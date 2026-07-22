@@ -849,19 +849,19 @@ function CTA() {
 
 
           <div className="relative flex flex-col items-center text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm text-[13px] text-white/90">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-canvas/20 bg-canvas/10 backdrop-blur-sm text-[13px] text-canvas/90">
+              <span className="w-1.5 h-1.5 rounded-full bg-coral animate-pulse" />
               Ready in two minutes ·{" "}
-              <a href="#how" className="underline underline-offset-2 hover:text-white">
+              <a href="#how" className="underline underline-offset-2 hover:text-canvas">
                 Install guide
               </a>
             </div>
 
-            <h2 className="mt-8 font-display text-5xl md:text-7xl leading-[1.02] max-w-4xl">
-              Give your Downloads folder the life it deserves.
+            <h2 className="mt-8 font-display text-5xl md:text-7xl leading-[1.02] max-w-4xl text-canvas">
+              Give your Downloads folder <em className="text-coral not-italic font-display italic">the life</em> it deserves.
             </h2>
 
-            <p className="mt-6 text-white/85 text-lg max-w-xl">
+            <p className="mt-6 text-canvas/70 text-lg max-w-xl">
               One zip. Two minutes. A permanently tidy filesystem — <br className="hidden md:block" />
               quietly renaming every image you save.
             </p>
@@ -870,13 +870,14 @@ function CTA() {
               <a
                 href="/smart-image-renamer.zip"
                 onClick={handleDownload}
-                className="group inline-flex items-center gap-2 h-12 px-7 rounded-full bg-canvas text-ink font-medium hover:bg-white transition-all shadow-[0_20px_50px_-15px_oklch(0.2_0.05_40/0.55)]"
+                className="group inline-flex items-center gap-2 h-12 px-7 rounded-full bg-coral text-canvas font-medium hover:bg-coral/90 transition-all shadow-[0_20px_60px_-15px_oklch(0.68_0.19_32/0.65)]"
               >
                 <Download className="w-4 h-4" /> Start renaming for free
               </a>
             </div>
           </div>
         </motion.div>
+
       </div>
     </section>
   );
