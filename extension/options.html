@@ -2,32 +2,232 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Smart Image Renamer — Options</title>
+    <title>Renma — Options</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,144,600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body { font-family: system-ui, sans-serif; padding: 20px; max-width: 560px; }
-      h1 { font-size: 18px; }
-      table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
-      th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee; font-size: 13px; }
-      input { padding: 6px 8px; font-size: 13px; width: 100%; box-sizing: border-box; }
-      button { padding: 6px 12px; font-size: 13px; cursor: pointer; }
-      .row { display: flex; gap: 8px; margin-top: 8px; }
-      .row input { flex: 1; }
-      .status { color: #0a0; font-size: 12px; margin-top: 8px; min-height: 16px; }
-      .del { color: #b00; background: none; border: none; cursor: pointer; }
+      :root {
+        --coral: #cc785c;
+        --coral-active: #a9583e;
+        --ink: #141413;
+        --body: #3d3d3a;
+        --muted: #6c6a64;
+        --muted-soft: #8e8b82;
+        --canvas: #faf9f5;
+        --surface-soft: #f5f0e8;
+        --surface-card: #efe9de;
+        --hairline: #e6dfd8;
+        --success: #5db872;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+      }
+      .shell {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 56px 32px 96px;
+      }
+      .brand-row {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 40px;
+      }
+      .wordmark {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-weight: 600;
+        font-size: 28px;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .wordmark .dot { color: var(--coral); }
+      .tag {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h1 {
+        font-family: "Instrument Serif", serif;
+        font-weight: 400;
+        font-size: 42px;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 12px;
+      }
+      h1 em {
+        font-style: italic;
+        color: var(--coral);
+      }
+      .lede {
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--body);
+        max-width: 520px;
+        margin: 0 0 40px;
+      }
+      .card {
+        background: var(--surface-card);
+        border-radius: 16px;
+        padding: 28px;
+      }
+      .card-label {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        text-align: left;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted-soft);
+        padding: 0 12px 10px;
+        border-bottom: 1px solid var(--hairline);
+      }
+      tbody td {
+        padding: 14px 12px;
+        border-bottom: 1px solid var(--hairline);
+        font-size: 14px;
+        color: var(--ink);
+        vertical-align: middle;
+      }
+      tbody tr:last-child td { border-bottom: none; }
+      td.domain-cell {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        color: var(--body);
+      }
+      td.prefix-cell {
+        font-weight: 500;
+        color: var(--coral);
+      }
+      .empty-cell {
+        color: var(--muted-soft);
+        font-style: italic;
+        padding: 32px 12px !important;
+        text-align: center;
+      }
+      .del {
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid var(--hairline);
+        border-radius: 999px;
+        padding: 4px 12px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .del:hover {
+        color: #c64545;
+        border-color: #c64545;
+      }
+      .add-row {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr auto;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      input {
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        color: var(--ink);
+        background: var(--canvas);
+        border: 1px solid var(--hairline);
+        border-radius: 10px;
+        padding: 11px 14px;
+        outline: none;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      input::placeholder { color: var(--muted-soft); }
+      input:focus {
+        border-color: var(--coral);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--coral) 15%, transparent);
+      }
+      #add {
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #fff;
+        background: var(--coral);
+        border: none;
+        border-radius: 10px;
+        padding: 0 20px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      #add:hover { background: var(--coral-active); }
+      .status {
+        margin-top: 14px;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--success);
+        min-height: 18px;
+      }
+      .foot {
+        margin-top: 32px;
+        font-size: 12px;
+        color: var(--muted-soft);
+      }
     </style>
   </head>
   <body>
-    <h1>Custom domain → prefix mappings</h1>
-    <table>
-      <thead><tr><th>Domain contains</th><th>Prefix</th><th></th></tr></thead>
-      <tbody id="list"></tbody>
-    </table>
-    <div class="row">
-      <input id="domain" placeholder="e.g. unsplash.com" />
-      <input id="prefix" placeholder="e.g. Unsplash" />
-      <button id="add">Add</button>
+    <div class="shell">
+      <div class="brand-row">
+        <span class="wordmark">renma<span class="dot">.</span></span>
+        <span class="tag">settings</span>
+      </div>
+
+      <h1>Teach <em>renma</em> your sources.</h1>
+      <p class="lede">
+        Add custom domain rules to override the default prefix. When a download's URL contains
+        the domain fragment, the file will be renamed with your chosen prefix.
+      </p>
+
+      <div class="card">
+        <div class="card-label">Custom mappings</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Domain contains</th>
+              <th>Prefix</th>
+              <th style="width: 90px"></th>
+            </tr>
+          </thead>
+          <tbody id="list"></tbody>
+        </table>
+
+        <div class="add-row">
+          <input id="domain" placeholder="e.g. unsplash.com" />
+          <input id="prefix" placeholder="e.g. Unsplash" />
+          <button id="add">Add rule</button>
+        </div>
+        <div class="status" id="status"></div>
+      </div>
+
+      <div class="foot">Local-first · stored in chrome.storage.local · never leaves your browser.</div>
     </div>
-    <div class="status" id="status"></div>
     <script src="options.js"></script>
   </body>
 </html>

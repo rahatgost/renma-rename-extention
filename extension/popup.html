@@ -2,26 +2,194 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Smart Image Renamer</title>
+    <title>Renma — Recent renames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,144,600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body { font-family: system-ui, sans-serif; width: 320px; padding: 12px; margin: 0; }
-      h1 { font-size: 14px; margin: 0 0 8px; }
-      .item { border-bottom: 1px solid #eee; padding: 6px 0; font-size: 12px; }
-      .item:last-child { border-bottom: none; }
-      .new { font-weight: 600; word-break: break-all; }
-      .old { color: #666; word-break: break-all; }
-      .meta { color: #999; font-size: 11px; margin-top: 2px; }
-      .empty { color: #888; font-size: 12px; padding: 12px 0; text-align: center; }
-      .footer { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; }
-      button { font-size: 11px; cursor: pointer; padding: 3px 8px; }
-      a { font-size: 11px; color: #06c; text-decoration: none; }
+      :root {
+        --coral: #cc785c;
+        --coral-active: #a9583e;
+        --ink: #141413;
+        --body: #3d3d3a;
+        --muted: #6c6a64;
+        --muted-soft: #8e8b82;
+        --canvas: #faf9f5;
+        --surface-soft: #f5f0e8;
+        --surface-card: #efe9de;
+        --hairline: #e6dfd8;
+        --hairline-soft: #ebe6df;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 340px;
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 18px 12px;
+        border-bottom: 1px solid var(--hairline);
+      }
+      .brand {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+      .wordmark {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-weight: 600;
+        font-size: 22px;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: var(--ink);
+      }
+      .wordmark .dot { color: var(--coral); }
+      .tag {
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .count {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        background: var(--surface-card);
+        padding: 3px 8px;
+        border-radius: 999px;
+      }
+      .section-label {
+        padding: 14px 18px 6px;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted-soft);
+      }
+      #list { padding: 0 10px; }
+      .item {
+        padding: 10px 12px;
+        border-radius: 10px;
+        margin-bottom: 4px;
+        transition: background 0.15s ease;
+      }
+      .item:hover { background: var(--surface-soft); }
+      .new {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--ink);
+        word-break: break-all;
+        line-height: 1.4;
+      }
+      .old {
+        font-size: 11.5px;
+        color: var(--muted);
+        word-break: break-all;
+        margin-top: 3px;
+        line-height: 1.4;
+      }
+      .old::before { content: "was "; color: var(--muted-soft); }
+      .meta {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+      }
+      .domain-pill {
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--coral);
+        background: color-mix(in oklab, var(--coral) 10%, transparent);
+        padding: 2px 7px;
+        border-radius: 999px;
+      }
+      .time {
+        font-size: 10.5px;
+        color: var(--muted-soft);
+      }
+      .empty {
+        margin: 8px 12px;
+        padding: 28px 16px;
+        text-align: center;
+        border: 1px dashed var(--hairline);
+        border-radius: 12px;
+        background: var(--surface-soft);
+      }
+      .empty .title {
+        font-family: "Instrument Serif", serif;
+        font-size: 20px;
+        line-height: 1.2;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+      .empty .sub {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 18px 16px;
+        border-top: 1px solid var(--hairline);
+        margin-top: 8px;
+      }
+      #opts {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      #opts:hover { color: var(--coral); }
+      #opts::after {
+        content: "→";
+        transition: transform 0.2s ease;
+      }
+      #opts:hover::after { transform: translateX(2px); }
+      #clear {
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid var(--hairline);
+        border-radius: 999px;
+        padding: 5px 12px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      #clear:hover {
+        color: var(--coral);
+        border-color: var(--coral);
+      }
     </style>
   </head>
   <body>
-    <h1>Recent renames</h1>
+    <div class="header">
+      <div class="brand">
+        <span class="wordmark">renma<span class="dot">.</span></span>
+        <span class="tag">renamer</span>
+      </div>
+      <span class="count" id="count">0</span>
+    </div>
+    <div class="section-label">Recent renames</div>
     <div id="list"></div>
     <div class="footer">
-      <a href="#" id="opts">Options</a>
+      <a href="#" id="opts">Custom rules</a>
       <button id="clear">Clear history</button>
     </div>
     <script src="popup.js"></script>
