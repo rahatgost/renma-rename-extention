@@ -1,5 +1,11 @@
 const listEl = document.getElementById("list");
 const countEl = document.getElementById("count");
+const masterSwitch = document.getElementById("masterSwitch");
+const toggleTitle = document.getElementById("toggleTitle");
+const toggleSub = document.getElementById("toggleSub");
+const siteRow = document.getElementById("siteRow");
+const siteHostEl = document.getElementById("siteHost");
+const siteToggleBtn = document.getElementById("siteToggle");
 
 function fmtTime(iso) {
   try {
@@ -14,7 +20,13 @@ function fmtTime(iso) {
   }
 }
 
-async function render() {
+function baseDomain(host) {
+  const clean = host.replace(/^www\./, "");
+  const parts = clean.split(".");
+  return parts.length <= 2 ? clean : parts.slice(-2).join(".");
+}
+
+async function renderHistory() {
   const { history = [] } = await chrome.storage.local.get("history");
   countEl.textContent = String(history.length);
   if (history.length === 0) {
@@ -49,13 +61,65 @@ async function render() {
   });
 }
 
+async function renderToggle() {
+  const { enabled = true } = await chrome.storage.local.get("enabled");
+  masterSwitch.classList.toggle("on", enabled);
+  masterSwitch.setAttribute("aria-checked", String(enabled));
+  toggleTitle.textContent = enabled ? "Renaming on" : "Renaming paused";
+  toggleSub.textContent = enabled
+    ? "Downloads will be auto-renamed"
+    : "Files save with their original names";
+}
+
+async function renderSiteRow() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab || !tab.url) return;
+    const host = new URL(tab.url).hostname;
+    if (!host || host === "newtab" || tab.url.startsWith("chrome://")) return;
+    const domain = baseDomain(host);
+    siteHostEl.textContent = domain;
+    siteRow.style.display = "flex";
+
+    const { siteMode = "all", siteList = [] } = await chrome.storage.local.get([
+      "siteMode",
+      "siteList",
+    ]);
+    const inList = siteList.some((d) => domain.includes(d) || d.includes(domain));
+    const skipping = siteMode === "blacklist" && inList;
+
+    siteToggleBtn.classList.toggle("active", skipping);
+    siteToggleBtn.textContent = skipping ? "Skipping — undo" : "Skip this site";
+
+    siteToggleBtn.onclick = async () => {
+      const s = await chrome.storage.local.get(["siteMode", "siteList"]);
+      let mode = s.siteMode || "all";
+      let list = s.siteList || [];
+      if (mode !== "blacklist") mode = "blacklist";
+      const idx = list.indexOf(domain);
+      if (idx === -1) list.push(domain);
+      else list.splice(idx, 1);
+      await chrome.storage.local.set({ siteMode: mode, siteList: list });
+      renderSiteRow();
+    };
+  } catch {}
+}
+
+masterSwitch.addEventListener("click", async () => {
+  const { enabled = true } = await chrome.storage.local.get("enabled");
+  await chrome.storage.local.set({ enabled: !enabled });
+  renderToggle();
+});
+
 document.getElementById("clear").addEventListener("click", async () => {
   await chrome.storage.local.set({ history: [] });
-  render();
+  renderHistory();
 });
 document.getElementById("opts").addEventListener("click", (e) => {
   e.preventDefault();
   chrome.runtime.openOptionsPage();
 });
 
-render();
+renderHistory();
+renderToggle();
+renderSiteRow();

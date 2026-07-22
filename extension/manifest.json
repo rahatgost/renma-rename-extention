@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Smart Image Renamer",
-  "version": "1.0.0",
-  "description": "Automatically renames downloaded images based on the source domain.",
-  "permissions": ["downloads", "storage"],
+  "name": "Renma — Smart Image Renamer",
+  "version": "1.1.0",
+  "description": "Auto-renames downloaded images with domain-aware prefixes, custom templates, and folder routing.",
+  "permissions": ["downloads", "storage", "tabs"],
   "background": { "service_worker": "background.js" },
   "action": { "default_popup": "popup.html", "default_icon": "icon.png" },
   "options_page": "options.html",
