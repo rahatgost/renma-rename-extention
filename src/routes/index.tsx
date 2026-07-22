@@ -138,13 +138,11 @@ function Nav() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: EASE }}
-      className="sticky top-4 z-50 px-4"
+      className="sticky top-0 z-50 bg-canvas"
     >
       <div
-        className={`max-w-6xl mx-auto flex items-center justify-between gap-4 h-14 pl-3 pr-3 rounded-full transition-all duration-500 ${
-          scrolled
-            ? "bg-canvas/70 backdrop-blur-xl border border-hairline shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)]"
-            : "bg-canvas/40 backdrop-blur-md border border-transparent"
+        className={`max-w-6xl mx-auto flex items-center justify-between gap-4 h-16 pl-3 pr-3 transition-all duration-300 ${
+          scrolled ? "border-b border-hairline" : "border-b border-transparent"
         }`}
       >
         {/* Logo */}
