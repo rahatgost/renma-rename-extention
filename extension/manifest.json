@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Image Renamer",
+  "version": "1.0.0",
+  "description": "Automatically renames downloaded images based on the source domain.",
+  "permissions": ["downloads", "storage"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_icon": "icon.png" },
+  "options_page": "options.html",
+  "icons": { "128": "icon.png" }
+}

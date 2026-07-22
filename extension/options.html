@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Smart Image Renamer — Options</title>
+    <style>
+      body { font-family: system-ui, sans-serif; padding: 20px; max-width: 560px; }
+      h1 { font-size: 18px; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+      th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee; font-size: 13px; }
+      input { padding: 6px 8px; font-size: 13px; width: 100%; box-sizing: border-box; }
+      button { padding: 6px 12px; font-size: 13px; cursor: pointer; }
+      .row { display: flex; gap: 8px; margin-top: 8px; }
+      .row input { flex: 1; }
+      .status { color: #0a0; font-size: 12px; margin-top: 8px; min-height: 16px; }
+      .del { color: #b00; background: none; border: none; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <h1>Custom domain → prefix mappings</h1>
+    <table>
+      <thead><tr><th>Domain contains</th><th>Prefix</th><th></th></tr></thead>
+      <tbody id="list"></tbody>
+    </table>
+    <div class="row">
+      <input id="domain" placeholder="e.g. unsplash.com" />
+      <input id="prefix" placeholder="e.g. Unsplash" />
+      <button id="add">Add</button>
+    </div>
+    <div class="status" id="status"></div>
+    <script src="options.js"></script>
+  </body>
+</html>
