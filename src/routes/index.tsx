@@ -813,59 +813,63 @@ function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-15%" }}
           transition={{ duration: 0.8, ease: EASE }}
-          className="relative overflow-hidden rounded-[2rem] p-10 md:p-24 text-white isolate"
+          className="relative overflow-hidden rounded-[2rem] px-6 py-20 md:px-16 md:py-28 text-white isolate"
           style={{
             background:
-              "radial-gradient(120% 90% at 85% 15%, oklch(0.66 0.128 42) 0%, oklch(0.42 0.09 38) 35%, oklch(0.22 0.02 50) 70%, oklch(0.16 0.008 60) 100%)",
+              "radial-gradient(140% 100% at 50% 0%, oklch(0.72 0.19 45) 0%, oklch(0.66 0.20 42) 40%, oklch(0.58 0.19 40) 75%, oklch(0.5 0.17 38) 100%)",
           }}
         >
-          <div className="pointer-events-none absolute -top-40 -right-24 w-[32rem] h-[32rem] rounded-full bg-coral/25 blur-[110px]" />
-          <div className="pointer-events-none absolute -bottom-48 -left-24 w-[36rem] h-[36rem] rounded-full bg-teal/15 blur-[130px]" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,oklch(1_0_0/0.08),transparent_55%)]" />
-
+          {/* dotted halftone texture */}
           <div
-            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            className="pointer-events-none absolute inset-0 opacity-[0.35]"
             style={{
               backgroundImage:
-                "linear-gradient(oklch(1 0 0 / 1) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 1) 1px, transparent 1px)",
-              backgroundSize: "56px 56px",
-              maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
-              WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+                "radial-gradient(oklch(0.4 0.12 35 / 0.55) 1px, transparent 1.4px)",
+              backgroundSize: "10px 10px",
+              maskImage:
+                "radial-gradient(ellipse 90% 70% at 50% 40%, transparent 30%, black 90%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 90% 70% at 50% 40%, transparent 30%, black 90%)",
             }}
           />
 
+          {/* bottom center warm glow */}
+          <div className="pointer-events-none absolute -bottom-40 left-1/2 -translate-x-1/2 w-[42rem] h-[42rem] rounded-full bg-[oklch(0.95_0.14_75)] opacity-60 blur-[120px]" />
+          {/* soft top vignette */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/25 to-transparent" />
+          {/* film grain */}
           <div
-            className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-[0.18]"
+            className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-[0.15]"
             style={{ backgroundImage: noiseSvg }}
           />
+          {/* top hairline */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
 
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-          <div className="relative max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm text-xs tracking-wide uppercase text-white/70">
-              <span className="w-1.5 h-1.5 rounded-full bg-coral animate-pulse" />
-              Ready in two minutes
+          <div className="relative flex flex-col items-center text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm text-[13px] text-white/90">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              Ready in two minutes ·{" "}
+              <a href="#how" className="underline underline-offset-2 hover:text-white">
+                Install guide
+              </a>
             </div>
-            <h2 className="mt-6 font-display text-5xl md:text-7xl leading-[1.02]">
-              Give your <span className="italic text-coral">Downloads folder</span> the life it deserves.
+
+            <h2 className="mt-8 font-display text-5xl md:text-7xl leading-[1.02] max-w-4xl">
+              Give your Downloads folder the life it deserves.
             </h2>
-            <p className="mt-6 text-white/65 text-lg max-w-lg">
-              One zip. Two minutes. A permanently tidy filesystem — quietly renaming every image you save.
+
+            <p className="mt-6 text-white/85 text-lg max-w-xl">
+              One zip. Two minutes. A permanently tidy filesystem — <br className="hidden md:block" />
+              quietly renaming every image you save.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3">
+
+            <div className="mt-10">
               <a
                 href="/smart-image-renamer.zip"
                 onClick={handleDownload}
-                className="group inline-flex items-center gap-2 h-12 px-6 rounded-full bg-coral text-white font-medium hover:bg-coral-active transition-all shadow-[0_10px_30px_-10px_oklch(0.66_0.128_42/0.6)]"
+                className="group inline-flex items-center gap-2 h-12 px-7 rounded-full bg-canvas text-ink font-medium hover:bg-white transition-all shadow-[0_20px_50px_-15px_oklch(0.2_0.05_40/0.55)]"
               >
-                <Download className="w-4 h-4" /> Download the extension
-                <span className="ml-1 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
-              </a>
-              <a
-                href="#how"
-                className="inline-flex items-center gap-2 h-12 px-6 rounded-full border border-white/15 bg-white/[0.04] text-white font-medium hover:bg-white/10 backdrop-blur-sm transition-colors"
-              >
-                Install guide
+                <Download className="w-4 h-4" /> Start renaming for free
               </a>
             </div>
           </div>
