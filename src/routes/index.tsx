@@ -802,6 +802,9 @@ function FAQ() {
 /* ---------------- CTA ---------------- */
 
 function CTA() {
+  const noiseSvg =
+    "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>\")";
+
   return (
     <section className="py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
@@ -810,28 +813,57 @@ function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-15%" }}
           transition={{ duration: 0.8, ease: EASE }}
-          className="relative overflow-hidden rounded-3xl bg-ink text-white p-10 md:p-20"
+          className="relative overflow-hidden rounded-[2rem] p-10 md:p-24 text-white isolate"
+          style={{
+            background:
+              "radial-gradient(120% 90% at 85% 15%, oklch(0.66 0.128 42) 0%, oklch(0.42 0.09 38) 35%, oklch(0.22 0.02 50) 70%, oklch(0.16 0.008 60) 100%)",
+          }}
         >
-          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-coral/40 blur-3xl" />
-          <div className="absolute -bottom-32 -left-16 w-96 h-96 rounded-full bg-teal/20 blur-3xl" />
-          <div className="relative max-w-2xl">
-            <h2 className="font-display text-5xl md:text-7xl leading-[1.02]">
-              Give your <span className="italic text-coral">Downloads folder</span> a life it deserves.
+          <div className="pointer-events-none absolute -top-40 -right-24 w-[32rem] h-[32rem] rounded-full bg-coral/25 blur-[110px]" />
+          <div className="pointer-events-none absolute -bottom-48 -left-24 w-[36rem] h-[36rem] rounded-full bg-teal/15 blur-[130px]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,oklch(1_0_0/0.08),transparent_55%)]" />
+
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "linear-gradient(oklch(1 0 0 / 1) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 1) 1px, transparent 1px)",
+              backgroundSize: "56px 56px",
+              maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+              WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+            }}
+          />
+
+          <div
+            className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-[0.18]"
+            style={{ backgroundImage: noiseSvg }}
+          />
+
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+
+          <div className="relative max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm text-xs tracking-wide uppercase text-white/70">
+              <span className="w-1.5 h-1.5 rounded-full bg-coral animate-pulse" />
+              Ready in two minutes
+            </div>
+            <h2 className="mt-6 font-display text-5xl md:text-7xl leading-[1.02]">
+              Give your <span className="italic text-coral">Downloads folder</span> the life it deserves.
             </h2>
-            <p className="mt-6 text-white/70 text-lg max-w-lg">
-              One zip. Two minutes. A permanently tidy filesystem.
+            <p className="mt-6 text-white/65 text-lg max-w-lg">
+              One zip. Two minutes. A permanently tidy filesystem — quietly renaming every image you save.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
               <a
                 href="/smart-image-renamer.zip"
                 onClick={handleDownload}
-                className="inline-flex items-center gap-2 h-12 px-6 rounded-lg bg-coral text-white font-medium hover:bg-coral-active transition-colors"
+                className="group inline-flex items-center gap-2 h-12 px-6 rounded-full bg-coral text-white font-medium hover:bg-coral-active transition-all shadow-[0_10px_30px_-10px_oklch(0.66_0.128_42/0.6)]"
               >
                 <Download className="w-4 h-4" /> Download the extension
+                <span className="ml-1 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
               </a>
               <a
                 href="#how"
-                className="inline-flex items-center gap-2 h-12 px-6 rounded-lg bg-white/10 text-white font-medium hover:bg-white/15 transition-colors"
+                className="inline-flex items-center gap-2 h-12 px-6 rounded-full border border-white/15 bg-white/[0.04] text-white font-medium hover:bg-white/10 backdrop-blur-sm transition-colors"
               >
                 Install guide
               </a>
