@@ -25,6 +25,8 @@ import {
   Target,
   Lock,
 } from "lucide-react";
+import renmaLogo from "@/assets/renma-logo.png";
+
 
 
 export const Route = createFileRoute("/")({
