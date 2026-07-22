@@ -144,7 +144,7 @@ function Nav() {
               transition={{ duration: 0.3 }}
             />
           </div>
-          <span className="font-display text-xl">Smart Image Renamer</span>
+          <span className="font-display text-xl">Renma</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-body-text">
           <a href="#features" className="hover:text-ink transition-colors">Features</a>
