@@ -994,12 +994,11 @@ function Footer() {
           </div>
         </div>
 
-        {/* Giant wordmark — centered with coral color overlay */}
+        {/* Giant wordmark — text-based using Fraunces italic */}
         <div
           aria-hidden
-          className="relative pointer-events-none select-none -mx-6 overflow-hidden"
+          className="relative pointer-events-none select-none overflow-hidden"
         >
-          {/* soft coral glow behind */}
           <div
             className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[70%] h-[70%]"
             style={{
@@ -1008,27 +1007,32 @@ function Footer() {
               opacity: 0.28,
             }}
           />
-          {/* wordmark, cropped to bottom half, centered */}
-          <div className="relative mx-auto w-full max-w-[1100px] px-6 flex justify-center">
-            <div className="relative w-full aspect-[1018/220] overflow-hidden">
-              <img
-                src={renmaWordmark}
-                alt=""
-                draggable={false}
-                className="absolute inset-x-0 top-0 mx-auto w-full h-auto object-contain"
-                style={{ opacity: 0.5 }}
-              />
-              {/* coral tint via blend */}
-              <div
-                className="absolute inset-0 mix-blend-color"
+          <div className="relative flex justify-center items-end pt-8">
+            <span
+              className="block text-center leading-[0.85] tracking-[-0.05em] italic"
+              style={{
+                fontFamily: '"Fraunces", serif',
+                fontWeight: 400,
+                fontSize: "clamp(6rem, 22vw, 20rem)",
+                background:
+                  "linear-gradient(135deg, var(--coral) 0%, var(--coral) 55%, var(--ink) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                opacity: 0.6,
+              }}
+            >
+              renma
+              <span
                 style={{
-                  background:
-                    "linear-gradient(135deg, var(--coral) 0%, var(--coral) 55%, var(--ink) 100%)",
+                  color: "var(--coral)",
+                  WebkitTextFillColor: "var(--coral)",
                 }}
-              />
-            </div>
+              >
+                .
+              </span>
+            </span>
           </div>
-          {/* fade to canvas at bottom */}
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-canvas" />
         </div>
 
