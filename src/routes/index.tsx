@@ -403,103 +403,31 @@ function FilenameMorph() {
 /* ---------------- Logo strip ---------------- */
 
 function LogoStrip() {
-  const items = [
-    "chatgpt.com",
-    "midjourney.com",
-    "unsplash.com",
-    "dribbble.com",
-    "pinterest.com",
-    "figma.com",
-    "behance.net",
-    "openai.com",
-    "pexels.com",
-    "are.na",
-  ];
-  // duplicate for seamless marquee
-  const row = [...items, ...items];
-
+  const items = ["chatgpt.com", "midjourney.com", "unsplash.com", "dribbble.com", "pinterest.com", "figma.com", "behance.net"];
   return (
-    <section className="relative py-20 md:py-28 border-y border-hairline bg-ink text-canvas overflow-hidden">
-      {/* subtle grain / vignette */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 25% 20%, rgba(255,255,255,0.6) 0, transparent 40%), radial-gradient(circle at 80% 80%, rgba(232,93,60,0.4) 0, transparent 50%)",
-        }}
-      />
-
-      <div className="relative max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-10">
-          <div>
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-coral mb-4">
-              <span className="w-8 h-px bg-coral" />
-              Universal capture
-            </div>
-            <h2
-              className="text-4xl md:text-6xl leading-[0.95] tracking-[-0.03em] text-canvas max-w-3xl"
-              style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontWeight: 500 }}
+    <section className="py-10 border-y border-hairline bg-surface-soft/40">
+      <div className="max-w-7xl mx-auto px-6">
+        <p className="text-xs uppercase tracking-widest text-muted-ink mb-6 text-center">
+          Works with every image source
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+          {items.map((s, idx) => (
+            <motion.span
+              key={s}
+              initial={{ opacity: 0, y: 6 }}
+              whileInView={{ opacity: 0.7, y: 0 }}
+              viewport={{ once: true, margin: "-20%" }}
+              transition={{ delay: idx * 0.05, duration: 0.5 }}
+              className="font-mono text-sm text-body-strong"
             >
-              Every image you save. From <span className="italic text-coral">everywhere</span> on the web.
-            </h2>
-          </div>
-          <p className="text-canvas/60 text-sm max-w-xs md:text-right">
-            Renma reads the download's origin — not the page you're on — so it works even inside iframes, CDNs, and login-walled tools.
-          </p>
+              {s}
+            </motion.span>
+          ))}
         </div>
-      </div>
-
-      {/* Marquee */}
-      <div className="relative">
-        {/* edge fades */}
-        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink to-transparent z-10 pointer-events-none" />
-
-        <div className="flex overflow-hidden group">
-          <motion.div
-            className="flex items-center gap-10 md:gap-14 shrink-0 pr-10 md:pr-14"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 45, ease: "linear", repeat: Infinity }}
-          >
-            {row.map((domain, i) => (
-              <div key={`${domain}-${i}`} className="flex items-center gap-3 shrink-0">
-                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-canvas/8 border border-canvas/10 overflow-hidden">
-                  <img
-                    src={`https://www.google.com/s2/favicons?sz=64&domain=${domain}`}
-                    alt=""
-                    width={20}
-                    height={20}
-                    loading="lazy"
-                    className="w-5 h-5 rounded-sm"
-                  />
-                </span>
-                <span
-                  className="text-4xl md:text-6xl leading-none tracking-[-0.04em] italic text-canvas/90"
-                  style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontWeight: 500 }}
-                >
-                  {domain}
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-coral" />
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-
-      {/* rename hint row */}
-      <div className="relative max-w-7xl mx-auto px-6 mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm">
-        <span className="font-mono text-canvas/40 line-through">image (17).png</span>
-        <ArrowRight className="w-4 h-4 text-coral" />
-        <span className="font-mono text-canvas bg-canvas/10 border border-canvas/15 rounded-md px-2.5 py-1">
-          AI_Generated_1729531200.png
-        </span>
-        <span className="text-canvas/40">— applied in &lt;3ms, no clicks.</span>
       </div>
     </section>
   );
 }
-
 
 /* ---------------- Bento features ---------------- */
 
