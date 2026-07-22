@@ -780,3 +780,296 @@ function Footer() {
     </footer>
   );
 }
+
+/* ---------------- Benchmark ---------------- */
+
+function Benchmark() {
+  const metrics = [
+    { key: "speed", label: "Speed", icon: Timer, desc: "Time from download click to correctly-named file on disk." },
+    { key: "precision", label: "Precision", icon: Target, desc: "How often the resulting filename actually tells you where it came from." },
+    { key: "setup", label: "Setup", icon: Gauge, desc: "Effort required before it starts working — accounts, configs, sign-ins." },
+    { key: "privacy", label: "Privacy", icon: Lock, desc: "Whether your download history ever leaves the machine." },
+  ];
+  const rows = [
+    { name: "Renma", brand: true, scores: { speed: 98, precision: 94, setup: 96, privacy: 100 } },
+    { name: "Manual rename", scores: { speed: 22, precision: 60, setup: 100, privacy: 100 } },
+    { name: "Save As… dialog", scores: { speed: 40, precision: 55, setup: 90, privacy: 100 } },
+    { name: "Bulk-rename apps", scores: { speed: 55, precision: 70, setup: 45, privacy: 65 } },
+  ];
+  const [active, setActive] = useState<string>("speed");
+  const current = metrics.find((m) => m.key === active)!;
+  const Icon = current.icon;
+
+  return (
+    <section className="py-24 md:py-36 bg-surface-soft border-y border-hairline">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-15%" }}
+          className="max-w-2xl mb-14"
+        >
+          <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">
+            The benchmark
+          </motion.div>
+          <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02]">
+            Renma vs. <span className="italic">everything else</span> you've tried.
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-body-text text-lg">
+            Four dimensions that actually matter when you save 40 images a day. Pick a metric on
+            the left, watch the bars redraw.
+          </motion.p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-12 gap-4">
+          {/* Metric selector */}
+          <div className="md:col-span-4 flex flex-col gap-3">
+            {metrics.map((m) => {
+              const MIcon = m.icon;
+              const isActive = m.key === active;
+              return (
+                <button
+                  key={m.key}
+                  onClick={() => setActive(m.key)}
+                  className={`text-left p-5 rounded-2xl border transition-all ${
+                    isActive
+                      ? "bg-canvas border-ink shadow-[0_10px_30px_-15px_rgba(20,20,19,0.25)]"
+                      : "bg-canvas/60 border-hairline hover:border-ink/30"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="font-display text-2xl text-ink">{m.label}</span>
+                    <span
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                        isActive ? "bg-coral text-white" : "bg-surface-card text-ink"
+                      }`}
+                    >
+                      <MIcon className="w-4 h-4" />
+                    </span>
+                  </div>
+                  {isActive && (
+                    <motion.p
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      transition={{ duration: 0.3 }}
+                      className="text-xs text-muted-ink leading-relaxed"
+                    >
+                      {m.desc}
+                    </motion.p>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Chart */}
+          <div className="md:col-span-8 rounded-2xl bg-canvas border border-hairline p-6 md:p-8 relative overflow-hidden">
+            <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-coral/10 blur-3xl pointer-events-none" />
+            <div className="flex items-center justify-between mb-8 relative">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-ink">
+                <Icon className="w-3.5 h-3.5" /> {current.label} · score /100
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-muted-ink">
+                <span className="w-2 h-2 rounded-full bg-coral" /> Renma
+                <span className="w-2 h-2 rounded-full bg-body-strong/40 ml-3" /> Others
+              </div>
+            </div>
+            <div className="space-y-6 relative">
+              {rows.map((r) => {
+                const score = r.scores[active as keyof typeof r.scores];
+                return (
+                  <div key={r.name} className="grid grid-cols-[140px_1fr_50px] items-center gap-4">
+                    <div className={`font-medium text-sm ${r.brand ? "text-ink" : "text-body-text"}`}>
+                      {r.brand && <span className="inline-block w-1.5 h-1.5 rounded-full bg-coral mr-2 align-middle" />}
+                      {r.name}
+                    </div>
+                    <div className="h-8 rounded-lg bg-surface-soft overflow-hidden relative">
+                      <motion.div
+                        key={`${r.name}-${active}`}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${score}%` }}
+                        transition={{ duration: 0.9, ease: EASE }}
+                        className={`h-full rounded-lg ${
+                          r.brand
+                            ? "bg-gradient-to-r from-coral to-coral-active"
+                            : "bg-body-strong/25"
+                        }`}
+                      />
+                    </div>
+                    <div className={`font-mono text-sm text-right ${r.brand ? "text-coral" : "text-muted-ink"}`}>
+                      {score}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-8 pt-6 border-t border-hairline text-xs text-muted-ink">
+              Scores are indicative, measured on a 500-download session across mixed AI + stock-photo sources.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Roadmap ---------------- */
+
+function Roadmap() {
+  return (
+    <section className="py-24 md:py-36">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-15%" }}
+          className="max-w-2xl mb-16"
+        >
+          <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">
+            What's next
+          </motion.div>
+          <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02]">
+            Renma is a <span className="italic">naming primitive.</span><br />These are the layers on top.
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-body-text text-lg">
+            The current release is a single, sharp tool. Here's the roadmap we're actively
+            prototyping — each one built on the same MV3 service-worker foundation.
+          </motion.p>
+        </motion.div>
+
+        {/* Row 1 — hero tile + smart folders + AI model tag */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <BentoCard className="md:col-span-4 bg-surface-cream-strong" delay={0}>
+            <div className="p-8 h-full flex flex-col justify-between min-h-[340px]">
+              <div>
+                <div className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full bg-canvas text-[10px] uppercase tracking-widest text-coral mb-6">
+                  <span className="w-1 h-1 rounded-full bg-coral animate-pulse" /> In design
+                </div>
+                <div className="font-display text-4xl leading-tight text-ink mb-4">
+                  Templates that <span className="italic">think.</span>
+                </div>
+                <p className="text-body-text text-sm leading-relaxed">
+                  Compose filenames from real variables — <span className="font-mono text-xs bg-canvas px-1 rounded">{"{domain}"}</span>,
+                  <span className="font-mono text-xs bg-canvas px-1 rounded mx-1">{"{date}"}</span>,
+                  <span className="font-mono text-xs bg-canvas px-1 rounded">{"{alt}"}</span>,
+                  <span className="font-mono text-xs bg-canvas px-1 rounded mx-1">{"{hash}"}</span>,
+                  <span className="font-mono text-xs bg-canvas px-1 rounded">{"{model}"}</span>. One config, every download.
+                </p>
+              </div>
+              <div className="mt-6 rounded-xl bg-surface-dark p-4 font-mono text-[11px] text-white/85 leading-relaxed">
+                <span className="text-white/40">template =</span> <span className="text-coral">{'"{domain}_{date}_{alt|slug}.{ext}"'}</span>
+                <div className="text-white/40 mt-2">→ unsplash_2026-07-22_mountain-fog.jpg</div>
+              </div>
+            </div>
+          </BentoCard>
+
+          <BentoCard className="md:col-span-5 bg-ink text-white" delay={0.08}>
+            <div className="p-8 h-full flex flex-col justify-between min-h-[340px]">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-white/50">
+                  <FolderTree className="w-3.5 h-3.5 text-coral" /> Smart folders
+                </div>
+                <span className="text-[10px] uppercase tracking-widest text-white/40">Q3 · prototype</span>
+              </div>
+              <div>
+                <div className="font-display text-4xl md:text-5xl leading-tight mb-3">
+                  Route images into <span className="italic text-coral">folders</span>, not just names.
+                </div>
+                <p className="text-white/60 text-sm max-w-md">
+                  Same rule engine, one extra hop. AI images land in <span className="font-mono text-white/90">/AI</span>, stock in <span className="font-mono text-white/90">/Stock</span>, references in <span className="font-mono text-white/90">/Refs</span>.
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { label: "/AI", count: "1.2k", tone: "text-coral" },
+                  { label: "/Stock", count: "480", tone: "text-teal" },
+                  { label: "/Refs", count: "204", tone: "text-amber" },
+                ].map((f) => (
+                  <div key={f.label} className="rounded-lg bg-white/5 border border-white/10 p-3">
+                    <div className={`font-mono text-sm ${f.tone}`}>{f.label}</div>
+                    <div className="text-white/40 text-[11px] mt-0.5">{f.count} files</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </BentoCard>
+
+          <BentoCard className="md:col-span-3 bg-coral text-white" delay={0.16}>
+            <div className="p-8 h-full flex flex-col justify-between min-h-[340px]">
+              <Wand2 className="w-8 h-8" />
+              <div>
+                <div className="font-display text-3xl leading-tight mb-2">
+                  Know <span className="italic">which</span> AI made it.
+                </div>
+                <p className="text-white/85 text-sm">
+                  Detect the generator — DALL·E, Midjourney, Flux, SDXL — from URL patterns and metadata, and tag the filename accordingly.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {["dalle", "mj", "flux", "sdxl", "nano"].map((m) => (
+                  <span key={m} className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/15 border border-white/20">
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </BentoCard>
+        </div>
+
+        {/* Row 2 — metadata / regex / team packs / sync */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+          <BentoCard className="md:col-span-3 bg-surface-card" delay={0}>
+            <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
+              <Tag className="w-7 h-7 text-ink" />
+              <div>
+                <div className="font-display text-2xl leading-tight mb-2">Alt-text as filename</div>
+                <p className="text-body-text text-xs">
+                  Pull the source image's <span className="font-mono">alt</span> attribute and slug it into the name — searchable, meaningful, human-readable.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
+          <BentoCard className="md:col-span-3 bg-surface-soft border border-hairline" delay={0.05}>
+            <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
+              <FileCode2 className="w-7 h-7 text-ink" />
+              <div>
+                <div className="font-display text-2xl leading-tight mb-2">Regex rules</div>
+                <p className="text-body-text text-xs">
+                  For power users — match URL paths and query params, not just hostnames. Redirect an entire CDN subtree to one prefix.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
+          <BentoCard className="md:col-span-3 bg-canvas border border-hairline" delay={0.1}>
+            <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
+              <Users className="w-7 h-7 text-ink" />
+              <div>
+                <div className="font-display text-2xl leading-tight mb-2">Shareable rule packs</div>
+                <p className="text-body-text text-xs">
+                  Export your mappings as a JSON pack, share with your team, import in one click. Design studios and research teams naming things the same way.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
+          <BentoCard className="md:col-span-3 bg-surface-dark text-white" delay={0.15}>
+            <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
+              <Layers className="w-7 h-7 text-coral" />
+              <div>
+                <div className="font-display text-2xl leading-tight mb-2">Bulk rename</div>
+                <p className="text-white/60 text-xs">
+                  Retroactively apply the current rule set to files already sitting in your Downloads folder. History becomes clean too.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+        </div>
+      </div>
+    </section>
+  );
+}
+
