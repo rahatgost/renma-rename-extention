@@ -24,6 +24,7 @@ import {
   Timer,
   Target,
   Lock,
+  Github,
 } from "lucide-react";
 import renmaLogo from "@/assets/renma-logo.png";
 import renmaWordmark from "@/assets/renma-wordmark.png";
