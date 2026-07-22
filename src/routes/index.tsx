@@ -813,18 +813,18 @@ function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-15%" }}
           transition={{ duration: 0.8, ease: EASE }}
-          className="relative overflow-hidden rounded-[2rem] px-6 py-20 md:px-16 md:py-28 text-white isolate"
+          className="relative overflow-hidden rounded-[2rem] px-6 py-20 md:px-16 md:py-28 text-canvas isolate"
           style={{
             background:
-              "radial-gradient(140% 100% at 50% 0%, oklch(0.72 0.19 45) 0%, oklch(0.66 0.20 42) 40%, oklch(0.58 0.19 40) 75%, oklch(0.5 0.17 38) 100%)",
+              "radial-gradient(140% 100% at 50% 0%, oklch(0.32 0.04 40) 0%, oklch(0.24 0.03 38) 55%, oklch(0.18 0.02 36) 100%)",
           }}
         >
           {/* dotted halftone texture */}
           <div
-            className="pointer-events-none absolute inset-0 opacity-[0.35]"
+            className="pointer-events-none absolute inset-0 opacity-[0.28]"
             style={{
               backgroundImage:
-                "radial-gradient(oklch(0.4 0.12 35 / 0.55) 1px, transparent 1.4px)",
+                "radial-gradient(oklch(0.95 0.06 60 / 0.35) 1px, transparent 1.4px)",
               backgroundSize: "10px 10px",
               maskImage:
                 "radial-gradient(ellipse 90% 70% at 50% 40%, transparent 30%, black 90%)",
@@ -833,17 +833,20 @@ function CTA() {
             }}
           />
 
-          {/* bottom center warm glow */}
-          <div className="pointer-events-none absolute -bottom-40 left-1/2 -translate-x-1/2 w-[42rem] h-[42rem] rounded-full bg-[oklch(0.95_0.14_75)] opacity-60 blur-[120px]" />
+          {/* bottom center coral glow — brand */}
+          <div className="pointer-events-none absolute -bottom-48 left-1/2 -translate-x-1/2 w-[46rem] h-[46rem] rounded-full bg-coral opacity-50 blur-[130px]" />
+          {/* warm canvas wash */}
+          <div className="pointer-events-none absolute -bottom-60 left-1/2 -translate-x-1/2 w-[30rem] h-[30rem] rounded-full bg-canvas opacity-30 blur-[100px]" />
           {/* soft top vignette */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/25 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/30 to-transparent" />
           {/* film grain */}
           <div
             className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-[0.15]"
             style={{ backgroundImage: noiseSvg }}
           />
           {/* top hairline */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-canvas/40 to-transparent" />
+
 
           <div className="relative flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm text-[13px] text-white/90">
