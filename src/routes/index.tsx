@@ -25,6 +25,8 @@ import {
   Target,
   Lock,
 } from "lucide-react";
+import renmaLogo from "@/assets/renma-logo.png";
+
 
 
 export const Route = createFileRoute("/")({
@@ -135,16 +137,16 @@ function Nav() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-ink text-canvas flex items-center justify-center relative overflow-hidden">
-            <ImageIcon className="w-4 h-4 relative z-10" />
-            <motion.div
-              className="absolute inset-0 bg-coral"
-              initial={{ y: "100%" }}
-              whileHover={{ y: 0 }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-          <span className="font-display text-xl">Renma</span>
+          <motion.img
+            src={renmaLogo}
+            alt="Renma"
+            width={32}
+            height={32}
+            className="w-8 h-8 rounded-lg shadow-sm"
+            whileHover={{ rotate: -6, scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+          />
+          <span className="font-display text-xl tracking-tight">Renma</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-body-text">
           <a href="#features" className="hover:text-ink transition-colors">Features</a>
@@ -771,9 +773,7 @@ function Footer() {
     <footer className="border-t border-hairline">
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-ink">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-ink text-canvas flex items-center justify-center">
-            <ImageIcon className="w-3 h-3" />
-          </div>
+          <img src={renmaLogo} alt="Renma" width={24} height={24} className="w-6 h-6 rounded-md" loading="lazy" />
           <span className="font-display text-lg text-ink">Renma</span>
         </div>
         <div>© {new Date().getFullYear()} · Chrome MV3 · Made with warmth.</div>
