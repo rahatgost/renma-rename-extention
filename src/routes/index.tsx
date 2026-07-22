@@ -429,28 +429,18 @@ function LogoStrip() {
       </div>
 
       <div className="relative">
-        {/* stronger edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-canvas via-canvas/90 to-transparent z-10" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-canvas via-canvas/90 to-transparent z-10" />
-
-        {/* center spotlight — subtle emphasis for the "selected" region */}
-        <div className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 w-72 z-[5] rounded-full bg-coral/[0.06] blur-2xl" />
-        <div className="pointer-events-none absolute inset-y-2 left-1/2 -translate-x-1/2 w-52 z-[6] rounded-full ring-1 ring-inset ring-coral/15" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-canvas to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-canvas to-transparent z-10" />
 
         <motion.div
-          className="flex gap-14 whitespace-nowrap py-3"
+          className="flex gap-14 whitespace-nowrap"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 40, ease: "linear", repeat: Infinity }}
         >
           {loop.map((s, idx) => (
-            <div
-              key={`${s}-${idx}`}
-              className="group/item flex items-center gap-2.5 shrink-0 px-3 py-1.5 rounded-full transition-all duration-300 hover:bg-coral/10 hover:ring-1 hover:ring-coral/25 cursor-default"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-coral/50 transition-all duration-300 group-hover/item:bg-coral group-hover/item:scale-150 group-hover/item:shadow-[0_0_10px_var(--coral)]" />
-              <span className="font-mono text-base text-body-strong/70 transition-colors duration-300 group-hover/item:text-ink">
-                {s}
-              </span>
+            <div key={`${s}-${idx}`} className="flex items-center gap-2.5 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-coral/60" />
+              <span className="font-mono text-base text-body-strong/80">{s}</span>
             </div>
           ))}
         </motion.div>
