@@ -1,0 +1,70 @@
+name: Release Extension
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "extension/**"
+      - "public/smart-image-renamer.zip"
+      - ".github/workflows/release-extension.yml"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. v1.0.3). Leave empty for auto-timestamp."
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read manifest version
+        id: manifest
+        run: |
+          if [ -f extension/manifest.json ]; then
+            VERSION=$(node -p "require('./extension/manifest.json').version")
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "version=0.0.0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Compute release tag
+        id: tag
+        run: |
+          INPUT="${{ github.event.inputs.version }}"
+          if [ -n "$INPUT" ]; then
+            TAG="$INPUT"
+          else
+            TAG="v${{ steps.manifest.outputs.version }}-$(date +%Y%m%d-%H%M%S)"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Package extension
+        run: |
+          mkdir -p public
+          rm -f public/smart-image-renamer.zip
+          cd extension
+          zip -r ../public/smart-image-renamer.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Renma ${{ steps.tag.outputs.tag }}
+          body: |
+            Smart Image Renamer (Renma) Chrome Extension — Manifest V3.
+
+            **Install:**
+            1. Download `smart-image-renamer.zip` below and unzip.
+            2. Open `chrome://extensions`, enable Developer mode.
+            3. Click "Load unpacked" and select the unzipped folder.
+          files: public/smart-image-renamer.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
