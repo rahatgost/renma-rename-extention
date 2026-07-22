@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Smart Image Renamer</title>
+    <style>
+      body { font-family: system-ui, sans-serif; width: 320px; padding: 12px; margin: 0; }
+      h1 { font-size: 14px; margin: 0 0 8px; }
+      .item { border-bottom: 1px solid #eee; padding: 6px 0; font-size: 12px; }
+      .item:last-child { border-bottom: none; }
+      .new { font-weight: 600; word-break: break-all; }
+      .old { color: #666; word-break: break-all; }
+      .meta { color: #999; font-size: 11px; margin-top: 2px; }
+      .empty { color: #888; font-size: 12px; padding: 12px 0; text-align: center; }
+      .footer { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; }
+      button { font-size: 11px; cursor: pointer; padding: 3px 8px; }
+      a { font-size: 11px; color: #06c; text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <h1>Recent renames</h1>
+    <div id="list"></div>
+    <div class="footer">
+      <a href="#" id="opts">Options</a>
+      <button id="clear">Clear history</button>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
