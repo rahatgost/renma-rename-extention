@@ -111,7 +111,7 @@ function Nav() {
     <motion.header
       initial={{ y: -30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.6, ease: EASE }}
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-canvas/80 backdrop-blur-md border-b border-hairline"
@@ -245,7 +245,7 @@ function Hero() {
           style={{ y: y1 }}
           initial={{ opacity: 0, scale: 0.94, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: 0.4, duration: 0.9, ease: EASE }}
           className="mt-20 md:mt-28 max-w-3xl mx-auto"
         >
           <FilenameMorph />
@@ -506,7 +506,7 @@ function BentoCard({ children, className = "", delay = 0 }: { children: React.Re
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7, delay, ease: EASE }}
       whileHover={{ y: -4 }}
       className={`rounded-2xl overflow-hidden ${className}`}
     >
@@ -619,7 +619,7 @@ function RulesShowcase() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-15%" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: EASE }}
             className="md:col-span-7 rounded-2xl bg-surface-dark p-1.5"
           >
             <div className="rounded-xl bg-surface-dark-elevated p-6">
@@ -691,7 +691,7 @@ function FAQ() {
               <motion.div
                 initial={false}
                 animate={{ height: open === i ? "auto" : 0, opacity: open === i ? 1 : 0 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.35, ease: EASE }}
                 className="overflow-hidden"
               >
                 <p className="pb-6 pr-14 text-body-text">{it.a}</p>
@@ -714,7 +714,7 @@ function CTA() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-15%" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: EASE }}
           className="relative overflow-hidden rounded-3xl bg-ink text-white p-10 md:p-20"
         >
           <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-coral/40 blur-3xl" />
