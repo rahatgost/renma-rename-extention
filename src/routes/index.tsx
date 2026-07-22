@@ -138,85 +138,90 @@ function Nav() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: EASE }}
-      className="sticky top-0 z-50 bg-canvas"
+      className="sticky top-4 z-50"
     >
-      <div
-        className={`max-w-6xl mx-auto flex items-center justify-between gap-4 h-20 px-3 transition-all duration-300 ${
-          scrolled ? "border-b border-hairline" : "border-b border-transparent"
-        }`}
-      >
-        {/* Logo */}
-        <a href="#top" className="flex items-center gap-2 pl-1 pr-2 group shrink-0">
-          <motion.img
-            src={renmaLogo}
-            alt="Renma"
-            width={32}
-            height={32}
-            className="w-8 h-8 rounded-lg shadow-sm"
-            whileHover={{ rotate: -8, scale: 1.06 }}
-            transition={{ type: "spring", stiffness: 300, damping: 14 }}
-          />
-          <span
-            className="text-[22px] leading-none tracking-[-0.04em] italic text-ink"
-            style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontOpticalSizing: "auto", fontVariationSettings: '"opsz" 144', fontWeight: 600 }}
-          >
-            renma<span className="text-coral">.</span>
-          </span>
-        </a>
-
-        {/* Center nav — floating rounded pill */}
-        <nav
+      <div className="max-w-6xl mx-auto px-4">
+        <div
           onMouseLeave={() => setHoverIdx(null)}
-          className="hidden md:flex relative items-center gap-0.5 text-[13.5px] text-body-text bg-surface-soft/70 backdrop-blur-md border border-hairline rounded-full p-1 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_8px_24px_-12px_rgba(0,0,0,0.15)]"
+          className={`flex items-center justify-between gap-3 h-14 pl-3 pr-2 rounded-full bg-canvas/85 backdrop-blur-xl border border-hairline transition-shadow duration-300 ${
+            scrolled
+              ? "shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_12px_32px_-16px_rgba(0,0,0,0.2)]"
+              : "shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_6px_20px_-14px_rgba(0,0,0,0.15)]"
+          }`}
         >
-          {links.map((l, i) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onMouseEnter={() => setHoverIdx(i)}
-              className="relative px-4 py-1.5 rounded-full transition-colors hover:text-ink"
+          {/* Logo */}
+          <a href="#top" className="flex items-center gap-2 pr-2 group shrink-0">
+            <motion.img
+              src={renmaLogo}
+              alt="Renma"
+              width={28}
+              height={28}
+              className="w-7 h-7 rounded-lg shadow-sm"
+              whileHover={{ rotate: -8, scale: 1.06 }}
+              transition={{ type: "spring", stiffness: 300, damping: 14 }}
+            />
+            <span
+              className="text-[20px] leading-none tracking-[-0.04em] italic text-ink"
+              style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontOpticalSizing: "auto", fontVariationSettings: '"opsz" 144', fontWeight: 600 }}
             >
-              {hoverIdx === i && (
-                <motion.span
-                  layoutId="nav-hover"
-                  className="absolute inset-0 rounded-full bg-canvas shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_12px_-4px_rgba(0,0,0,0.1)] border border-hairline"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">{l.label}</span>
-            </a>
-          ))}
-        </nav>
-
-
-        {/* Right cluster */}
-        <div className="flex items-center gap-2 shrink-0">
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full text-body-text hover:text-ink hover:bg-ink/[0.06] transition-colors"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px]" aria-hidden>
-              <path d="M12 .5C5.73.5.66 5.57.66 11.84c0 5.01 3.24 9.26 7.75 10.76.57.1.78-.25.78-.55v-1.94c-3.15.68-3.82-1.52-3.82-1.52-.52-1.32-1.27-1.67-1.27-1.67-1.03-.71.08-.7.08-.7 1.14.08 1.74 1.17 1.74 1.17 1.02 1.74 2.66 1.24 3.31.95.1-.74.4-1.24.72-1.53-2.51-.28-5.15-1.25-5.15-5.58 0-1.23.44-2.24 1.16-3.03-.12-.29-.5-1.45.11-3.02 0 0 .95-.3 3.12 1.16.9-.25 1.87-.37 2.83-.38.96 0 1.93.13 2.83.38 2.17-1.47 3.11-1.16 3.11-1.16.62 1.57.23 2.73.11 3.02.72.79 1.16 1.8 1.16 3.03 0 4.34-2.65 5.29-5.17 5.57.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.79.55 4.51-1.5 7.74-5.75 7.74-10.76C23.34 5.57 18.27.5 12 .5z" />
-            </svg>
-          </a>
-          <a
-            href="/smart-image-renamer.zip"
-            onClick={handleDownload}
-            className="group relative inline-flex items-center gap-1.5 h-10 pl-4 pr-3 rounded-full bg-ink text-canvas text-[13.5px] font-medium hover:bg-coral transition-colors"
-          >
-            <span>Add to Chrome</span>
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-canvas/15 group-hover:bg-canvas/25 transition-colors">
-              <ArrowRight className="w-3.5 h-3.5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+              renma<span className="text-coral">.</span>
             </span>
           </a>
+
+          {/* Divider */}
+          <span className="hidden md:block h-6 w-px bg-hairline" aria-hidden />
+
+          {/* Nav links */}
+          <nav className="hidden md:flex relative items-center gap-0.5 text-[13.5px] text-body-text flex-1">
+            {links.map((l, i) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onMouseEnter={() => setHoverIdx(i)}
+                className="relative px-3.5 py-1.5 rounded-full transition-colors hover:text-ink"
+              >
+                {hoverIdx === i && (
+                  <motion.span
+                    layoutId="nav-hover"
+                    className="absolute inset-0 rounded-full bg-ink/[0.06]"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{l.label}</span>
+              </a>
+            ))}
+          </nav>
+
+          {/* Right cluster */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full text-body-text hover:text-ink hover:bg-ink/[0.06] transition-colors"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px]" aria-hidden>
+                <path d="M12 .5C5.73.5.66 5.57.66 11.84c0 5.01 3.24 9.26 7.75 10.76.57.1.78-.25.78-.55v-1.94c-3.15.68-3.82-1.52-3.82-1.52-.52-1.32-1.27-1.67-1.27-1.67-1.03-.71.08-.7.08-.7 1.14.08 1.74 1.17 1.74 1.17 1.02 1.74 2.66 1.24 3.31.95.1-.74.4-1.24.72-1.53-2.51-.28-5.15-1.25-5.15-5.58 0-1.23.44-2.24 1.16-3.03-.12-.29-.5-1.45.11-3.02 0 0 .95-.3 3.12 1.16.9-.25 1.87-.37 2.83-.38.96 0 1.93.13 2.83.38 2.17-1.47 3.11-1.16 3.11-1.16.62 1.57.23 2.73.11 3.02.72.79 1.16 1.8 1.16 3.03 0 4.34-2.65 5.29-5.17 5.57.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.79.55 4.51-1.5 7.74-5.75 7.74-10.76C23.34 5.57 18.27.5 12 .5z" />
+              </svg>
+            </a>
+            <a
+              href="/smart-image-renamer.zip"
+              onClick={handleDownload}
+              className="group relative inline-flex items-center gap-1.5 h-9 pl-3.5 pr-2 rounded-full bg-ink text-canvas text-[13px] font-medium hover:bg-coral transition-colors"
+            >
+              <span>Add to Chrome</span>
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-canvas/15 group-hover:bg-canvas/25 transition-colors">
+                <ArrowRight className="w-3.5 h-3.5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+              </span>
+            </a>
+          </div>
         </div>
       </div>
     </motion.header>
   );
 }
+
 
 
 function handleDownload(e: React.MouseEvent<HTMLAnchorElement>) {
