@@ -543,23 +543,6 @@
             </div>
           </div>
         </section>
-      </main>
-    </div>
-
-    <script>
-      // Sidebar active state on scroll
-      const links = document.querySelectorAll('.side-nav a');
-      const sections = Array.from(links).map(a => document.querySelector(a.getAttribute('href')));
-      const setActive = () => {
-        const y = window.scrollY + 120;
-        let idx = 0;
-        sections.forEach((s, i) => { if (s && s.offsetTop <= y) idx = i; });
-        links.forEach((l, i) => l.classList.toggle('active', i === idx));
-      };
-      window.addEventListener('scroll', setActive, { passive: true });
-      setActive();
-    </script>
-    <script src="options.js"></script>
         <!-- DUPLICATES -->
         <section id="duplicates" class="section">
           <div class="card">
