@@ -944,9 +944,9 @@ function Footer() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-10">
-        {/* Top: brand + oversized wordmark */}
-        <div className="grid md:grid-cols-12 gap-10 md:gap-8 pb-14 border-b border-white/10">
+      <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-8">
+        {/* Top: brand + link columns */}
+        <div className="grid md:grid-cols-12 gap-10 md:gap-8 pb-12 border-b border-white/10">
           {/* Brand column */}
           <div className="md:col-span-5">
             <div className="flex items-center gap-2.5">
@@ -954,25 +954,25 @@ function Footer() {
               <img
                 src={renmaWordmark}
                 alt="Renma"
-                className="h-6 w-auto invert brightness-0 [filter:invert(1)] select-none"
+                className="h-6 w-auto [filter:invert(1)] select-none"
                 draggable={false}
               />
             </div>
-            <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-canvas/70">
+            <p className="mt-5 max-w-sm text-[14.5px] leading-relaxed text-canvas/65">
               A tiny Chrome extension that gives every downloaded image a name
-              you can actually search for. Local-first. No accounts. Warm by design.
+              you can actually search for. Local-first. No accounts.
             </p>
 
-            <div className="mt-8 flex items-center gap-3">
+            <div className="mt-7 flex items-center gap-2.5">
               <a
                 href="#install"
-                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-coral text-canvas t-button hover:bg-coral-active transition-colors"
+                className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-coral text-canvas t-button hover:bg-coral-active transition-colors"
               >
                 Add to Chrome
               </a>
               <a
                 href="#"
-                className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-white/15 text-canvas/80 hover:text-canvas hover:border-white/30 transition-colors"
+                className="inline-flex items-center justify-center h-9 w-9 rounded-full border border-white/15 text-canvas/75 hover:text-canvas hover:border-white/30 transition-colors"
                 aria-label="GitHub"
               >
                 <Github className="w-4 h-4" />
@@ -984,13 +984,13 @@ function Footer() {
           <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
             {cols.map((col) => (
               <div key={col.title}>
-                <div className="t-caption-upper text-canvas/45 mb-4">{col.title}</div>
-                <ul className="space-y-2.5">
+                <div className="t-caption-upper text-canvas/40 mb-4">{col.title}</div>
+                <ul className="space-y-2">
                   {col.links.map((l) => (
                     <li key={l.label}>
                       <a
                         href={l.href}
-                        className="text-[14px] text-canvas/80 hover:text-coral transition-colors"
+                        className="text-[13.5px] text-canvas/75 hover:text-coral transition-colors"
                       >
                         {l.label}
                       </a>
@@ -1002,34 +1002,38 @@ function Footer() {
           </div>
         </div>
 
-        {/* Giant wordmark band */}
-        <div className="py-14 md:py-20 flex items-center justify-center">
+        {/* Subtle wordmark band */}
+        <div className="py-10 md:py-14 flex items-center justify-center overflow-hidden">
           <img
             src={renmaWordmark}
             alt=""
             aria-hidden
-            className="w-full max-w-5xl h-auto opacity-90 [filter:invert(1)] select-none"
+            className="w-full max-w-3xl h-auto opacity-[0.14] [filter:invert(1)] select-none"
             draggable={false}
           />
         </div>
 
         {/* Bottom meta */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-white/10 text-[13px] text-canvas/50">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-6 border-t border-white/10 text-[12.5px] text-canvas/50">
+          <div className="flex items-center gap-2.5">
             <span className="inline-flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
+              <span className="relative flex w-1.5 h-1.5">
+                <span className="absolute inset-0 rounded-full bg-teal animate-ping opacity-60" />
+                <span className="relative w-1.5 h-1.5 rounded-full bg-teal" />
+              </span>
               All systems local
             </span>
-            <span className="hidden sm:inline text-canvas/25">·</span>
-            <span className="hidden sm:inline">Chrome Manifest V3</span>
+            <span className="text-canvas/20">·</span>
+            <span>Chrome Manifest V3</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>© {new Date().getFullYear()} Renma</span>
             <a href="#" className="hover:text-canvas transition-colors">Privacy</a>
             <a href="#" className="hover:text-canvas transition-colors">Terms</a>
+            <span className="text-canvas/30">© {new Date().getFullYear()} Renma</span>
           </div>
         </div>
       </div>
+
     </footer>
   );
 }
