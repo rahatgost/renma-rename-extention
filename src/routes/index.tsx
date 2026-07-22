@@ -403,27 +403,47 @@ function FilenameMorph() {
 /* ---------------- Logo strip ---------------- */
 
 function LogoStrip() {
-  const items = ["chatgpt.com", "midjourney.com", "unsplash.com", "dribbble.com", "pinterest.com", "figma.com", "behance.net"];
+  const items = [
+    "chatgpt.com",
+    "midjourney.com",
+    "unsplash.com",
+    "dribbble.com",
+    "pinterest.com",
+    "figma.com",
+    "behance.net",
+    "openai.com",
+    "leonardo.ai",
+    "stability.ai",
+  ];
+  const loop = [...items, ...items];
   return (
-    <section className="py-10 border-y border-hairline bg-surface-soft/40">
+    <section className="py-16 border-y border-hairline bg-surface-soft/40 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <p className="text-xs uppercase tracking-widest text-muted-ink mb-6 text-center">
-          Works with every image source
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-          {items.map((s, idx) => (
-            <motion.span
-              key={s}
-              initial={{ opacity: 0, y: 6 }}
-              whileInView={{ opacity: 0.7, y: 0 }}
-              viewport={{ once: true, margin: "-20%" }}
-              transition={{ delay: idx * 0.05, duration: 0.5 }}
-              className="font-mono text-sm text-body-strong"
-            >
-              {s}
-            </motion.span>
-          ))}
+        <div className="flex items-center justify-center gap-3 mb-8">
+          <div className="h-px w-10 bg-hairline" />
+          <p className="text-[11px] uppercase tracking-[0.2em] text-muted-ink">
+            Works with every image source
+          </p>
+          <div className="h-px w-10 bg-hairline" />
         </div>
+      </div>
+
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-canvas to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-canvas to-transparent z-10" />
+
+        <motion.div
+          className="flex gap-14 whitespace-nowrap"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+        >
+          {loop.map((s, idx) => (
+            <div key={`${s}-${idx}`} className="flex items-center gap-2.5 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-coral/60" />
+              <span className="font-mono text-base text-body-strong/80">{s}</span>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
