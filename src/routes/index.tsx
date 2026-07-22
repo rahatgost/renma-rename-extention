@@ -30,25 +30,26 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Smart Image Renamer — Auto-name downloads by source domain" },
+      { title: "Renma — Every image, named the moment it lands" },
       {
         name: "description",
         content:
-          "A Chrome extension that instantly renames image downloads using the site you got them from. AI images become AI_Generated. Everything else, just clean.",
+          "Renma is a Chrome extension that renames image downloads by their source domain, in the same millisecond Chrome writes the file. AI images get tagged. Everything else, just clean.",
       },
-      { property: "og:title", content: "Smart Image Renamer" },
+      { property: "og:title", content: "Renma — Auto-name every image download" },
       {
         property: "og:description",
         content:
-          "Stop dragging image (17).png into folders. Auto-rename every download by source domain — Chrome MV3, zero setup.",
+          "Stop dragging image (17).png into folders. Renma rewrites filenames the moment they hit disk — Chrome MV3, zero setup, zero telemetry.",
       },
-      { name: "twitter:title", content: "Smart Image Renamer" },
+      { name: "twitter:title", content: "Renma" },
       {
         name: "twitter:description",
         content:
-          "Auto-rename every image download by source domain. Chrome MV3.",
+          "Auto-rename every image download by source domain. Chrome MV3. Local-only.",
       },
     ],
+
   }),
   component: Landing,
 });
