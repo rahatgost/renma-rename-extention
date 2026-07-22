@@ -141,7 +141,7 @@ function Nav() {
       className="sticky top-0 z-50 bg-canvas"
     >
       <div
-        className={`max-w-6xl mx-auto flex items-center justify-between gap-4 h-16 pl-3 pr-3 transition-all duration-300 ${
+        className={`max-w-6xl mx-auto flex items-center justify-between gap-4 h-20 px-3 transition-all duration-300 ${
           scrolled ? "border-b border-hairline" : "border-b border-transparent"
         }`}
       >
@@ -164,22 +164,22 @@ function Nav() {
           </span>
         </a>
 
-        {/* Center nav with animated hover pill */}
+        {/* Center nav — floating rounded pill */}
         <nav
           onMouseLeave={() => setHoverIdx(null)}
-          className="hidden md:flex relative items-center gap-1 text-[13.5px] text-body-text"
+          className="hidden md:flex relative items-center gap-0.5 text-[13.5px] text-body-text bg-surface-soft/70 backdrop-blur-md border border-hairline rounded-full p-1 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_8px_24px_-12px_rgba(0,0,0,0.15)]"
         >
           {links.map((l, i) => (
             <a
               key={l.href}
               href={l.href}
               onMouseEnter={() => setHoverIdx(i)}
-              className="relative px-3.5 py-2 rounded-full transition-colors hover:text-ink"
+              className="relative px-4 py-1.5 rounded-full transition-colors hover:text-ink"
             >
               {hoverIdx === i && (
                 <motion.span
                   layoutId="nav-hover"
-                  className="absolute inset-0 rounded-full bg-ink/[0.06]"
+                  className="absolute inset-0 rounded-full bg-canvas shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_12px_-4px_rgba(0,0,0,0.1)] border border-hairline"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
@@ -187,6 +187,7 @@ function Nav() {
             </a>
           ))}
         </nav>
+
 
         {/* Right cluster */}
         <div className="flex items-center gap-2 shrink-0">
