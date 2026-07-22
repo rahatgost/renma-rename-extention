@@ -26,6 +26,7 @@ import {
   Lock,
 } from "lucide-react";
 import renmaLogo from "@/assets/renma-logo.png";
+import renmaWordmark from "@/assets/renma-wordmark.png";
 
 
 
@@ -150,22 +151,22 @@ function Nav() {
           }`}
         >
           {/* Logo */}
-          <a href="#top" className="flex items-center gap-2 pr-2 group shrink-0">
+          <a href="#top" className="flex items-center gap-2 pr-2 group shrink-0" aria-label="Renma home">
             <motion.img
               src={renmaLogo}
-              alt="Renma"
+              alt=""
               width={28}
               height={28}
               className="w-7 h-7 rounded-lg shadow-sm"
               whileHover={{ rotate: -8, scale: 1.06 }}
               transition={{ type: "spring", stiffness: 300, damping: 14 }}
             />
-            <span
-              className="text-[20px] leading-none tracking-[-0.04em] italic text-ink"
-              style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontOpticalSizing: "auto", fontVariationSettings: '"opsz" 144', fontWeight: 600 }}
-            >
-              renma<span className="text-coral">.</span>
-            </span>
+            <img
+              src={renmaWordmark}
+              alt="Renma"
+              className="h-[22px] w-auto select-none"
+              draggable={false}
+            />
           </a>
 
           {/* Divider */}
