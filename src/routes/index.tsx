@@ -152,16 +152,25 @@ function Nav() {
           }`}
         >
           {/* Logo */}
-          <a href="#top" className="flex items-center pl-1 pr-2 shrink-0" aria-label="Renma home">
+          <a href="#top" className="flex items-center gap-2 pl-1 pr-2 shrink-0" aria-label="Renma home">
             <motion.img
+              src={renmaLogo}
+              alt=""
+              width={28}
+              height={28}
+              className="w-7 h-7 rounded-lg select-none"
+              draggable={false}
+              whileHover={{ rotate: -6, scale: 1.06 }}
+              transition={{ type: "spring", stiffness: 300, damping: 14 }}
+            />
+            <img
               src={renmaWordmark}
               alt="Renma"
               className="h-8 w-auto select-none"
               draggable={false}
-              whileHover={{ scale: 1.04, rotate: -1.5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 16 }}
             />
           </a>
+
 
           {/* Divider */}
           <span className="hidden md:block h-6 w-px bg-hairline" aria-hidden />
