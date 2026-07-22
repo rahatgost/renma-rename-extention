@@ -117,6 +117,15 @@ function Landing() {
 
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const links = [
+    { label: "Features", href: "#features" },
+    { label: "How it works", href: "#how" },
+    { label: "Rules", href: "#rules" },
+    { label: "Roadmap", href: "#roadmap" },
+    { label: "FAQ", href: "#faq" },
+  ];
+
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 20);
     on();
@@ -126,51 +135,90 @@ function Nav() {
 
   return (
     <motion.header
-      initial={{ y: -30, opacity: 0 }}
+      initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: EASE }}
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-canvas/80 backdrop-blur-md border-b border-hairline"
-          : "bg-transparent"
-      }`}
+      className="sticky top-4 z-50 px-4"
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#top" className="flex items-center gap-2.5 group">
+      <div
+        className={`max-w-6xl mx-auto flex items-center justify-between gap-4 h-14 pl-3 pr-3 rounded-full transition-all duration-500 ${
+          scrolled
+            ? "bg-canvas/70 backdrop-blur-xl border border-hairline shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)]"
+            : "bg-canvas/40 backdrop-blur-md border border-transparent"
+        }`}
+      >
+        {/* Logo */}
+        <a href="#top" className="flex items-center gap-2 pl-1 pr-2 group shrink-0">
           <motion.img
             src={renmaLogo}
             alt="Renma"
             width={32}
             height={32}
             className="w-8 h-8 rounded-lg shadow-sm"
-            whileHover={{ rotate: -6, scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            whileHover={{ rotate: -8, scale: 1.06 }}
+            transition={{ type: "spring", stiffness: 300, damping: 14 }}
           />
           <span
-            className="text-[26px] leading-none tracking-[-0.04em] italic text-ink"
+            className="text-[22px] leading-none tracking-[-0.04em] italic text-ink"
             style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontOpticalSizing: "auto", fontVariationSettings: '"opsz" 144', fontWeight: 600 }}
           >
             renma<span className="text-coral">.</span>
           </span>
         </a>
-        <nav className="hidden md:flex items-center gap-8 text-sm text-body-text">
-          <a href="#features" className="hover:text-ink transition-colors">Features</a>
-          <a href="#how" className="hover:text-ink transition-colors">How it works</a>
-          <a href="#rules" className="hover:text-ink transition-colors">Rules</a>
-          <a href="#faq" className="hover:text-ink transition-colors">FAQ</a>
-        </nav>
-        <a
-          href="/smart-image-renamer.zip"
-          onClick={handleDownload}
-          className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-ink text-canvas text-sm font-medium hover:bg-coral transition-colors"
+
+        {/* Center nav with animated hover pill */}
+        <nav
+          onMouseLeave={() => setHoverIdx(null)}
+          className="hidden md:flex relative items-center gap-1 text-[13.5px] text-body-text"
         >
-          <Download className="w-4 h-4" />
-          <span className="hidden sm:inline">Download</span>
-        </a>
+          {links.map((l, i) => (
+            <a
+              key={l.href}
+              href={l.href}
+              onMouseEnter={() => setHoverIdx(i)}
+              className="relative px-3.5 py-2 rounded-full transition-colors hover:text-ink"
+            >
+              {hoverIdx === i && (
+                <motion.span
+                  layoutId="nav-hover"
+                  className="absolute inset-0 rounded-full bg-ink/[0.06]"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{l.label}</span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Right cluster */}
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full text-body-text hover:text-ink hover:bg-ink/[0.06] transition-colors"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px]" aria-hidden>
+              <path d="M12 .5C5.73.5.66 5.57.66 11.84c0 5.01 3.24 9.26 7.75 10.76.57.1.78-.25.78-.55v-1.94c-3.15.68-3.82-1.52-3.82-1.52-.52-1.32-1.27-1.67-1.27-1.67-1.03-.71.08-.7.08-.7 1.14.08 1.74 1.17 1.74 1.17 1.02 1.74 2.66 1.24 3.31.95.1-.74.4-1.24.72-1.53-2.51-.28-5.15-1.25-5.15-5.58 0-1.23.44-2.24 1.16-3.03-.12-.29-.5-1.45.11-3.02 0 0 .95-.3 3.12 1.16.9-.25 1.87-.37 2.83-.38.96 0 1.93.13 2.83.38 2.17-1.47 3.11-1.16 3.11-1.16.62 1.57.23 2.73.11 3.02.72.79 1.16 1.8 1.16 3.03 0 4.34-2.65 5.29-5.17 5.57.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.79.55 4.51-1.5 7.74-5.75 7.74-10.76C23.34 5.57 18.27.5 12 .5z" />
+            </svg>
+          </a>
+          <a
+            href="/smart-image-renamer.zip"
+            onClick={handleDownload}
+            className="group relative inline-flex items-center gap-1.5 h-10 pl-4 pr-3 rounded-full bg-ink text-canvas text-[13.5px] font-medium hover:bg-coral transition-colors"
+          >
+            <span>Add to Chrome</span>
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-canvas/15 group-hover:bg-canvas/25 transition-colors">
+              <ArrowRight className="w-3.5 h-3.5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+            </span>
+          </a>
+        </div>
       </div>
     </motion.header>
   );
 }
+
 
 function handleDownload(e: React.MouseEvent<HTMLAnchorElement>) {
   e.preventDefault();
