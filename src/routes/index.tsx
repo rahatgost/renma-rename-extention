@@ -273,7 +273,7 @@ function Hero() {
 
           <motion.h1
             variants={fadeUp}
-            className="font-display text-[52px] leading-[1.02] md:text-[92px] md:leading-[0.98] tracking-tight text-ink"
+            className="h-display-xl text-ink"
           >
             Every image, <br />
             <span className="italic text-coral">named properly</span> <br />
@@ -471,7 +471,7 @@ function BentoFeatures() {
           <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">
             Built for messy download folders
           </motion.div>
-          <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02] text-ink">
+          <motion.h2 variants={fadeUp} className="h-display-lg text-ink">
             Small extension.<br /><span className="italic">Enormous</span> quality-of-life.
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-5 text-body-text text-lg">
@@ -488,7 +488,7 @@ function BentoFeatures() {
                 <Sparkles className="w-3.5 h-3.5 text-coral" /> AI detection
               </div>
               <div>
-                <div className="font-display text-4xl md:text-5xl leading-tight mb-4">
+                <div className="h-display-md mb-4">
                   AI-generated images get <span className="italic text-coral">their own prefix.</span>
                 </div>
                 <p className="text-white/60 max-w-md">
@@ -511,7 +511,7 @@ function BentoFeatures() {
             <div className="p-8 h-full flex flex-col justify-between min-h-[320px]">
               <Zap className="w-8 h-8" />
               <div>
-                <div className="font-display text-3xl md:text-4xl leading-tight mb-3">
+                <div className="h-display-sm mb-3">
                   Zero delay.
                 </div>
                 <p className="text-white/85 text-sm">
@@ -526,7 +526,7 @@ function BentoFeatures() {
             <div className="p-8 h-full flex flex-col justify-between min-h-[240px]">
               <Settings2 className="w-8 h-8 text-ink" />
               <div>
-                <div className="font-display text-3xl leading-tight mb-2">Your rules, your prefixes.</div>
+                <div className="h-display-sm mb-2">Your rules, your prefixes.</div>
                 <p className="text-body-text text-sm">
                   Add custom domain → prefix mappings from the options page. Saved instantly
                   via chrome.storage.local.
@@ -538,7 +538,7 @@ function BentoFeatures() {
           <BentoCard className="md:col-span-2 bg-canvas border border-hairline" delay={0.2}>
             <div className="p-8 h-full flex flex-col min-h-[240px]">
               <Clock className="w-8 h-8 text-ink mb-6" />
-              <div className="font-display text-3xl leading-tight mb-2">Last 5 renames.</div>
+              <div className="h-display-sm mb-2">Last 5 renames.</div>
               <p className="text-body-text text-sm mb-4">Popup shows exactly what changed.</p>
               <div className="mt-auto space-y-1.5">
                 {["AI_Generated_...812.png", "unsplash_...901.jpg", "dribbble_...044.webp"].map((n) => (
@@ -552,7 +552,7 @@ function BentoFeatures() {
             <div className="p-8 h-full flex flex-col justify-between min-h-[240px]">
               <Shield className="w-8 h-8 text-ink" />
               <div>
-                <div className="font-display text-3xl leading-tight mb-2">Privacy first.</div>
+                <div className="h-display-sm mb-2">Privacy first.</div>
                 <p className="text-body-text text-sm">
                   Everything is local. No telemetry, no servers, no analytics. The
                   extension only asks for the <code className="font-mono text-xs bg-canvas px-1 rounded">downloads</code> permission.
@@ -565,7 +565,7 @@ function BentoFeatures() {
             <div className="p-8 h-full flex flex-col justify-between min-h-[220px]">
               <Globe2 className="w-8 h-8 text-ink" />
               <div>
-                <div className="font-display text-3xl leading-tight mb-2">Any domain, any extension.</div>
+                <div className="h-display-sm mb-2">Any domain, any extension.</div>
                 <p className="text-body-text text-sm">
                   Preserves the original file extension — png, jpg, webp, gif, svg, avif —
                   and strips <code className="font-mono text-xs">www.</code> plus TLD for
@@ -579,7 +579,7 @@ function BentoFeatures() {
             <div className="p-8 h-full flex flex-col justify-between min-h-[220px]">
               <Puzzle className="w-8 h-8 text-coral" />
               <div>
-                <div className="font-display text-3xl leading-tight mb-2">
+                <div className="h-display-sm mb-2">
                   Manifest V3, service worker, done.
                 </div>
                 <p className="text-white/60 text-sm">
@@ -632,7 +632,7 @@ function HowItWorks() {
             <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">
               How it works
             </motion.div>
-            <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02] text-ink">
+            <motion.h2 variants={fadeUp} className="h-display-lg text-ink">
               Three steps.<br /><span className="italic">That's it.</span>
             </motion.h2>
             <motion.p variants={fadeUp} className="mt-6 text-body-text">
@@ -656,7 +656,7 @@ function HowItWorks() {
               >
                 <div className="font-display text-4xl text-coral shrink-0 leading-none">{s.n}</div>
                 <div>
-                  <div className="font-display text-2xl text-ink mb-1.5">{s.title}</div>
+                  <div className="h-title-lg font-display text-ink mb-1.5">{s.title}</div>
                   <p className="text-body-text text-sm leading-relaxed">{s.body}</p>
                 </div>
                 <ChevronRight className="ml-auto w-5 h-5 text-muted-ink self-center opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -686,7 +686,7 @@ function RulesShowcase() {
             <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">
               Naming logic
             </motion.div>
-            <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02]">
+            <motion.h2 variants={fadeUp} className="h-display-lg">
               A tiny <span className="italic">decision tree</span> with big returns.
             </motion.h2>
             <motion.p variants={fadeUp} className="mt-6 text-body-text">
@@ -757,7 +757,7 @@ function FAQ() {
           className="mb-14"
         >
           <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">FAQ</motion.div>
-          <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02]">
+          <motion.h2 variants={fadeUp} className="h-display-lg">
             Questions, <span className="italic">answered.</span>
           </motion.h2>
         </motion.div>
@@ -774,7 +774,7 @@ function FAQ() {
                 onClick={() => setOpen(open === i ? null : i)}
                 className="w-full text-left py-6 flex items-center justify-between gap-6 group"
               >
-                <span className="font-display text-xl md:text-2xl text-ink">{it.q}</span>
+                <span className="h-title-lg font-display text-ink">{it.q}</span>
                 <motion.span
                   animate={{ rotate: open === i ? 45 : 0 }}
                   transition={{ duration: 0.3 }}
@@ -857,7 +857,7 @@ function CTA() {
               </a>
             </div>
 
-            <h2 className="mt-8 font-display text-5xl md:text-7xl leading-[1.02] max-w-4xl text-canvas">
+            <h2 className="mt-8 h-display-xl max-w-4xl text-canvas">
               Give your Downloads folder <em className="text-coral not-italic font-display italic">the life</em> it deserves.
             </h2>
 
@@ -936,7 +936,7 @@ function Benchmark() {
           <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">
             The benchmark
           </motion.div>
-          <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02]">
+          <motion.h2 variants={fadeUp} className="h-display-lg">
             Renma vs. <span className="italic">everything else</span> you've tried.
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-5 text-body-text text-lg">
@@ -962,7 +962,7 @@ function Benchmark() {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-display text-2xl text-ink">{m.label}</span>
+                    <span className="h-title-lg font-display text-ink">{m.label}</span>
                     <span
                       className={`w-9 h-9 rounded-xl flex items-center justify-center ${
                         isActive ? "bg-coral text-white" : "bg-surface-card text-ink"
@@ -1053,7 +1053,7 @@ function Roadmap() {
           <motion.div variants={fadeUp} className="text-xs uppercase tracking-widest text-coral mb-4">
             What's next
           </motion.div>
-          <motion.h2 variants={fadeUp} className="font-display text-5xl md:text-6xl leading-[1.02]">
+          <motion.h2 variants={fadeUp} className="h-display-lg">
             Renma is a <span className="italic">naming primitive.</span><br />These are the layers on top.
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-5 text-body-text text-lg">
@@ -1070,7 +1070,7 @@ function Roadmap() {
                 <div className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full bg-canvas text-[10px] uppercase tracking-widest text-coral mb-6">
                   <span className="w-1 h-1 rounded-full bg-coral animate-pulse" /> In design
                 </div>
-                <div className="font-display text-4xl leading-tight text-ink mb-4">
+                <div className="h-display-md text-ink mb-4">
                   Templates that <span className="italic">think.</span>
                 </div>
                 <p className="text-body-text text-sm leading-relaxed">
@@ -1097,7 +1097,7 @@ function Roadmap() {
                 <span className="text-[10px] uppercase tracking-widest text-white/40">Q3 · prototype</span>
               </div>
               <div>
-                <div className="font-display text-4xl md:text-5xl leading-tight mb-3">
+                <div className="h-display-md mb-3">
                   Route images into <span className="italic text-coral">folders</span>, not just names.
                 </div>
                 <p className="text-white/60 text-sm max-w-md">
@@ -1123,7 +1123,7 @@ function Roadmap() {
             <div className="p-8 h-full flex flex-col justify-between min-h-[340px]">
               <Wand2 className="w-8 h-8" />
               <div>
-                <div className="font-display text-3xl leading-tight mb-2">
+                <div className="h-display-sm mb-2">
                   Know <span className="italic">which</span> AI made it.
                 </div>
                 <p className="text-white/85 text-sm">
@@ -1147,7 +1147,7 @@ function Roadmap() {
             <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
               <Tag className="w-7 h-7 text-ink" />
               <div>
-                <div className="font-display text-2xl leading-tight mb-2">Alt-text as filename</div>
+                <div className="h-title-lg font-display leading-tight mb-2">Alt-text as filename</div>
                 <p className="text-body-text text-xs">
                   Pull the source image's <span className="font-mono">alt</span> attribute and slug it into the name — searchable, meaningful, human-readable.
                 </p>
@@ -1159,7 +1159,7 @@ function Roadmap() {
             <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
               <FileCode2 className="w-7 h-7 text-ink" />
               <div>
-                <div className="font-display text-2xl leading-tight mb-2">Regex rules</div>
+                <div className="h-title-lg font-display leading-tight mb-2">Regex rules</div>
                 <p className="text-body-text text-xs">
                   For power users — match URL paths and query params, not just hostnames. Redirect an entire CDN subtree to one prefix.
                 </p>
@@ -1171,7 +1171,7 @@ function Roadmap() {
             <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
               <Users className="w-7 h-7 text-ink" />
               <div>
-                <div className="font-display text-2xl leading-tight mb-2">Shareable rule packs</div>
+                <div className="h-title-lg font-display leading-tight mb-2">Shareable rule packs</div>
                 <p className="text-body-text text-xs">
                   Export your mappings as a JSON pack, share with your team, import in one click. Design studios and research teams naming things the same way.
                 </p>
@@ -1183,7 +1183,7 @@ function Roadmap() {
             <div className="p-6 h-full flex flex-col justify-between min-h-[240px]">
               <Layers className="w-7 h-7 text-coral" />
               <div>
-                <div className="font-display text-2xl leading-tight mb-2">Bulk rename</div>
+                <div className="h-title-lg font-display leading-tight mb-2">Bulk rename</div>
                 <p className="text-white/60 text-xs">
                   Retroactively apply the current rule set to files already sitting in your Downloads folder. History becomes clean too.
                 </p>
