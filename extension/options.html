@@ -369,6 +369,9 @@
           <a href="#template"><span class="n">02</span>Template</a>
           <a href="#mappings"><span class="n">03</span>Domain rules</a>
           <a href="#scope"><span class="n">04</span>Site scope</a>
+          <a href="#duplicates"><span class="n">05</span>Duplicates</a>
+          <a href="#stats"><span class="n">06</span>Stats</a>
+          <a href="#backup"><span class="n">07</span>Backup</a>
         </nav>
         <div class="side-foot">
           <div class="pulse">Local · private</div>
@@ -420,6 +423,23 @@
                   <span class="s">Group downloads into <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--coral)">YYYY/MM/DD</code> subfolders automatically.</span>
                 </div>
                 <div class="switch" id="sw-dateFolders"></div>
+              </div>
+              <div class="row">
+                <div class="info">
+                  <span class="t">Desktop notifications</span>
+                  <span class="s">Show a small toast every time renma renames a download.</span>
+                </div>
+                <div class="switch" id="sw-notifications"></div>
+              </div>
+              <div class="row">
+                <div class="info">
+                  <span class="t">Sequence counter</span>
+                  <span class="s">Powers the <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--coral)">{counter}</code> token. Reset anytime.</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span id="counterVal" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--body)">0000</span>
+                  <button id="resetCounter" class="del">Reset</button>
+                </div>
               </div>
             </div>
           </div>
@@ -520,6 +540,94 @@
                 </div>
                 <div class="chip-list" id="siteChips"></div>
               </div>
+            </div>
+          </div>
+        </section>
+        <!-- DUPLICATES -->
+        <section id="duplicates" class="section">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h2>Duplicate handling</h2>
+                <p>Renma tracks recent download URLs. Decide what happens on a repeat.</p>
+              </div>
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row" style="align-items:center">
+                <div class="info">
+                  <span class="t">On duplicate URL</span>
+                  <span class="s">Tag marks the entry in history. Skip cancels the rename so Chrome uses the default name.</span>
+                </div>
+                <div class="seg" id="dupSeg">
+                  <button data-mode="off">Off</button>
+                  <button data-mode="tag">Tag</button>
+                  <button data-mode="skip">Skip</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STATS -->
+        <section id="stats" class="section">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h2>Stats</h2>
+                <p>What renma has been up to on this machine.</p>
+              </div>
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+                <div style="padding:16px;background:var(--surface-soft);border-radius:12px">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted-soft);margin-bottom:6px">Total</div>
+                  <div id="stat-total" style="font-family:'Instrument Serif',serif;font-size:32px;color:var(--ink);line-height:1">0</div>
+                </div>
+                <div style="padding:16px;background:var(--surface-soft);border-radius:12px">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted-soft);margin-bottom:6px">Today</div>
+                  <div id="stat-today" style="font-family:'Instrument Serif',serif;font-size:32px;color:var(--ink);line-height:1">0</div>
+                </div>
+                <div style="padding:16px;background:var(--surface-soft);border-radius:12px">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted-soft);margin-bottom:6px">Sources</div>
+                  <div id="stat-sources" style="font-family:'Instrument Serif',serif;font-size:32px;color:var(--ink);line-height:1">0</div>
+                </div>
+              </div>
+              <div class="field-label" style="margin-bottom:10px">Top sources</div>
+              <div id="topDomains" style="display:flex;flex-direction:column;gap:8px"></div>
+              <div style="margin-top:18px;display:flex;justify-content:flex-end">
+                <button id="resetStats" class="del">Reset stats</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BACKUP -->
+        <section id="backup" class="section">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h2>Backup &amp; restore</h2>
+                <p>Export every rule and preference to a JSON file, or import an existing config.</p>
+              </div>
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button id="exportSettings" class="btn-primary">Export settings</button>
+                <label class="btn-primary" style="background:var(--surface-card);color:var(--ink);cursor:pointer">
+                  Import settings
+                  <input id="importFile" type="file" accept="application/json" style="display:none" />
+                </label>
+              </div>
+              <div class="status" id="b-status"></div>
             </div>
           </div>
         </section>

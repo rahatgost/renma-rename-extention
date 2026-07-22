@@ -187,12 +187,117 @@ $("s-add").addEventListener("click", async () => {
   renderSites();
 });
 
+/* ---------- Duplicate mode ---------- */
+const dupSeg = $("dupSeg");
+async function renderDupMode() {
+  const { duplicateMode = "tag" } = await get("duplicateMode");
+  dupSeg.querySelectorAll("button").forEach((b) =>
+    b.classList.toggle("active", b.dataset.mode === duplicateMode)
+  );
+}
+dupSeg.querySelectorAll("button").forEach((b) =>
+  b.addEventListener("click", async () => {
+    await set({ duplicateMode: b.dataset.mode });
+    renderDupMode();
+  })
+);
+
+/* ---------- Counter ---------- */
+async function renderCounter() {
+  const { counter = 0 } = await get("counter");
+  $("counterVal").textContent = String(counter).padStart(4, "0");
+}
+$("resetCounter").addEventListener("click", async () => {
+  await set({ counter: 0 });
+  renderCounter();
+});
+
+/* ---------- Stats ---------- */
+async function renderStats() {
+  const { stats = { total: 0, byDomain: {}, byDay: {} } } = await get("stats");
+  const today = new Date().toISOString().slice(0, 10);
+  $("stat-total").textContent = stats.total || 0;
+  $("stat-today").textContent = stats.byDay?.[today] || 0;
+  $("stat-sources").textContent = Object.keys(stats.byDomain || {}).length;
+
+  const entries = Object.entries(stats.byDomain || {}).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const max = entries[0]?.[1] || 1;
+  const top = $("topDomains");
+  top.innerHTML = "";
+  if (entries.length === 0) {
+    top.innerHTML = `<div style="font-family:'Instrument Serif',serif;font-size:15px;color:var(--muted-soft);text-align:center;padding:20px">No downloads tracked yet.</div>`;
+    return;
+  }
+  entries.forEach(([domain, count]) => {
+    const pct = (count / max) * 100;
+    const row = document.createElement("div");
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--body)"></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--coral);font-weight:500"></span>
+      </div>
+      <div style="height:6px;background:var(--surface-soft);border-radius:999px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--coral);border-radius:999px"></div>
+      </div>`;
+    row.children[0].children[0].textContent = domain;
+    row.children[0].children[1].textContent = count;
+    top.appendChild(row);
+  });
+}
+$("resetStats").addEventListener("click", async () => {
+  await set({ stats: { total: 0, byDomain: {}, byDay: {} } });
+  renderStats();
+});
+
+/* ---------- Backup ---------- */
+const bStatus = $("b-status");
+const BACKUP_KEYS = [
+  "enabled", "template", "dateFolders", "dateFolderFormat",
+  "siteMode", "siteList", "customMappings", "filetypes",
+  "onlyImages", "notifications", "duplicateMode",
+];
+$("exportSettings").addEventListener("click", async () => {
+  const data = await get(BACKUP_KEYS);
+  const blob = new Blob([JSON.stringify({ __renma: 1, version: 1, data }, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `renma-settings-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  flash(bStatus, "Exported");
+});
+$("importFile").addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    const data = parsed.data || parsed;
+    const clean = {};
+    BACKUP_KEYS.forEach((k) => { if (k in data) clean[k] = data[k]; });
+    await set(clean);
+    flash(bStatus, "Imported — reloading");
+    setTimeout(() => location.reload(), 700);
+  } catch (err) {
+    bStatus.style.color = "#c64545";
+    bStatus.textContent = "Invalid file";
+    setTimeout(() => { bStatus.textContent = ""; bStatus.style.color = ""; }, 2000);
+  }
+});
+
 /* ---------- Init ---------- */
 bindSwitch("sw-enabled", "enabled", true);
 bindSwitch("sw-onlyImages", "onlyImages", true);
 bindSwitch("sw-dateFolders", "dateFolders", false);
+bindSwitch("sw-notifications", "notifications", false);
 renderTokens();
 loadTemplate();
 renderMappings();
 renderMode();
 renderSites();
+renderDupMode();
+renderCounter();
+renderStats();
