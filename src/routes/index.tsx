@@ -146,7 +146,12 @@ function Nav() {
             whileHover={{ rotate: -6, scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
           />
-          <span className="font-display text-xl tracking-tight">Renma</span>
+          <span
+            className="text-[26px] leading-none tracking-[-0.04em] italic text-ink"
+            style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontOpticalSizing: "auto", fontVariationSettings: '"opsz" 144', fontWeight: 600 }}
+          >
+            renma<span className="text-coral">.</span>
+          </span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-body-text">
           <a href="#features" className="hover:text-ink transition-colors">Features</a>
@@ -774,7 +779,12 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-ink">
         <div className="flex items-center gap-2">
           <img src={renmaLogo} alt="Renma" width={24} height={24} className="w-6 h-6 rounded-md" loading="lazy" />
-          <span className="font-display text-lg text-ink">Renma</span>
+          <span
+            className="text-xl leading-none tracking-[-0.04em] italic text-ink"
+            style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontVariationSettings: '"opsz" 144', fontWeight: 600 }}
+          >
+            renma<span className="text-coral">.</span>
+          </span>
         </div>
         <div>© {new Date().getFullYear()} · Chrome MV3 · Made with warmth.</div>
       </div>
