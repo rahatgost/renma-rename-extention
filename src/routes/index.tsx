@@ -994,17 +994,32 @@ function Footer() {
           </div>
         </div>
 
-        {/* Giant wordmark watermark */}
+        {/* Giant wordmark — masked, centered, gradient-filled */}
         <div
           aria-hidden
-          className="relative overflow-hidden pointer-events-none select-none -mx-6"
+          className="relative pointer-events-none select-none flex justify-center items-end -mx-6 h-[22vw] min-h-[140px] max-h-[280px] overflow-hidden"
         >
-          <img
-            src={renmaWordmark}
-            alt=""
-            className="w-full h-auto opacity-[0.06] -mb-[6vw]"
-            draggable={false}
+          {/* soft glow behind */}
+          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-[radial-gradient(ellipse_at_center,hsl(var(--coral)/0.18),transparent_70%)]" />
+          {/* gradient-filled wordmark using image as CSS mask */}
+          <div
+            className="relative w-[92%] h-full -mb-[3vw]"
+            style={{
+              WebkitMaskImage: `url(${renmaWordmark})`,
+              maskImage: `url(${renmaWordmark})`,
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "center bottom",
+              maskPosition: "center bottom",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+              background:
+                "linear-gradient(135deg, hsl(var(--coral)) 0%, hsl(var(--coral)/0.85) 35%, hsl(var(--ink)/0.9) 100%)",
+              opacity: 0.22,
+            }}
           />
+          {/* fade to canvas at bottom */}
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-canvas" />
         </div>
 
         {/* Meta row */}
