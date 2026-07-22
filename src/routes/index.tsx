@@ -994,40 +994,44 @@ function Footer() {
           </div>
         </div>
 
-        {/* Giant wordmark — masked, centered, gradient-filled */}
+        {/* Giant wordmark — centered with coral color overlay */}
         <div
           aria-hidden
-          className="relative pointer-events-none select-none flex justify-center items-end -mx-6 h-[22vw] min-h-[160px] max-h-[280px] overflow-hidden"
+          className="relative pointer-events-none select-none -mx-6 overflow-hidden"
         >
           {/* soft coral glow behind */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[80%] h-2/3"
+            className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[70%] h-[70%]"
             style={{
               background:
-                "radial-gradient(ellipse at center, var(--coral) 0%, transparent 70%)",
-              opacity: 0.22,
+                "radial-gradient(ellipse at center, var(--coral) 0%, transparent 65%)",
+              opacity: 0.28,
             }}
           />
-          {/* gradient-filled wordmark using image as CSS mask */}
-          <div
-            className="relative mx-auto w-full max-w-[1100px] h-full -mb-[2vw]"
-            style={{
-              WebkitMaskImage: `url(${renmaWordmark})`,
-              maskImage: `url(${renmaWordmark})`,
-              WebkitMaskRepeat: "no-repeat",
-              maskRepeat: "no-repeat",
-              WebkitMaskPosition: "center center",
-              maskPosition: "center center",
-              WebkitMaskSize: "contain",
-              maskSize: "contain",
-              background:
-                "linear-gradient(135deg, var(--coral) 0%, var(--coral) 40%, var(--ink) 100%)",
-              opacity: 0.55,
-            }}
-          />
+          {/* wordmark, cropped to bottom half, centered */}
+          <div className="relative mx-auto w-full max-w-[1100px] px-6 flex justify-center">
+            <div className="relative w-full aspect-[1018/220] overflow-hidden">
+              <img
+                src={renmaWordmark}
+                alt=""
+                draggable={false}
+                className="absolute inset-x-0 top-0 mx-auto w-full h-auto object-contain"
+                style={{ opacity: 0.5 }}
+              />
+              {/* coral tint via blend */}
+              <div
+                className="absolute inset-0 mix-blend-color"
+                style={{
+                  background:
+                    "linear-gradient(135deg, var(--coral) 0%, var(--coral) 55%, var(--ink) 100%)",
+                }}
+              />
+            </div>
+          </div>
           {/* fade to canvas at bottom */}
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-canvas" />
         </div>
+
 
 
         {/* Meta row */}
