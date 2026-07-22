@@ -773,7 +773,7 @@ function Footer() {
           <div className="w-6 h-6 rounded-md bg-ink text-canvas flex items-center justify-center">
             <ImageIcon className="w-3 h-3" />
           </div>
-          <span className="font-display text-lg text-ink">Smart Image Renamer</span>
+          <span className="font-display text-lg text-ink">Renma</span>
         </div>
         <div>© {new Date().getFullYear()} · Chrome MV3 · Made with warmth.</div>
       </div>
