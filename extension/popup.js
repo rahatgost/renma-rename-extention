@@ -1,11 +1,14 @@
 const listEl = document.getElementById("list");
 const countEl = document.getElementById("count");
+const searchEl = document.getElementById("search");
 const masterSwitch = document.getElementById("masterSwitch");
 const toggleTitle = document.getElementById("toggleTitle");
 const toggleSub = document.getElementById("toggleSub");
 const siteRow = document.getElementById("siteRow");
 const siteHostEl = document.getElementById("siteHost");
 const siteToggleBtn = document.getElementById("siteToggle");
+
+let cachedHistory = [];
 
 function fmtTime(iso) {
   try {
@@ -26,19 +29,18 @@ function baseDomain(host) {
   return parts.length <= 2 ? clean : parts.slice(-2).join(".");
 }
 
-async function renderHistory() {
-  const { history = [] } = await chrome.storage.local.get("history");
-  countEl.textContent = String(history.length);
-  if (history.length === 0) {
+function paint(entries) {
+  countEl.textContent = String(cachedHistory.length);
+  if (entries.length === 0) {
     listEl.innerHTML = `
       <div class="empty">
-        <div class="title">Nothing renamed yet.</div>
-        <div class="sub">Save an image — renma will do the rest.</div>
+        <div class="title">${cachedHistory.length === 0 ? "Nothing renamed yet." : "No matches."}</div>
+        <div class="sub">${cachedHistory.length === 0 ? "Save an image — renma will do the rest." : "Try a different search."}</div>
       </div>`;
     return;
   }
   listEl.innerHTML = "";
-  history.forEach((h) => {
+  entries.forEach((h) => {
     const div = document.createElement("div");
     div.className = "item";
     const nw = document.createElement("div");
@@ -52,13 +54,39 @@ async function renderHistory() {
     const pill = document.createElement("span");
     pill.className = "domain-pill";
     pill.textContent = h.domain || "unknown";
+    mt.appendChild(pill);
+    if (h.duplicate) {
+      const dp = document.createElement("span");
+      dp.className = "dup-pill";
+      dp.textContent = "duplicate";
+      mt.appendChild(dp);
+    }
     const time = document.createElement("span");
     time.className = "time";
     time.textContent = fmtTime(h.time);
-    mt.append(pill, time);
+    mt.appendChild(time);
     div.append(nw, od, mt);
     listEl.appendChild(div);
   });
+}
+
+function applyFilter() {
+  const q = (searchEl.value || "").toLowerCase().trim();
+  if (!q) return paint(cachedHistory);
+  paint(
+    cachedHistory.filter(
+      (h) =>
+        (h.newName || "").toLowerCase().includes(q) ||
+        (h.originalName || "").toLowerCase().includes(q) ||
+        (h.domain || "").toLowerCase().includes(q)
+    )
+  );
+}
+
+async function renderHistory() {
+  const { history = [] } = await chrome.storage.local.get("history");
+  cachedHistory = history;
+  applyFilter();
 }
 
 async function renderToggle() {
@@ -111,10 +139,24 @@ masterSwitch.addEventListener("click", async () => {
   renderToggle();
 });
 
+searchEl.addEventListener("input", applyFilter);
+
 document.getElementById("clear").addEventListener("click", async () => {
   await chrome.storage.local.set({ history: [] });
   renderHistory();
 });
+
+document.getElementById("export").addEventListener("click", async () => {
+  const { history = [] } = await chrome.storage.local.get("history");
+  const blob = new Blob([JSON.stringify(history, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `renma-history-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
 document.getElementById("opts").addEventListener("click", (e) => {
   e.preventDefault();
   chrome.runtime.openOptionsPage();
