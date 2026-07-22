@@ -96,7 +96,7 @@ const CODE_SNIPPET = `chrome.downloads.onDeterminingFilename.addListener(
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-canvas text-ink font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-canvas text-ink font-sans">
       <Nav />
       <Hero />
       <LogoStrip />
