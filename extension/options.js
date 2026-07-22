@@ -8,16 +8,17 @@ async function load() {
   const { customMappings = [] } = await chrome.storage.local.get("customMappings");
   listEl.innerHTML = "";
   if (customMappings.length === 0) {
-    listEl.innerHTML = `<tr><td colspan="3" style="color:#888">No custom mappings yet.</td></tr>`;
+    listEl.innerHTML = `<tr><td colspan="3" class="empty-cell">No custom rules yet — add your first below.</td></tr>`;
     return;
   }
   customMappings.forEach((m, i) => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td></td><td></td><td><button class="del" data-i="${i}">Remove</button></td>`;
+    tr.innerHTML = `<td class="domain-cell"></td><td class="prefix-cell"></td><td style="text-align:right"><button class="del" data-i="${i}">Remove</button></td>`;
     tr.children[0].textContent = m.domain;
     tr.children[1].textContent = m.prefix;
     listEl.appendChild(tr);
   });
+
   listEl.querySelectorAll(".del").forEach((btn) =>
     btn.addEventListener("click", async (e) => {
       const i = Number(e.target.dataset.i);
