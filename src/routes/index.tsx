@@ -202,7 +202,7 @@ function Hero() {
           variants={stagger}
           initial="hidden"
           animate="show"
-          className="max-w-4xl"
+          className="max-w-4xl mx-auto text-center flex flex-col items-center"
         >
           <motion.div
             variants={fadeUp}
@@ -230,7 +230,7 @@ function Hero() {
             filename before it hits disk — cleanly, deterministically, forever.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center gap-3">
+          <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <a
               href="/smart-image-renamer.zip"
               onClick={handleDownload}
@@ -248,11 +248,12 @@ function Hero() {
             </a>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mt-8 flex items-center gap-6 text-xs text-muted-ink">
+          <motion.div variants={fadeUp} className="mt-8 flex items-center justify-center gap-6 text-xs text-muted-ink">
             <div className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-coral" /> Free · Open source</div>
             <div className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-coral" /> No account</div>
             <div className="hidden sm:flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-coral" /> Works offline</div>
           </motion.div>
+
         </motion.div>
 
         {/* Floating filename morph card */}
