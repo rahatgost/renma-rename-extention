@@ -994,19 +994,11 @@ function Footer() {
           </div>
         </div>
 
-        {/* Giant wordmark — text-based using Fraunces italic */}
+        {/* Giant wordmark — clean text */}
         <div
           aria-hidden
           className="relative pointer-events-none select-none overflow-hidden"
         >
-          <div
-            className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[70%] h-[70%]"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, var(--coral) 0%, transparent 65%)",
-              opacity: 0.28,
-            }}
-          />
           <div className="relative flex justify-center items-end pt-8">
             <span
               className="block text-center leading-[0.85] tracking-[-0.05em] italic"
@@ -1014,27 +1006,16 @@ function Footer() {
                 fontFamily: '"Fraunces", serif',
                 fontWeight: 400,
                 fontSize: "clamp(6rem, 22vw, 20rem)",
-                background:
-                  "linear-gradient(135deg, var(--coral) 0%, var(--coral) 55%, var(--ink) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                opacity: 0.6,
+                color: "var(--ink)",
+                opacity: 0.9,
               }}
             >
               renma
-              <span
-                style={{
-                  color: "var(--coral)",
-                  WebkitTextFillColor: "var(--coral)",
-                }}
-              >
-                .
-              </span>
+              <span style={{ color: "var(--coral)" }}>.</span>
             </span>
           </div>
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-canvas" />
         </div>
+
 
 
 
