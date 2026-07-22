@@ -887,19 +887,145 @@ function CTA() {
 /* ---------------- Footer ---------------- */
 
 function Footer() {
+  const cols = [
+    {
+      title: "Product",
+      links: [
+        { label: "Features", href: "#features" },
+        { label: "How it works", href: "#how" },
+        { label: "Benchmark", href: "#benchmark" },
+        { label: "Roadmap", href: "#roadmap" },
+        { label: "FAQ", href: "#faq" },
+      ],
+    },
+    {
+      title: "Install",
+      links: [
+        { label: "Add to Chrome", href: "#install" },
+        { label: "Load unpacked", href: "#install" },
+        { label: "Release notes", href: "#" },
+        { label: "Changelog", href: "#" },
+      ],
+    },
+    {
+      title: "Resources",
+      links: [
+        { label: "Docs", href: "#" },
+        { label: "GitHub", href: "#" },
+        { label: "Report an issue", href: "#" },
+        { label: "Privacy", href: "#" },
+      ],
+    },
+  ];
+
   return (
-    <footer className="border-t border-hairline">
-      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-ink">
-        <div className="flex items-center gap-2">
-          <img src={renmaLogo} alt="Renma" width={24} height={24} className="w-6 h-6 rounded-md" loading="lazy" />
-          <span
-            className="text-xl leading-none tracking-[-0.04em] italic text-ink"
-            style={{ fontFamily: '"Fraunces", "Instrument Serif", serif', fontVariationSettings: '"opsz" 144', fontWeight: 600 }}
-          >
-            renma<span className="text-coral">.</span>
-          </span>
+    <footer className="relative overflow-hidden bg-surface-dark text-canvas">
+      {/* soft coral glow bleeding from bottom */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 -bottom-40 h-80 opacity-60"
+        style={{
+          background:
+            "radial-gradient(60% 100% at 50% 0%, oklch(0.66 0.128 42 / 0.35), transparent 70%)",
+        }}
+      />
+      {/* faint grid */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage: "radial-gradient(ellipse at top, #000 55%, transparent 80%)",
+        }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-10">
+        {/* Top: brand + oversized wordmark */}
+        <div className="grid md:grid-cols-12 gap-10 md:gap-8 pb-14 border-b border-white/10">
+          {/* Brand column */}
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-2.5">
+              <img src={renmaLogo} alt="" width={28} height={28} className="w-7 h-7 rounded-lg" loading="lazy" />
+              <img
+                src={renmaWordmark}
+                alt="Renma"
+                className="h-6 w-auto invert brightness-0 [filter:invert(1)] select-none"
+                draggable={false}
+              />
+            </div>
+            <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-canvas/70">
+              A tiny Chrome extension that gives every downloaded image a name
+              you can actually search for. Local-first. No accounts. Warm by design.
+            </p>
+
+            <div className="mt-8 flex items-center gap-3">
+              <a
+                href="#install"
+                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-coral text-canvas t-button hover:bg-coral-active transition-colors"
+              >
+                Add to Chrome
+              </a>
+              <a
+                href="#"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-white/15 text-canvas/80 hover:text-canvas hover:border-white/30 transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Link columns */}
+          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            {cols.map((col) => (
+              <div key={col.title}>
+                <div className="t-caption-upper text-canvas/45 mb-4">{col.title}</div>
+                <ul className="space-y-2.5">
+                  {col.links.map((l) => (
+                    <li key={l.label}>
+                      <a
+                        href={l.href}
+                        className="text-[14px] text-canvas/80 hover:text-coral transition-colors"
+                      >
+                        {l.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
-        <div>© {new Date().getFullYear()} · Chrome MV3 · Made with warmth.</div>
+
+        {/* Giant wordmark band */}
+        <div className="py-14 md:py-20 flex items-center justify-center">
+          <img
+            src={renmaWordmark}
+            alt=""
+            aria-hidden
+            className="w-full max-w-5xl h-auto opacity-90 [filter:invert(1)] select-none"
+            draggable={false}
+          />
+        </div>
+
+        {/* Bottom meta */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-white/10 text-[13px] text-canvas/50">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
+              All systems local
+            </span>
+            <span className="hidden sm:inline text-canvas/25">·</span>
+            <span className="hidden sm:inline">Chrome Manifest V3</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span>© {new Date().getFullYear()} Renma</span>
+            <a href="#" className="hover:text-canvas transition-colors">Privacy</a>
+            <a href="#" className="hover:text-canvas transition-colors">Terms</a>
+          </div>
+        </div>
       </div>
     </footer>
   );
