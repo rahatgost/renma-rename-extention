@@ -430,31 +430,102 @@ function LogoStrip() {
 
       <div className="relative">
         {/* stronger edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-canvas via-canvas/90 to-transparent z-10" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-canvas via-canvas/90 to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-canvas via-canvas/90 to-transparent z-20" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-canvas via-canvas/90 to-transparent z-20" />
 
-        {/* center spotlight — subtle emphasis for the "selected" region */}
+        {/* center spotlight — logos reveal when items enter this zone */}
         <div className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 w-72 z-[5] rounded-full bg-coral/[0.06] blur-2xl" />
         <div className="pointer-events-none absolute inset-y-2 left-1/2 -translate-x-1/2 w-52 z-[6] rounded-full ring-1 ring-inset ring-coral/15" />
 
-        <motion.div
-          className="flex gap-14 whitespace-nowrap py-3"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-        >
-          {loop.map((s, idx) => (
-            <div
-              key={`${s}-${idx}`}
-              className="group/item flex items-center gap-2.5 shrink-0 px-3 py-1.5 rounded-full transition-all duration-300 hover:bg-coral/10 hover:ring-1 hover:ring-coral/25 cursor-default"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-coral/50 transition-all duration-300 group-hover/item:bg-coral group-hover/item:scale-150 group-hover/item:shadow-[0_0_10px_var(--coral)]" />
-              <span className="font-mono text-base text-body-strong/70 transition-colors duration-300 group-hover/item:text-ink">
-                {s}
-              </span>
-            </div>
-          ))}
-        </motion.div>
+        <MarqueeRow items={loop} />
       </div>
+    </section>
+  );
+}
+
+function MarqueeRow({ items }: { items: string[] }) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let raf = 0;
+    const CENTER_ZONE = 110; // px on each side of viewport center
+
+    const tick = () => {
+      const vw = window.innerWidth;
+      const center = vw / 2;
+      const children = track.children;
+      for (let i = 0; i < children.length; i++) {
+        const el = children[i] as HTMLElement;
+        const rect = el.getBoundingClientRect();
+        const itemCenter = rect.left + rect.width / 2;
+        const dist = Math.abs(itemCenter - center);
+        if (dist < CENTER_ZONE) {
+          const t = 1 - dist / CENTER_ZONE; // 0..1
+          el.style.setProperty("--t", t.toFixed(3));
+          el.dataset.active = "true";
+        } else if (el.dataset.active === "true") {
+          el.style.setProperty("--t", "0");
+          el.dataset.active = "false";
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  return (
+    <motion.div
+      ref={trackRef}
+      className="flex gap-14 whitespace-nowrap py-3"
+      animate={{ x: ["0%", "-50%"] }}
+      transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+    >
+      {items.map((s, idx) => (
+        <div
+          key={`${s}-${idx}`}
+          data-active="false"
+          style={{ ["--t" as string]: 0 }}
+          className="marquee-item group/item flex items-center gap-2.5 shrink-0 px-3 py-1.5 rounded-full cursor-default"
+        >
+          <span
+            className="relative inline-flex items-center justify-center h-6 w-6 rounded-full bg-surface-soft ring-1 ring-hairline overflow-hidden transition-transform duration-300"
+            style={{
+              transform: `scale(calc(1 + var(--t) * 0.5))`,
+            }}
+          >
+            {/* fallback coral dot */}
+            <span
+              className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
+              style={{ opacity: `calc(1 - var(--t))` }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-coral/60" />
+            </span>
+            {/* favicon reveal in center */}
+            <img
+              src={`https://www.google.com/s2/favicons?domain=${s}&sz=64`}
+              alt=""
+              loading="lazy"
+              className="h-4 w-4 object-contain transition-opacity duration-300"
+              style={{ opacity: `var(--t)` }}
+              onError={(e) => ((e.currentTarget.style.display = "none"))}
+            />
+          </span>
+          <span
+            className="font-mono text-base transition-colors duration-300"
+            style={{
+              color: `color-mix(in oklab, var(--ink) calc(var(--t) * 100%), color-mix(in oklab, var(--ink) 55%, transparent))`,
+            }}
+          >
+            {s}
+          </span>
+        </div>
+      ))}
+    </motion.div>
+  );
+}
     </section>
   );
 }
