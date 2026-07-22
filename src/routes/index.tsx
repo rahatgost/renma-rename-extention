@@ -997,9 +997,9 @@ function Footer() {
         {/* Giant wordmark — clean text */}
         <div
           aria-hidden
-          className="relative pointer-events-none select-none overflow-hidden"
+          className="relative pointer-events-none select-none overflow-hidden mt-4"
         >
-          <div className="relative flex justify-center items-end pt-8">
+          <div className="relative flex justify-center items-end">
             <span
               className="block text-center leading-[0.85] tracking-[-0.05em] italic"
               style={{
@@ -1016,27 +1016,6 @@ function Footer() {
           </div>
         </div>
 
-
-
-
-        {/* Meta row */}
-        <div className="relative flex flex-col md:flex-row justify-between items-center py-6 border-t border-ink/10 gap-4">
-          <div className="text-[13px] text-ink/55">
-            © {new Date().getFullYear()} Renma. Local-first, open in spirit.
-          </div>
-          <div className="flex items-center gap-6 text-[13px] font-medium text-ink/60">
-            <a href="#" className="hover:text-ink transition-colors">Privacy</a>
-            <a href="#" className="hover:text-ink transition-colors">Terms</a>
-            <a
-              href="#"
-              className="inline-flex items-center gap-1.5 hover:text-ink transition-colors"
-              aria-label="GitHub"
-            >
-              <Github className="w-4 h-4" />
-              GitHub
-            </a>
-          </div>
-        </div>
       </div>
     </footer>
   );
