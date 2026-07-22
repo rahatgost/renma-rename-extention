@@ -526,9 +526,6 @@ function MarqueeRow({ items }: { items: string[] }) {
     </motion.div>
   );
 }
-    </section>
-  );
-}
 
 /* ---------------- Bento features ---------------- */
 
