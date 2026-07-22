@@ -922,75 +922,56 @@ function Footer() {
   ];
 
   return (
-    <footer className="relative overflow-hidden bg-surface-dark text-canvas">
-      {/* soft coral glow bleeding from bottom */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 -bottom-40 h-80 opacity-60"
-        style={{
-          background:
-            "radial-gradient(60% 100% at 50% 0%, oklch(0.66 0.128 42 / 0.35), transparent 70%)",
-        }}
-      />
-      {/* faint grid */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage: "radial-gradient(ellipse at top, #000 55%, transparent 80%)",
-        }}
-      />
-
-      <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-8">
-        {/* Top: brand + link columns */}
-        <div className="grid md:grid-cols-12 gap-10 md:gap-8 pb-12 border-b border-white/10">
+    <footer className="relative overflow-hidden bg-canvas text-ink border-t border-ink/10">
+      <div className="relative max-w-7xl mx-auto px-6">
+        {/* Top: brand + links + CTA (asymmetric 4/5/3) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 py-16 md:py-20">
           {/* Brand column */}
-          <div className="md:col-span-5">
-            <div className="flex items-center gap-2.5">
-              <img src={renmaLogo} alt="" width={28} height={28} className="w-7 h-7 rounded-lg" loading="lazy" />
-              <img
-                src={renmaWordmark}
-                alt="Renma"
-                className="h-6 w-auto [filter:invert(1)] select-none"
-                draggable={false}
-              />
+          <div className="md:col-span-4 flex flex-col justify-between gap-8">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <img
+                  src={renmaLogo}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 rounded-lg"
+                  loading="lazy"
+                />
+                <img
+                  src={renmaWordmark}
+                  alt="Renma"
+                  className="h-7 w-auto select-none"
+                  draggable={false}
+                />
+              </div>
+              <p className="mt-6 max-w-xs text-[15px] leading-relaxed text-ink/70">
+                A tiny Chrome extension that gives every downloaded image a name
+                you can actually search for. Local-first. No accounts.
+              </p>
             </div>
-            <p className="mt-5 max-w-sm text-[14.5px] leading-relaxed text-canvas/65">
-              A tiny Chrome extension that gives every downloaded image a name
-              you can actually search for. Local-first. No accounts.
-            </p>
-
-            <div className="mt-7 flex items-center gap-2.5">
-              <a
-                href="#install"
-                className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-coral text-canvas t-button hover:bg-coral-active transition-colors"
-              >
-                Add to Chrome
-              </a>
-              <a
-                href="#"
-                className="inline-flex items-center justify-center h-9 w-9 rounded-full border border-white/15 text-canvas/75 hover:text-canvas hover:border-white/30 transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="w-4 h-4" />
-              </a>
+            <div className="flex items-center gap-3">
+              <span className="relative flex w-2 h-2">
+                <span className="absolute inset-0 rounded-full bg-teal animate-ping opacity-60" />
+                <span className="relative w-2 h-2 rounded-full bg-teal" />
+              </span>
+              <span className="t-caption-upper text-ink/55">
+                All systems local · Manifest V3
+              </span>
             </div>
           </div>
 
           {/* Link columns */}
-          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+          <div className="md:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-8">
             {cols.map((col) => (
-              <div key={col.title}>
-                <div className="t-caption-upper text-canvas/40 mb-4">{col.title}</div>
-                <ul className="space-y-2">
+              <div key={col.title} className="space-y-4">
+                <h4 className="t-caption-upper text-ink/40">{col.title}</h4>
+                <ul className="space-y-3">
                   {col.links.map((l) => (
                     <li key={l.label}>
                       <a
                         href={l.href}
-                        className="text-[13.5px] text-canvas/75 hover:text-coral transition-colors"
+                        className="text-[13.5px] font-medium text-ink/80 hover:text-coral transition-colors"
                       >
                         {l.label}
                       </a>
@@ -1000,43 +981,55 @@ function Footer() {
               </div>
             ))}
           </div>
+
+          {/* CTA column */}
+          <div className="md:col-span-3 flex md:justify-end items-start">
+            <a
+              href="#install"
+              className="group relative inline-flex items-center justify-center h-12 px-6 rounded-full bg-ink text-canvas t-button overflow-hidden transition-all hover:pr-12"
+            >
+              <span className="relative z-10">Add to Chrome</span>
+              <ArrowRight className="absolute right-4 w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+            </a>
+          </div>
         </div>
 
-        {/* Subtle wordmark band */}
-        <div className="py-10 md:py-14 flex items-center justify-center overflow-hidden">
+        {/* Giant wordmark watermark */}
+        <div
+          aria-hidden
+          className="relative overflow-hidden pointer-events-none select-none -mx-6"
+        >
           <img
             src={renmaWordmark}
             alt=""
-            aria-hidden
-            className="w-full max-w-3xl h-auto opacity-[0.14] [filter:invert(1)] select-none"
+            className="w-full h-auto opacity-[0.06] -mb-[6vw]"
             draggable={false}
           />
         </div>
 
-        {/* Bottom meta */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-6 border-t border-white/10 text-[12.5px] text-canvas/50">
-          <div className="flex items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="relative flex w-1.5 h-1.5">
-                <span className="absolute inset-0 rounded-full bg-teal animate-ping opacity-60" />
-                <span className="relative w-1.5 h-1.5 rounded-full bg-teal" />
-              </span>
-              All systems local
-            </span>
-            <span className="text-canvas/20">·</span>
-            <span>Chrome Manifest V3</span>
+        {/* Meta row */}
+        <div className="relative flex flex-col md:flex-row justify-between items-center py-6 border-t border-ink/10 gap-4">
+          <div className="text-[13px] text-ink/55">
+            © {new Date().getFullYear()} Renma. Local-first, open in spirit.
           </div>
-          <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-canvas transition-colors">Privacy</a>
-            <a href="#" className="hover:text-canvas transition-colors">Terms</a>
-            <span className="text-canvas/30">© {new Date().getFullYear()} Renma</span>
+          <div className="flex items-center gap-6 text-[13px] font-medium text-ink/60">
+            <a href="#" className="hover:text-ink transition-colors">Privacy</a>
+            <a href="#" className="hover:text-ink transition-colors">Terms</a>
+            <a
+              href="#"
+              className="inline-flex items-center gap-1.5 hover:text-ink transition-colors"
+              aria-label="GitHub"
+            >
+              <Github className="w-4 h-4" />
+              GitHub
+            </a>
           </div>
         </div>
       </div>
-
     </footer>
   );
 }
+
 
 /* ---------------- Benchmark ---------------- */
 
