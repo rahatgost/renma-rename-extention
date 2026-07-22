@@ -1,6 +1,8 @@
 const AI_HOSTS = ["openai.com", "chatgpt.com", "oaiusercontent.com"];
 const DEFAULT_IMAGE_EXTS = ["png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "avif", "tiff", "ico", "heic"];
 const DEFAULT_TEMPLATE = "{prefix}_{timestamp}.{ext}";
+const HISTORY_LIMIT = 50;
+const SEEN_LIMIT = 300;
 
 const DEFAULTS = {
   enabled: true,
@@ -14,6 +16,11 @@ const DEFAULTS = {
   onlyImages: true,
   counter: 0,
   history: [],
+  // new
+  notifications: false,
+  duplicateMode: "tag", // "off" | "tag" | "skip"
+  seenUrls: [], // recent URLs (bounded)
+  stats: { total: 0, byDomain: {}, byDay: {} },
 };
 
 async function getSettings() {
@@ -84,7 +91,6 @@ function formatDate(d, fmt) {
 }
 
 function sanitize(part) {
-  // Illegal filename chars + control chars
   return String(part)
     .replace(/[\\?%*:|"<>\x00-\x1F]/g, "")
     .replace(/\s+/g, "_")
@@ -103,7 +109,7 @@ function renderTemplate(template, tokens) {
 async function pushHistory(entry) {
   const { history = [] } = await chrome.storage.local.get("history");
   history.unshift(entry);
-  await chrome.storage.local.set({ history: history.slice(0, 5) });
+  await chrome.storage.local.set({ history: history.slice(0, HISTORY_LIMIT) });
 }
 
 async function nextCounter() {
@@ -111,6 +117,42 @@ async function nextCounter() {
   const next = counter + 1;
   await chrome.storage.local.set({ counter: next });
   return next;
+}
+
+async function bumpStats(hostname, dateStr) {
+  const { stats = { total: 0, byDomain: {}, byDay: {} } } = await chrome.storage.local.get("stats");
+  stats.total = (stats.total || 0) + 1;
+  stats.byDomain[hostname] = (stats.byDomain[hostname] || 0) + 1;
+  stats.byDay[dateStr] = (stats.byDay[dateStr] || 0) + 1;
+  // keep byDay bounded to last 30 keys
+  const days = Object.keys(stats.byDay).sort();
+  if (days.length > 30) {
+    const drop = days.slice(0, days.length - 30);
+    drop.forEach((k) => delete stats.byDay[k]);
+  }
+  await chrome.storage.local.set({ stats });
+}
+
+async function checkAndTrackDuplicate(url) {
+  const { seenUrls = [] } = await chrome.storage.local.get("seenUrls");
+  const isDup = seenUrls.includes(url);
+  if (!isDup) {
+    seenUrls.unshift(url);
+    await chrome.storage.local.set({ seenUrls: seenUrls.slice(0, SEEN_LIMIT) });
+  }
+  return isDup;
+}
+
+function notify(title, message) {
+  try {
+    chrome.notifications?.create({
+      type: "basic",
+      iconUrl: "icon-128.png",
+      title,
+      message,
+      priority: 0,
+    });
+  } catch {}
 }
 
 chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
@@ -124,6 +166,14 @@ chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
 
     const hostname = getHostname(item);
     if (!siteAllowed(hostname, s.siteMode, s.siteList)) return suggest();
+
+    // Duplicate handling
+    const url = item.finalUrl || item.url || "";
+    const isDup = url ? await checkAndTrackDuplicate(url) : false;
+    if (isDup && s.duplicateMode === "skip") {
+      if (s.notifications) notify("Renma — duplicate skipped", hostname || "unknown source");
+      return suggest();
+    }
 
     const mapping = resolveMapping(hostname, s.customMappings);
     const now = new Date();
@@ -145,7 +195,6 @@ chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
     let name = renderTemplate(s.template || DEFAULT_TEMPLATE, tokens);
     if (!name || name.startsWith(".")) name = renderTemplate(DEFAULT_TEMPLATE, tokens);
 
-    // Build folder path
     const parts = [];
     if (mapping.folder) {
       mapping.folder.split("/").filter(Boolean).forEach((p) => parts.push(sanitize(p)));
@@ -163,11 +212,21 @@ chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
       originalName: item.filename,
       newName: finalPath,
       domain: hostname,
+      url,
+      duplicate: isDup,
       time: now.toISOString(),
     });
+    await bumpStats(hostname || "unknown", formatDate(now, "YYYY-MM-DD"));
+
+    if (s.notifications) {
+      notify(
+        isDup ? "Renma — duplicate renamed" : "Renma — renamed",
+        `${item.filename} → ${finalPath}`
+      );
+    }
 
     suggest({ filename: finalPath, conflictAction: "uniquify" });
   })();
 
-  return true; // async suggest
+  return true;
 });
