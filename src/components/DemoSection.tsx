@@ -12,10 +12,8 @@ const DEMO_CONTENT = {
   description:
     "Watch a real download turn from image (17).png into a clean, sourced filename — before Chrome even finishes writing it to disk.",
   ctaLabel: "Watch Demo",
-  posterUrl:
-    "https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=1600&q=80",
-  videoUrl:
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  posterUrl: "/renma-demo-poster.jpg",
+  videoUrl: "/renma-demo.mp4",
   highlights: [
     { icon: Wand2, label: "Instant source-aware renaming" },
     { icon: FolderTree, label: "Auto-routed into the right folder" },
