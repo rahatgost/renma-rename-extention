@@ -10,7 +10,10 @@ import {
   ArrowRight,
   Lightbulb,
   Keyboard,
+  FileImage,
+  FolderOpen,
 } from "lucide-react";
+
 import sketchOpen from "@/assets/guide/sketch-01-open.jpg";
 import sketchBehavior from "@/assets/guide/sketch-02-behavior.jpg";
 import sketchTemplate from "@/assets/guide/sketch-03-template.jpg";
