@@ -9,15 +9,14 @@ import {
   Settings2,
   ArrowRight,
 } from "lucide-react";
-import renmaLogo from "@/assets/renma-logo.png";
-import shotBehavior from "@/assets/guide/behavior.png";
-import shotTemplate from "@/assets/guide/template.png";
-import shotMappings from "@/assets/guide/mappings.png";
-import shotScope from "@/assets/guide/scope.png";
-import shotDuplicates from "@/assets/guide/duplicates.png";
-import shotStats from "@/assets/guide/stats.png";
-import shotBackup from "@/assets/guide/backup.png";
-import shotPopup from "@/assets/guide/popup.png";
+import sketchOpen from "@/assets/guide/sketch-01-open.jpg";
+import sketchBehavior from "@/assets/guide/sketch-02-behavior.jpg";
+import sketchTemplate from "@/assets/guide/sketch-03-template.jpg";
+import sketchRules from "@/assets/guide/sketch-04-rules.jpg";
+import sketchScope from "@/assets/guide/sketch-05-scope.jpg";
+import sketchStats from "@/assets/guide/sketch-06-stats.jpg";
+import sketchBackup from "@/assets/guide/sketch-07-backup.jpg";
+import sketchPopup from "@/assets/guide/sketch-08-popup.jpg";
 
 /* ───────────────────── Hand-drawn primitives ───────────────────── */
 
@@ -37,99 +36,33 @@ function Star({ className = "" }: { className?: string }) {
   );
 }
 
-/** Curved hand-drawn arrow from (x1,y1) → (x2,y2) in % of container */
-function Arrow({
-  from,
-  to,
-  bend = 40,
-  className = "text-[color:var(--ink)]",
-}: {
-  from: [number, number];
-  to: [number, number];
-  bend?: number;
-  className?: string;
-}) {
-  const [x1, y1] = from;
-  const [x2, y2] = to;
-  const mx = (x1 + x2) / 2;
-  const my = (y1 + y2) / 2 - bend;
-  return (
-    <svg className={`pointer-events-none absolute inset-0 h-full w-full ${className}`} viewBox="0 0 100 100" preserveAspectRatio="none">
-      <defs>
-        <marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
-        </marker>
-      </defs>
-      <path
-        d={`M ${x1} ${y1} Q ${mx} ${my}, ${x2} ${y2}`}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="0.5"
-        strokeLinecap="round"
-        strokeDasharray="0.8 1.2"
-        vectorEffect="non-scaling-stroke"
-        markerEnd="url(#ah)"
-        style={{ strokeWidth: 1.4 } as React.CSSProperties}
-      />
-    </svg>
-  );
-}
+/* ───────────────────── Sketch frame ───────────────────── */
 
-/* ───────────────────── Annotated screenshot w/ margin notes ───────────────────── */
-
-type Callout = {
-  /** dot position on the screenshot, in % */
-  pin: [number, number];
-  /** note anchor, in % of the outer frame */
-  note: [number, number];
-  /** which side the note sits: 'l' | 'r' */
-  side: "l" | "r";
-  title: string;
-  body: string;
-  bend?: number;
-};
-
-function SketchShot({
+function SketchFrame({
   src,
   alt,
-  callouts,
-  aspect = "auto",
+  legend,
 }: {
   src: string;
   alt: string;
-  callouts: Callout[];
-  aspect?: string;
+  legend: { title: string; body: string }[];
 }) {
   return (
     <div className="relative">
       {/* paper frame w/ tape */}
-      <div className="relative rounded-[22px] border border-[color:var(--hairline)] bg-[color:var(--canvas)] p-3 sm:p-4 shadow-[0_30px_80px_-40px_rgba(20,20,19,0.35)]">
+      <div className="relative rounded-[22px] border border-[color:var(--hairline)] bg-[color:var(--canvas)] p-2.5 sm:p-3 shadow-[0_30px_80px_-40px_rgba(20,20,19,0.35)]">
         <span className="absolute -top-3 left-10 h-6 w-20 rotate-[-4deg] rounded-[2px] bg-[color:var(--coral)]/25 border border-[color:var(--coral)]/40" />
         <span className="absolute -top-3 right-14 h-6 w-16 rotate-[3deg] rounded-[2px] bg-[color:var(--accent-amber,#e8a55a)]/25 border border-[color:var(--accent-amber,#e8a55a)]/40" />
 
-        <div className="relative overflow-hidden rounded-[14px] border border-[color:var(--hairline)] bg-white" style={{ aspectRatio: aspect === "auto" ? undefined : aspect }}>
-          <img src={src} alt={alt} className="block w-full h-auto" />
-
-          {/* pins */}
-          {callouts.map((c, i) => (
-            <div
-              key={`pin-${i}`}
-              className="absolute z-10"
-              style={{ left: `${c.pin[0]}%`, top: `${c.pin[1]}%`, transform: "translate(-50%,-50%)" }}
-            >
-              <span className="absolute inset-0 -m-2 rounded-full bg-[color:var(--coral)]/20 animate-ping" />
-              <span className="relative grid h-7 w-7 place-items-center rounded-full border-2 border-[color:var(--coral)] bg-[color:var(--canvas)] text-[12px] font-bold text-[color:var(--coral)] shadow-md">
-                {i + 1}
-              </span>
-            </div>
-          ))}
+        <div className="overflow-hidden rounded-[14px] border border-[color:var(--hairline)] bg-[#f5efe1]">
+          <img src={src} alt={alt} loading="lazy" className="block w-full h-auto" />
         </div>
       </div>
 
-      {/* legend list (always visible, no overflow) */}
+      {/* legend */}
       <ol className="mt-5 grid gap-2 sm:grid-cols-2">
-        {callouts.map((c, i) => (
-          <li key={`m-${i}`} className="flex gap-2.5 rounded-lg border border-[color:var(--hairline)] bg-[color:var(--surface-soft)] p-3">
+        {legend.map((c, i) => (
+          <li key={i} className="flex gap-2.5 rounded-lg border border-[color:var(--hairline)] bg-[color:var(--surface-soft)] p-3">
             <span className="mt-[2px] inline-grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[color:var(--coral)] text-[11px] font-bold text-white">
               {i + 1}
             </span>
@@ -143,7 +76,6 @@ function SketchShot({
     </div>
   );
 }
-
 
 /* ───────────────────── Real-usage demo strip ───────────────────── */
 
@@ -164,7 +96,7 @@ function BeforeAfter({
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="flex-1 rounded-lg border border-[color:var(--hairline)] bg-white p-3">
           <p className="font-mono text-[10px] uppercase tracking-wider text-[color:var(--muted)]">Browser saved</p>
-          <p className="mt-1 truncate font-mono text-[13px] text-[color:var(--body-strong,#252523)] line-through decoration-[color:var(--muted-soft)]/60">
+          <p className="mt-1 truncate font-mono text-[13px] text-[color:var(--ink)]/70 line-through decoration-[color:var(--muted-soft)]/60">
             {before}
           </p>
         </div>
@@ -179,7 +111,6 @@ function BeforeAfter({
       {note && (
         <p className="mt-3 font-[Fraunces] italic text-[14px] text-[color:var(--body)]">— {note}</p>
       )}
-
     </div>
   );
 }
@@ -209,7 +140,7 @@ function Step({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6 }}
-      className="relative grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)] lg:gap-16 items-start"
+      className="relative grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)] lg:gap-14 items-start"
     >
       <div className="lg:sticky lg:top-28">
         <div className="flex items-center gap-3 text-[color:var(--muted)]">
@@ -273,8 +204,8 @@ export default function GuideSection() {
             .
           </h2>
           <p className="mt-5 text-[16.5px] leading-[1.65] text-[color:var(--body)] max-w-xl">
-            Real screenshots. Real downloads. Numbered pins, margin notes, and a
-            before/after for each control — so you know exactly what changes.
+            Ink-and-paper sketches for every control — plus a before/after with a
+            real filename, so you know exactly what changes.
           </p>
         </div>
 
@@ -313,41 +244,14 @@ export default function GuideSection() {
             icon={Settings2}
             title="Find the settings page"
             shot={
-              <div className="relative rounded-[22px] border border-[color:var(--hairline)] bg-[color:var(--ink)] p-6 sm:p-10 text-[color:var(--canvas)]">
-                <span className="absolute -top-3 left-10 h-6 w-20 rotate-[-4deg] rounded-[2px] bg-[color:var(--coral)]/40" />
-                <p className="font-mono text-[11px] uppercase tracking-widest text-white/60 mb-4">
-                  chrome://extensions
-                </p>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
-                    <img src={renmaLogo} alt="" className="h-8 w-8 rounded-md" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-[Fraunces] italic text-[18px]">renma.</p>
-                      <p className="text-[12px] text-white/50">v1.3 · enabled</p>
-                    </div>
-                    <button className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-mono uppercase tracking-wider">
-                      Details
-                    </button>
-                  </div>
-                  <div className="relative flex items-center gap-3 rounded-xl border border-dashed border-[color:var(--coral)] bg-[color:var(--coral)]/10 p-3">
-                    <div className="h-8 w-8 rounded-md bg-[color:var(--coral)] grid place-items-center">
-                      <Settings2 className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="text-[13px] flex-1">Extension options</span>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-[color:var(--coral)]">
-                      click →
-                    </span>
-                    <span
-                      className="absolute -right-4 -top-6 font-[Fraunces] italic text-[16px] text-[color:var(--coral)] rotate-[-6deg]"
-                    >
-                      here!
-                    </span>
-                  </div>
-                </div>
-                <p className="mt-5 text-[12px] text-white/50 leading-relaxed">
-                  Or right-click the Renma toolbar icon → <b>Options</b>.
-                </p>
-              </div>
+              <SketchFrame
+                src={sketchOpen}
+                alt="chrome://extensions with Renma highlighted"
+                legend={[
+                  { title: "Extension card", body: "Renma sits on your chrome://extensions page like any other extension." },
+                  { title: "Extension options", body: "Click the dashed row to open the full settings surface." },
+                ]}
+              />
             }
           >
             <p>
@@ -369,13 +273,13 @@ export default function GuideSection() {
             icon={MousePointer2}
             title="Flip the master switches"
             shot={
-              <SketchShot
-                src={shotBehavior}
-                alt="Behavior settings"
-                callouts={[
-                  { pin: [88, 22], note: [104, 22], side: "r", title: "Master switch", body: "Pause Renma everywhere without uninstalling.", bend: 20 },
-                  { pin: [88, 50], note: [104, 50], side: "r", title: "Only images", body: "Skip PDFs, ZIPs, and other MIME types.", bend: 0 },
-                  { pin: [88, 78], note: [104, 78], side: "r", title: "Notify me", body: "Small desktop toast fires on every rename.", bend: -10 },
+              <SketchFrame
+                src={sketchBehavior}
+                alt="Behavior toggles sketch"
+                legend={[
+                  { title: "Enable renma", body: "Global kill switch — pause everywhere without uninstalling." },
+                  { title: "Images only", body: "Skip PDFs, ZIPs, and other MIME types." },
+                  { title: "Notify me", body: "Small desktop toast fires on every rename." },
                 ]}
               />
             }
@@ -401,12 +305,12 @@ export default function GuideSection() {
             icon={FileType2}
             title="Design the filename"
             shot={
-              <SketchShot
-                src={shotTemplate}
-                alt="Template editor"
-                callouts={[
-                  { pin: [45, 32], note: [104, 26], side: "r", title: "The recipe", body: "Mix tokens with _  -  . to taste. Click a chip to insert.", bend: 20 },
-                  { pin: [45, 74], note: [104, 74], side: "r", title: "Live preview", body: "Renders using a real Unsplash download.", bend: -12 },
+              <SketchFrame
+                src={sketchTemplate}
+                alt="Filename template editor sketch"
+                legend={[
+                  { title: "The recipe", body: "Mix tokens with _  -  . to taste. Tap a chip to insert." },
+                  { title: "Live preview", body: "Renders using a real Unsplash download." },
                 ]}
               />
             }
@@ -433,13 +337,13 @@ export default function GuideSection() {
             icon={Globe2}
             title="Teach it your domains"
             shot={
-              <SketchShot
-                src={shotMappings}
-                alt="Domain rules"
-                callouts={[
-                  { pin: [18, 62], note: [-4, 62], side: "l", title: "Domain", body: "Any substring of the URL host. dribbble also matches cdn.dribbble.com.", bend: 15 },
-                  { pin: [50, 62], note: [50, 108], side: "r", title: "Prefix", body: "Becomes {prefix} in your template.", bend: -20 },
-                  { pin: [82, 62], note: [104, 62], side: "r", title: "Folder", body: "Optional subfolder inside your Downloads/ root.", bend: 10 },
+              <SketchFrame
+                src={sketchRules}
+                alt="Domain rules table sketch"
+                legend={[
+                  { title: "Domain", body: "Any substring of the URL host. dribbble also matches cdn.dribbble.com." },
+                  { title: "Prefix", body: "Becomes {prefix} in your template." },
+                  { title: "Folder", body: "Optional subfolder inside your Downloads/ root." },
                 ]}
               />
             }
@@ -464,12 +368,12 @@ export default function GuideSection() {
             icon={Sparkles}
             title="Pick where Renma runs"
             shot={
-              <SketchShot
-                src={shotScope}
-                alt="Site scope"
-                callouts={[
-                  { pin: [50, 22], note: [104, 22], side: "r", title: "Mode", body: "All sites · whitelist · blacklist. Only one is active.", bend: 12 },
-                  { pin: [50, 68], note: [-4, 68], side: "l", title: "Site list", body: "One domain per chip. Enter to add, × to remove.", bend: -15 },
+              <SketchFrame
+                src={sketchScope}
+                alt="Site scope sketch"
+                legend={[
+                  { title: "Mode", body: "All sites · whitelist · blacklist. Only one is active." },
+                  { title: "Site list", body: "One domain per chip. Enter to add, × to remove." },
                 ]}
               />
             }
@@ -495,23 +399,15 @@ export default function GuideSection() {
             icon={BarChart3}
             title="Duplicates & stats"
             shot={
-              <div className="grid gap-6">
-                <SketchShot
-                  src={shotDuplicates}
-                  alt="Duplicate mode"
-                  callouts={[
-                    { pin: [50, 60], note: [104, 60], side: "r", title: "Off · Tag · Skip", body: "How to treat the same URL downloaded twice.", bend: 10 },
-                  ]}
-                />
-                <SketchShot
-                  src={shotStats}
-                  alt="Stats dashboard"
-                  callouts={[
-                    { pin: [50, 26], note: [-4, 26], side: "l", title: "Totals", body: "Lifetime · today · unique sources.", bend: 10 },
-                    { pin: [50, 78], note: [104, 78], side: "r", title: "Top domains", body: "Bar chart of where your images actually come from.", bend: -10 },
-                  ]}
-                />
-              </div>
+              <SketchFrame
+                src={sketchStats}
+                alt="Duplicate handling and stats sketch"
+                legend={[
+                  { title: "Off · Tag · Skip", body: "How to treat the same URL downloaded twice." },
+                  { title: "Totals", body: "Lifetime, today, and unique sources at a glance." },
+                  { title: "Top domains", body: "Bar chart of where your images actually come from." },
+                ]}
+              />
             }
             demo={
               <BeforeAfter
@@ -535,12 +431,12 @@ export default function GuideSection() {
             icon={Copy}
             title="Backup & restore"
             shot={
-              <SketchShot
-                src={shotBackup}
-                alt="Backup panel"
-                callouts={[
-                  { pin: [30, 60], note: [-4, 60], side: "l", title: "Export", body: "Downloads your full config as renma-backup.json.", bend: 15 },
-                  { pin: [70, 60], note: [104, 60], side: "r", title: "Import", body: "Drop the same JSON on any other machine.", bend: -15 },
+              <SketchFrame
+                src={sketchBackup}
+                alt="Backup and restore sketch"
+                legend={[
+                  { title: "Export", body: "Downloads your full config as renma-backup.json." },
+                  { title: "Import", body: "Drop the same JSON on any other machine." },
                 ]}
               />
             }
@@ -562,7 +458,7 @@ export default function GuideSection() {
           <div id="guide-popup" />
           <section className="relative rounded-[28px] border border-[color:var(--hairline)] bg-[color:var(--surface-soft)] p-6 sm:p-10">
             <span className="absolute -top-3 left-10 h-6 w-24 rotate-[-4deg] rounded-[2px] bg-[color:var(--coral)]/25 border border-[color:var(--coral)]/40" />
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] items-center">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] items-center">
               <div>
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[color:var(--coral)]">
                   Bonus
@@ -589,11 +485,8 @@ export default function GuideSection() {
                   ))}
                 </div>
               </div>
-              <div className="relative rounded-[20px] border border-[color:var(--hairline)] bg-[color:var(--canvas)] p-4 shadow-[0_20px_60px_-30px_rgba(20,20,19,0.3)]">
-                <img src={shotPopup} alt="Renma popup" className="w-full h-auto rounded-[12px]" />
-                <span className="absolute -right-4 top-10 font-[Fraunces] italic text-[18px] text-[color:var(--coral)] rotate-[8deg]">
-                  ← one click undo
-                </span>
+              <div className="relative mx-auto max-w-sm rounded-[20px] border border-[color:var(--hairline)] bg-[color:var(--canvas)] p-3 shadow-[0_20px_60px_-30px_rgba(20,20,19,0.3)]">
+                <img src={sketchPopup} alt="Renma popup sketch" loading="lazy" className="block w-full h-auto rounded-[12px]" />
               </div>
             </div>
           </section>
