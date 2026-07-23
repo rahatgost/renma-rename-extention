@@ -61,29 +61,70 @@ function SketchFrame({ src, alt }: { src: string; alt: string }) {
 
 function BeforeAfter({ before, after, note }: { before: string; after: string; note?: string }) {
   return (
-    <div className="relative rounded-2xl border border-dashed border-[color:var(--ink)]/20 bg-[color:var(--canvas)] p-4 sm:p-5">
-      <span className="absolute -top-3 left-4 rounded-full bg-[color:var(--surface-soft)] px-2 font-mono text-[10px] uppercase tracking-widest text-[color:var(--muted)]">
-        real download
-      </span>
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-        <div className="flex-1 rounded-lg border border-[color:var(--hairline)] bg-white p-3">
-          <p className="font-mono text-[10px] uppercase tracking-wider text-[color:var(--muted)]">Browser saved</p>
-          <p className="mt-1 truncate font-mono text-[13px] text-[color:var(--ink)]/70 line-through decoration-[color:var(--muted-soft)]/60">
-            {before}
-          </p>
+    <figure className="relative">
+      {/* torn-paper receipt */}
+      <div className="relative rounded-2xl border border-[color:var(--hairline)] bg-[color:var(--canvas)] shadow-[0_20px_50px_-30px_rgba(20,20,19,0.35)] overflow-hidden">
+        {/* header strip */}
+        <div className="flex items-center justify-between gap-3 border-b border-dashed border-[color:var(--ink)]/15 bg-[color:var(--surface-soft)] px-4 py-2">
+          <div className="flex items-center gap-2 text-[color:var(--muted)]">
+            <span className="grid h-2 w-2 rounded-full bg-[color:var(--coral)]/60" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em]">download receipt</span>
+          </div>
+          <span className="font-[Fraunces] italic text-[12px] text-[color:var(--muted)]">real filename</span>
         </div>
-        <div className="grid place-items-center px-1 text-[color:var(--coral)]">
-          <ArrowRight className="h-5 w-5 rotate-90 sm:rotate-0" />
+
+        {/* rows */}
+        <div className="grid sm:grid-cols-[1fr_auto_1fr]">
+          {/* before */}
+          <div className="relative p-4 sm:p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <FileImage className="h-3.5 w-3.5 text-[color:var(--muted)]" />
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-[color:var(--muted)]">Browser saved</p>
+            </div>
+            <p className="font-mono text-[13px] leading-snug text-[color:var(--ink)]/60 line-through decoration-[color:var(--muted-soft)]/70 break-all">
+              {before}
+            </p>
+          </div>
+
+          {/* arrow divider */}
+          <div className="relative grid place-items-center px-2 py-2 sm:py-0">
+            <div className="hidden sm:block absolute inset-y-3 left-1/2 -translate-x-1/2 w-px border-l border-dashed border-[color:var(--ink)]/15" />
+            <div className="relative grid h-8 w-8 place-items-center rounded-full bg-[color:var(--coral)] text-white shadow-[0_6px_16px_-6px_rgba(204,120,92,0.6)]">
+              <ArrowRight className="h-4 w-4 rotate-90 sm:rotate-0" />
+            </div>
+          </div>
+
+          {/* after */}
+          <div className="relative p-4 sm:p-5 bg-[color:var(--coral)]/5">
+            <div className="flex items-center gap-2 mb-2">
+              <FolderOpen className="h-3.5 w-3.5 text-[color:var(--coral)]" />
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-[color:var(--coral)]">Renma saved</p>
+            </div>
+            <p className="font-mono text-[13.5px] font-medium leading-snug text-[color:var(--ink)] break-all">
+              {after}
+            </p>
+          </div>
         </div>
-        <div className="flex-1 rounded-lg border border-[color:var(--coral)]/40 bg-[color:var(--coral)]/8 p-3">
-          <p className="font-mono text-[10px] uppercase tracking-wider text-[color:var(--coral)]">Renma renamed</p>
-          <p className="mt-1 truncate font-mono text-[13px] font-medium text-[color:var(--ink)]">{after}</p>
-        </div>
+
+        {/* note strip */}
+        {note && (
+          <figcaption className="flex items-start gap-2 border-t border-dashed border-[color:var(--ink)]/15 bg-[color:var(--surface-soft)]/60 px-4 py-3">
+            <span className="mt-[6px] h-[6px] w-[6px] shrink-0 rotate-45 bg-[color:var(--coral)]" />
+            <p className="font-[Fraunces] italic text-[13.5px] leading-snug text-[color:var(--body)]">{note}</p>
+          </figcaption>
+        )}
       </div>
-      {note && <p className="mt-3 font-[Fraunces] italic text-[14px] text-[color:var(--body)]">— {note}</p>}
-    </div>
+
+      {/* punched holes on the left edge (paper feel) */}
+      <div className="pointer-events-none absolute left-[-6px] top-6 bottom-6 hidden sm:flex flex-col justify-between">
+        {[0, 1, 2, 3].map((i) => (
+          <span key={i} className="h-2 w-2 rounded-full bg-[color:var(--canvas)] border border-[color:var(--hairline)]" />
+        ))}
+      </div>
+    </figure>
   );
 }
+
 
 /* ───────────────────── How-to steps + Tip ───────────────────── */
 
