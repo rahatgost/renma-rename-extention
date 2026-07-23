@@ -1,38 +1,23 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Play, X, Wand2, FolderTree, Gauge, Clock } from "lucide-react";
+import { Play, X, Wand2, FolderTree, Gauge } from "lucide-react";
 
+/* ---------------- Editable content ----------------
+ * Replace POSTER_URL and VIDEO_URL with the final demo assets.
+ * Everything user-visible lives in DEMO_CONTENT.
+ */
 const DEMO_CONTENT = {
   eyebrow: "Live demo",
   title: "See Renma in motion",
   description:
     "Watch a real download turn from image (17).png into a clean, sourced filename — before Chrome even finishes writing it to disk.",
-  ctaLabel: "Play the 45s walkthrough",
-  duration: "0:45",
+  ctaLabel: "Watch Demo",
   posterUrl: "/renma-demo-poster.jpg",
   videoUrl: "/renma-demo.mp4",
-  chapters: [
-    { time: "0:04", label: "The image (17).png problem" },
-    { time: "0:12", label: "Right-click → Save" },
-    { time: "0:22", label: "Filename morphs live" },
-    { time: "0:34", label: "Auto-routed folders" },
-  ],
   highlights: [
-    {
-      icon: Wand2,
-      title: "Source-aware renaming",
-      body: "ChatGPT, Midjourney, Dribbble — each file inherits where it came from.",
-    },
-    {
-      icon: FolderTree,
-      title: "Auto-routed folders",
-      body: "Rules move every download into the right project directory on save.",
-    },
-    {
-      icon: Gauge,
-      title: "Zero-latency, fully local",
-      body: "Runs inside the download pipeline. No servers, no uploads, no wait.",
-    },
+    { icon: Wand2, label: "Instant source-aware renaming" },
+    { icon: FolderTree, label: "Auto-routed into the right folder" },
+    { icon: Gauge, label: "Zero-latency, fully local" },
   ],
 } as const;
 
@@ -52,34 +37,25 @@ export default function DemoSection() {
       aria-labelledby="demo-heading"
       className="relative isolate overflow-hidden bg-surface-dark py-24 md:py-32"
     >
-      {/* Ambient coral glow */}
+      {/* Radial coral glow */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(55% 50% at 50% 30%, oklch(0.66 0.128 42 / 0.28), transparent 70%), radial-gradient(40% 40% at 50% 100%, oklch(0.72 0.08 175 / 0.12), transparent 70%)",
+            "radial-gradient(60% 55% at 50% 40%, oklch(0.66 0.128 42 / 0.28), transparent 70%), radial-gradient(40% 40% at 50% 100%, oklch(0.66 0.128 42 / 0.12), transparent 70%)",
         }}
       />
-      {/* Grid mask */}
+      {/* Subtle grid */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.05]"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06]"
         style={{
           backgroundImage:
             "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
+          backgroundSize: "48px 48px",
           maskImage:
-            "radial-gradient(ellipse at center, black 40%, transparent 78%)",
-        }}
-      />
-      {/* Grain */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.08] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>\")",
+            "radial-gradient(ellipse at center, black 40%, transparent 75%)",
         }}
       />
 
@@ -92,114 +68,71 @@ export default function DemoSection() {
           transition={{ duration: 0.7, ease: EASE }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 backdrop-blur-sm">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-coral opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-coral" />
-            </span>
-            <span className="t-caption-upper text-white/80">{DEMO_CONTENT.eyebrow}</span>
-          </span>
-          <h2 id="demo-heading" className="h-display-lg mt-5 text-white">
+          <span className="t-caption-upper text-coral">{DEMO_CONTENT.eyebrow}</span>
+          <h2
+            id="demo-heading"
+            className="h-display-lg mt-4 text-white"
+          >
             {DEMO_CONTENT.title}
           </h2>
-          <p className="t-body mt-4 text-white/65">{DEMO_CONTENT.description}</p>
+          <p className="t-body mt-4 text-white/70">{DEMO_CONTENT.description}</p>
         </motion.div>
 
         {/* Video preview */}
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 36 }}
+          initial={reduce ? false : { opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
           className="relative mx-auto mt-14 max-w-5xl"
         >
-          {/* Corner tick marks */}
-          <CornerTicks />
-
           {/* Animated gradient border */}
           <div
             aria-hidden
-            className="absolute -inset-px rounded-[24px] opacity-70 [background:conic-gradient(from_var(--angle),transparent_20%,oklch(0.66_0.128_42/.7)_40%,transparent_60%,oklch(0.72_0.08_175/.5)_80%,transparent)] motion-safe:animate-[demo-spin_9s_linear_infinite]"
-            style={{ ["--angle" as string]: "0deg" } as React.CSSProperties}
+            className="absolute -inset-px rounded-[22px] opacity-70 [background:conic-gradient(from_var(--angle),transparent_20%,oklch(0.66_0.128_42/.7)_40%,transparent_60%,oklch(0.72_0.08_175/.5)_80%,transparent)] motion-safe:animate-[demo-spin_8s_linear_infinite]"
+            style={
+              {
+                ["--angle" as string]: "0deg",
+              } as React.CSSProperties
+            }
           />
           <style>{`
             @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
             @keyframes demo-spin { to { --angle: 360deg; } }
-            @keyframes demo-pulse { 0%,100% { box-shadow: 0 0 0 0 oklch(0.66 0.128 42 / 0.55); } 50% { box-shadow: 0 0 0 22px oklch(0.66 0.128 42 / 0); } }
+            @keyframes demo-pulse { 0%,100% { box-shadow: 0 0 0 0 oklch(0.66 0.128 42 / 0.55); } 50% { box-shadow: 0 0 0 18px oklch(0.66 0.128 42 / 0); } }
           `}</style>
 
-          {/* Browser chrome frame */}
-          <div className="relative overflow-hidden rounded-[22px] bg-surface-dark-elevated ring-1 ring-white/10 shadow-[0_40px_100px_-24px_rgba(0,0,0,0.75)]">
-            {/* Chrome bar */}
-            <div className="flex items-center gap-3 border-b border-white/[0.06] bg-black/30 px-4 py-3">
-              <div className="flex gap-1.5">
-                <span className="h-3 w-3 rounded-full bg-white/15" />
-                <span className="h-3 w-3 rounded-full bg-white/15" />
-                <span className="h-3 w-3 rounded-full bg-white/15" />
-              </div>
-              <div className="mx-auto flex items-center gap-2 rounded-md bg-white/[0.06] px-3 py-1 text-[11px] text-white/50">
-                <span className="h-1.5 w-1.5 rounded-full bg-coral/70" />
-                renma · live demo · 1080p
-              </div>
-              <span className="inline-flex items-center gap-1 rounded-md bg-white/[0.06] px-2 py-1 text-[11px] text-white/60">
-                <Clock className="h-3 w-3" /> {DEMO_CONTENT.duration}
-              </span>
-            </div>
+          <button
+            ref={triggerRef}
+            type="button"
+            onClick={handleOpen}
+            aria-label="Play demo video"
+            className="group relative block aspect-video w-full overflow-hidden rounded-[20px] bg-surface-dark-elevated ring-1 ring-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] transition duration-500 hover:ring-coral/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+          >
+            <img
+              src={DEMO_CONTENT.posterUrl}
+              alt=""
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-[1.02] group-hover:opacity-100"
+            />
+            {/* Vignette */}
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/30"
+            />
 
-            <button
-              ref={triggerRef}
-              type="button"
-              onClick={handleOpen}
-              aria-label="Play demo video"
-              className="group relative block aspect-video w-full overflow-hidden focus-visible:outline-none"
+            {/* Play button */}
+            <span
+              aria-hidden
+              className="absolute left-1/2 top-1/2 grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/30 bg-white/15 backdrop-blur-md transition duration-300 group-hover:scale-110 group-hover:bg-white/25 motion-safe:animate-[demo-pulse_2.6s_ease-out_infinite] md:h-24 md:w-24"
             >
-              <img
-                src={DEMO_CONTENT.posterUrl}
-                alt=""
-                loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-[1.03] group-hover:opacity-100"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/30"
-              />
+              <Play className="ml-1 h-8 w-8 fill-white text-white md:h-10 md:w-10" />
+            </span>
 
-              {/* Play button */}
-              <span
-                aria-hidden
-                className="absolute left-1/2 top-1/2 grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-white/15 backdrop-blur-xl transition duration-300 group-hover:scale-110 group-hover:bg-white/25 motion-safe:animate-[demo-pulse_2.6s_ease-out_infinite] md:h-24 md:w-24"
-              >
-                <Play className="ml-1 h-8 w-8 fill-white text-white md:h-10 md:w-10" />
-              </span>
-
-              {/* Bottom bar overlay */}
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
-                <span className="rounded-full bg-black/45 px-3 py-1.5 text-[13px] font-medium text-white/90 backdrop-blur-md ring-1 ring-white/10">
-                  ▶ {DEMO_CONTENT.ctaLabel}
-                </span>
-                <span className="hidden rounded-full bg-black/45 px-3 py-1.5 text-[11px] uppercase tracking-[0.15em] text-white/70 backdrop-blur-md ring-1 ring-white/10 sm:inline-flex">
-                  No audio · silent by design
-                </span>
-              </div>
-            </button>
-          </div>
-
-          {/* Chapters */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-            {DEMO_CONTENT.chapters.map((c) => (
-              <button
-                key={c.time}
-                type="button"
-                onClick={handleOpen}
-                className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 transition hover:border-coral/40 hover:bg-white/[0.06]"
-              >
-                <span className="font-mono text-[11px] text-coral">{c.time}</span>
-                <span className="t-body-sm text-white/70 group-hover:text-white/90">
-                  {c.label}
-                </span>
-              </button>
-            ))}
-          </div>
+            <span className="absolute bottom-5 left-5 t-caption-upper text-white/80">
+              {DEMO_CONTENT.ctaLabel}
+            </span>
+          </button>
         </motion.div>
 
         {/* Highlights */}
@@ -211,31 +144,21 @@ export default function DemoSection() {
             hidden: {},
             show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
           }}
-          className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-3"
+          className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3"
         >
-          {DEMO_CONTENT.highlights.map(({ icon: Icon, title, body }, i) => (
+          {DEMO_CONTENT.highlights.map(({ icon: Icon, label }) => (
             <motion.li
-              key={title}
+              key={label}
               variants={{
-                hidden: { opacity: 0, y: 18 },
+                hidden: { opacity: 0, y: 16 },
                 show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
               }}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm transition hover:border-coral/30 hover:bg-white/[0.05]"
+              className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 backdrop-blur-sm"
             >
-              <div className="flex items-center justify-between">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-coral/15 text-coral ring-1 ring-coral/25">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <span className="font-mono text-[11px] text-white/30">
-                  0{i + 1}
-                </span>
-              </div>
-              <h3 className="h-title-md mt-4 text-white">{title}</h3>
-              <p className="t-body-sm mt-1.5 text-white/60">{body}</p>
-              <span
-                aria-hidden
-                className="pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full bg-coral/20 opacity-0 blur-3xl transition duration-500 group-hover:opacity-100"
-              />
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-coral/15 text-coral ring-1 ring-coral/25">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="t-body-sm text-white/85">{label}</span>
             </motion.li>
           ))}
         </motion.ul>
@@ -249,19 +172,6 @@ export default function DemoSection() {
         />
       )}
     </section>
-  );
-}
-
-function CornerTicks() {
-  const base =
-    "pointer-events-none absolute h-4 w-4 border-coral/60";
-  return (
-    <>
-      <span aria-hidden className={`${base} -left-2 -top-2 border-l border-t`} />
-      <span aria-hidden className={`${base} -right-2 -top-2 border-r border-t`} />
-      <span aria-hidden className={`${base} -bottom-2 -left-2 border-b border-l`} />
-      <span aria-hidden className={`${base} -bottom-2 -right-2 border-b border-r`} />
-    </>
   );
 }
 
@@ -280,6 +190,7 @@ function VideoModal({
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Lock scroll
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -288,6 +199,7 @@ function VideoModal({
     };
   }, []);
 
+  // Focus management + focus trap + Escape
   useEffect(() => {
     const prevActive = document.activeElement as HTMLElement | null;
     closeBtnRef.current?.focus();
