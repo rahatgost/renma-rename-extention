@@ -1,5 +1,5 @@
 const DEFAULT_TEMPLATE = "{prefix}_{timestamp}.{ext}";
-const TOKENS = ["prefix", "domain", "host", "date", "time", "timestamp", "counter", "originalName", "ext"];
+const TOKENS = ["prefix", "domain", "host", "date", "time", "timestamp", "counter", "originalName", "ext", "width", "height", "dimensions"];
 
 const $ = (id) => document.getElementById(id);
 
@@ -63,6 +63,9 @@ function previewFor(template) {
     counter: "0042",
     originalName: "photo-hero",
     ext: "jpg",
+    width: "1920",
+    height: "1080",
+    dimensions: "1920x1080",
   };
   return (template || DEFAULT_TEMPLATE).replace(/\{(\w+)\}/g, (_, k) =>
     tokens[k] === undefined ? "" : String(tokens[k])

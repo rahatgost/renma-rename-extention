@@ -40,7 +40,8 @@ function paint(entries) {
     return;
   }
   listEl.innerHTML = "";
-  entries.forEach((h) => {
+  const isUnfiltered = entries === cachedHistory;
+  entries.forEach((h, idx) => {
     const div = document.createElement("div");
     div.className = "item";
     const nw = document.createElement("div");
@@ -55,6 +56,12 @@ function paint(entries) {
     pill.className = "domain-pill";
     pill.textContent = h.domain || "unknown";
     mt.appendChild(pill);
+    if (h.dimensions) {
+      const dm = document.createElement("span");
+      dm.className = "dim-pill";
+      dm.textContent = h.dimensions;
+      mt.appendChild(dm);
+    }
     if (h.duplicate) {
       const dp = document.createElement("span");
       dp.className = "dup-pill";
@@ -65,6 +72,25 @@ function paint(entries) {
     time.className = "time";
     time.textContent = fmtTime(h.time);
     mt.appendChild(time);
+    if (isUnfiltered && idx === 0) {
+      const undoBtn = document.createElement("button");
+      undoBtn.className = "undo-btn";
+      undoBtn.textContent = "Undo";
+      undoBtn.title = "Remove from history & keep original name next time this URL downloads";
+      undoBtn.onclick = async () => {
+        undoBtn.disabled = true;
+        undoBtn.textContent = "Undone";
+        try { await chrome.runtime.sendMessage({ type: "undo-last" }); }
+        catch {
+          const { history = [], skipOnce = [] } = await chrome.storage.local.get(["history", "skipOnce"]);
+          const [last, ...rest] = history;
+          const nextSkip = last?.url ? [last.url, ...skipOnce.filter((u) => u !== last.url)].slice(0, 50) : skipOnce;
+          await chrome.storage.local.set({ history: rest, skipOnce: nextSkip });
+        }
+        setTimeout(renderHistory, 250);
+      };
+      mt.appendChild(undoBtn);
+    }
     div.append(nw, od, mt);
     listEl.appendChild(div);
   });
