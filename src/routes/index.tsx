@@ -104,6 +104,7 @@ function Landing() {
     <div className="min-h-screen bg-canvas text-ink font-sans [overflow-x:clip]">
       <Nav />
       <Hero />
+      <DemoSection />
       <LogoStrip />
       <BentoFeatures />
       <Benchmark />
