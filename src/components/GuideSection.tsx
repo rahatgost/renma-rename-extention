@@ -126,43 +126,16 @@ function SketchShot({
         </div>
       </div>
 
-      {/* margin notes */}
-      {callouts.map((c, i) => {
-        const isLeft = c.side === "l";
-        return (
-          <div
-            key={`note-${i}`}
-            className="pointer-events-none absolute z-20 hidden md:block"
-            style={{
-              left: `${c.note[0]}%`,
-              top: `${c.note[1]}%`,
-              transform: `translate(${isLeft ? "-100%" : "0"}, -50%) rotate(${isLeft ? "-1.2deg" : "1deg"})`,
-              maxWidth: "220px",
-            }}
-          >
-            <div className="rounded-md border border-[color:var(--ink)]/15 bg-[color:var(--surface-soft)] px-3 py-2 shadow-[2px_3px_0_rgba(20,20,19,0.08)]">
-              <div className="flex items-center gap-1.5">
-                <span className="grid h-4 w-4 place-items-center rounded-full bg-[color:var(--coral)] text-[10px] font-bold text-white">
-                  {i + 1}
-                </span>
-                <p className="font-[Fraunces] italic text-[15px] leading-none text-[color:var(--ink)]">{c.title}</p>
-              </div>
-              <p className="mt-1 text-[12.5px] leading-snug text-[color:var(--body)]">{c.body}</p>
-            </div>
-          </div>
-        );
-      })}
-
-      {/* mobile note list */}
-      <ol className="mt-4 grid gap-2 md:hidden">
+      {/* legend list (always visible, no overflow) */}
+      <ol className="mt-5 grid gap-2 sm:grid-cols-2">
         {callouts.map((c, i) => (
-          <li key={`m-${i}`} className="flex gap-2 rounded-lg border border-[color:var(--hairline)] bg-[color:var(--surface-soft)] p-3">
+          <li key={`m-${i}`} className="flex gap-2.5 rounded-lg border border-[color:var(--hairline)] bg-[color:var(--surface-soft)] p-3">
             <span className="mt-[2px] inline-grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[color:var(--coral)] text-[11px] font-bold text-white">
               {i + 1}
             </span>
-            <div>
-              <p className="font-[Fraunces] italic text-[15px] text-[color:var(--ink)]">{c.title}</p>
-              <p className="text-[13px] leading-snug text-[color:var(--body)]">{c.body}</p>
+            <div className="min-w-0">
+              <p className="font-[Fraunces] italic text-[15px] leading-tight text-[color:var(--ink)]">{c.title}</p>
+              <p className="mt-1 text-[13px] leading-snug text-[color:var(--body)]">{c.body}</p>
             </div>
           </li>
         ))}
@@ -170,6 +143,7 @@ function SketchShot({
     </div>
   );
 }
+
 
 /* ───────────────────── Real-usage demo strip ───────────────────── */
 
@@ -203,8 +177,9 @@ function BeforeAfter({
         </div>
       </div>
       {note && (
-        <p className="mt-3 font-[Fraunces] italic text-[14px] text-[color:var(--muted)]">— {note}</p>
+        <p className="mt-3 font-[Fraunces] italic text-[14px] text-[color:var(--body)]">— {note}</p>
       )}
+
     </div>
   );
 }
@@ -330,7 +305,7 @@ export default function GuideSection() {
         </ol>
 
         {/* Steps */}
-        <div className="mt-24 space-y-32">
+        <div className="mt-24 space-y-24">
           <div id="guide-1" />
           <Step
             num="01"
