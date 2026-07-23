@@ -257,7 +257,7 @@ const bStatus = $("b-status");
 const BACKUP_KEYS = [
   "enabled", "template", "dateFolders", "dateFolderFormat",
   "siteMode", "siteList", "customMappings", "filetypes",
-  "onlyImages", "notifications", "duplicateMode",
+  "onlyImages", "notifications", "duplicateMode", "fetchDimensions",
 ];
 $("exportSettings").addEventListener("click", async () => {
   const data = await get(BACKUP_KEYS);
