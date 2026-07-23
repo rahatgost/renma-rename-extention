@@ -913,17 +913,17 @@ function Footer() {
       links: [
         { label: "Add to Chrome", href: "#install" },
         { label: "Load unpacked", href: "#install" },
-        { label: "Release notes", href: "#" },
-        { label: "Changelog", href: "#" },
+        { label: "Release notes", href: "/release-notes" },
+        { label: "Changelog", href: "/changelog" },
       ],
     },
     {
       title: "Resources",
       links: [
-        { label: "Docs", href: "#" },
+        { label: "User guide", href: "/guide" },
         { label: "GitHub", href: "#" },
         { label: "Report an issue", href: "#" },
-        { label: "Privacy", href: "#" },
+        { label: "Privacy", href: "/privacy" },
       ],
     },
   ];
