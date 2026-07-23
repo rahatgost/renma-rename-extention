@@ -124,6 +124,7 @@ function Nav() {
     { label: "Features", href: "#features" },
     { label: "How it works", href: "#how" },
     { label: "Rules", href: "#rules" },
+    { label: "Guide", href: "/guide" },
     { label: "Roadmap", href: "#roadmap" },
     { label: "FAQ", href: "#faq" },
   ];
