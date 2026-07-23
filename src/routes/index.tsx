@@ -29,6 +29,7 @@ import {
 import renmaLogo from "@/assets/renma-logo.png";
 import renmaWordmark from "@/assets/renma-wordmark.png";
 import GuideSection from "@/components/GuideSection";
+import DemoSection from "@/components/DemoSection";
 
 
 
@@ -103,6 +104,7 @@ function Landing() {
     <div className="min-h-screen bg-canvas text-ink font-sans [overflow-x:clip]">
       <Nav />
       <Hero />
+      <DemoSection />
       <LogoStrip />
       <BentoFeatures />
       <Benchmark />
