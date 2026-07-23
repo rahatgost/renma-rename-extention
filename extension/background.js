@@ -291,17 +291,20 @@ chrome.runtime.onStartup?.addListener(createMenus);
 
 chrome.contextMenus?.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === "renma-save-image" && info.srcUrl) {
-    // Ensure renaming is enabled for this download
+    // Ensure renaming is enabled for this download, then restore prior state
+    // only AFTER the download has been initiated (avoids a race where
+    // onDeterminingFilename fires after we've flipped enabled back to false).
     const { enabled = true } = await chrome.storage.local.get("enabled");
-    if (!enabled) await chrome.storage.local.set({ enabled: true });
+    const wasDisabled = !enabled;
+    if (wasDisabled) await chrome.storage.local.set({ enabled: true });
     try {
       await chrome.downloads.download({ url: info.srcUrl, saveAs: false });
     } catch (e) {
       notify("Renma", "Could not start download.");
     }
-    if (!enabled) {
-      // restore user's original preference shortly after
-      setTimeout(() => chrome.storage.local.set({ enabled: false }), 1500);
+    if (wasDisabled) {
+      // Give onDeterminingFilename time to fire (dimension fetch can take ~2s).
+      setTimeout(() => chrome.storage.local.set({ enabled: false }), 5000);
     }
   } else if (info.menuItemId === "renma-toggle") {
     const { enabled = true } = await chrome.storage.local.get("enabled");
