@@ -124,18 +124,20 @@ function notify(title, message) {
   } catch {}
 }
 
-// Fetch image dimensions (best-effort, with timeout)
+// Fetch image dimensions (best-effort, capped size + short timeout so we
+// never block Chrome's onDeterminingFilename beyond its ~4s budget).
+const MAX_DIM_BYTES = 8 * 1024 * 1024; // 8 MB
 async function fetchDimensions(url) {
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 3500);
+    const timer = setTimeout(() => controller.abort(), 2000);
     const res = await fetch(url, { signal: controller.signal, credentials: "omit" });
     clearTimeout(timer);
     if (!res.ok) return null;
+    const len = Number(res.headers.get("content-length") || 0);
+    if (len && len > MAX_DIM_BYTES) return null;
     const blob = await res.blob();
-    if (!blob.type.startsWith("image/") && !/image/.test(blob.type)) {
-      // still try
-    }
+    if (blob.size > MAX_DIM_BYTES) return null;
     const bitmap = await createImageBitmap(blob);
     const dims = { width: bitmap.width, height: bitmap.height };
     bitmap.close?.();
@@ -289,17 +291,20 @@ chrome.runtime.onStartup?.addListener(createMenus);
 
 chrome.contextMenus?.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === "renma-save-image" && info.srcUrl) {
-    // Ensure renaming is enabled for this download
+    // Ensure renaming is enabled for this download, then restore prior state
+    // only AFTER the download has been initiated (avoids a race where
+    // onDeterminingFilename fires after we've flipped enabled back to false).
     const { enabled = true } = await chrome.storage.local.get("enabled");
-    if (!enabled) await chrome.storage.local.set({ enabled: true });
+    const wasDisabled = !enabled;
+    if (wasDisabled) await chrome.storage.local.set({ enabled: true });
     try {
       await chrome.downloads.download({ url: info.srcUrl, saveAs: false });
     } catch (e) {
       notify("Renma", "Could not start download.");
     }
-    if (!enabled) {
-      // restore user's original preference shortly after
-      setTimeout(() => chrome.storage.local.set({ enabled: false }), 1500);
+    if (wasDisabled) {
+      // Give onDeterminingFilename time to fire (dimension fetch can take ~2s).
+      setTimeout(() => chrome.storage.local.set({ enabled: false }), 5000);
     }
   } else if (info.menuItemId === "renma-toggle") {
     const { enabled = true } = await chrome.storage.local.get("enabled");

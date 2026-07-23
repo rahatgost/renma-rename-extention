@@ -140,7 +140,8 @@ async function renderSiteRow() {
       "siteList",
     ]);
     const inList = siteList.some((d) => domain.includes(d) || d.includes(domain));
-    const skipping = siteMode === "blacklist" && inList;
+    // "Skipping" means: in blacklist and listed, OR in whitelist and NOT listed.
+    const skipping = (siteMode === "blacklist" && inList) || (siteMode === "whitelist" && !inList);
 
     siteToggleBtn.classList.toggle("active", skipping);
     siteToggleBtn.textContent = skipping ? "Skipping — undo" : "Skip this site";
@@ -148,11 +149,18 @@ async function renderSiteRow() {
     siteToggleBtn.onclick = async () => {
       const s = await chrome.storage.local.get(["siteMode", "siteList"]);
       let mode = s.siteMode || "all";
-      let list = s.siteList || [];
-      if (mode !== "blacklist") mode = "blacklist";
+      let list = Array.isArray(s.siteList) ? [...s.siteList] : [];
       const idx = list.indexOf(domain);
-      if (idx === -1) list.push(domain);
-      else list.splice(idx, 1);
+      if (mode === "whitelist") {
+        // Toggle domain membership; whitelist mode preserved.
+        if (idx === -1) list.push(domain);
+        else list.splice(idx, 1);
+      } else {
+        // "all" or "blacklist": ensure blacklist mode and toggle membership.
+        mode = "blacklist";
+        if (idx === -1) list.push(domain);
+        else list.splice(idx, 1);
+      }
       await chrome.storage.local.set({ siteMode: mode, siteList: list });
       renderSiteRow();
     };
