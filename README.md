@@ -1,29 +1,51 @@
-# Welcome to your Lovable project
+# Renma — Smart Image Renamer
 
-This project was built with [Lovable](https://lovable.dev).
+Renma is a Manifest V3 Chrome extension that automatically gives downloaded images clean, searchable filenames the moment Chrome saves them.
 
-## Build with Lovable
+## What changed in this branch
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+- **Advanced popup UI** — premium command-center layout, quick stats, filters, search, one-click site skipping, export, and undo.
+- **Better naming engine** — richer AI host detection, default `date + time + counter` template, optional AI folder routing, safer filename length limits, case controls, and recent cache support.
+- **Local-first workflow** — history, rules, stats, and backups stay in `chrome.storage.local`.
+- **Professional Remotion video** — product promo source lives in `product-video/` and renders a 48-second 1080p launch video.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## Install locally
+
+1. Download or clone this repository.
+2. Open `chrome://extensions`.
+3. Enable **Developer mode**.
+4. Click **Load unpacked** and select the `extension/` folder.
+
+## Extension features
+
+- Source-domain prefixes: `unsplash_...jpg`, `dribbble_...webp`, etc.
+- AI-source detection for OpenAI, ChatGPT, oaiusercontent, Midjourney, Leonardo, Stability, Ideogram, and Fal.
+- Custom template tokens: `{prefix}`, `{domain}`, `{date}`, `{time}`, `{counter}`, `{dimensions}`, `{ext}`, and more.
+- Optional date folders and domain-specific folders.
+- Duplicate modes: off, tag, or skip.
+- Popup search, filters, JSON export, and undo.
+- Options-page backup and restore.
+
+## Render the product video
+
+The promo video is built with Remotion and lives in `product-video/`.
+
+```sh
+cd product-video
+npm install
+npm run render
+```
+
+Output: `product-video/out/renma-product-video.mp4`
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
 npm i
 npm run dev
+npm run build
 ```
 
-## Built with
+## Privacy
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+Renma does not upload your downloads, filenames, rules, or stats. Extension data stays inside the browser's local storage.

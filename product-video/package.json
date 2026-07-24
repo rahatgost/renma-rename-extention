@@ -1,0 +1,16 @@
+{
+  "name": "renma-product-video",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "render": "remotion render src/index.js RenmaProductVideo out/renma-product-video.mp4 --codec=h264 --crf=23",
+    "preview": "remotion studio src/index.js"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.454",
+    "remotion": "^4.0.454",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {}
+}
