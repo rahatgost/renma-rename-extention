@@ -7,8 +7,13 @@ const toggleSub = document.getElementById("toggleSub");
 const siteRow = document.getElementById("siteRow");
 const siteHostEl = document.getElementById("siteHost");
 const siteToggleBtn = document.getElementById("siteToggle");
+const statToday = document.getElementById("statToday");
+const statTotal = document.getElementById("statTotal");
+const statSources = document.getElementById("statSources");
+const filters = document.getElementById("filters");
 
 let cachedHistory = [];
+let activeFilter = "all";
 
 function fmtTime(iso) {
   try {
@@ -23,74 +28,119 @@ function fmtTime(iso) {
   }
 }
 
+function isToday(iso) {
+  try {
+    return new Date(iso).toDateString() === new Date().toDateString();
+  } catch {
+    return false;
+  }
+}
+
 function baseDomain(host) {
   const clean = host.replace(/^www\./, "");
   const parts = clean.split(".");
   return parts.length <= 2 ? clean : parts.slice(-2).join(".");
 }
 
+function aiLike(h) {
+  const hay = `${h.domain || ""} ${h.newName || ""}`.toLowerCase();
+  return (
+    hay.includes("ai_generated") ||
+    hay.includes("chatgpt") ||
+    hay.includes("openai") ||
+    hay.includes("oaiusercontent")
+  );
+}
+
+function applyMode(entries) {
+  if (activeFilter === "ai") return entries.filter(aiLike);
+  if (activeFilter === "duplicates") return entries.filter((h) => h.duplicate);
+  if (activeFilter === "today") return entries.filter((h) => isToday(h.time));
+  return entries;
+}
+
 function paint(entries) {
   countEl.textContent = String(cachedHistory.length);
-  if (entries.length === 0) {
+  const shown = applyMode(entries);
+
+  if (shown.length === 0) {
     listEl.innerHTML = `
       <div class="empty">
         <div class="title">${cachedHistory.length === 0 ? "Nothing renamed yet." : "No matches."}</div>
-        <div class="sub">${cachedHistory.length === 0 ? "Save an image — renma will do the rest." : "Try a different search."}</div>
+        <div class="sub">${
+          cachedHistory.length === 0
+            ? "Save an image — Renma will clean the name instantly."
+            : "Try another search or filter."
+        }</div>
       </div>`;
     return;
   }
+
   listEl.innerHTML = "";
-  const isUnfiltered = entries === cachedHistory;
-  entries.forEach((h, idx) => {
+  shown.forEach((h, idx) => {
     const div = document.createElement("div");
     div.className = "item";
+
     const nw = document.createElement("div");
     nw.className = "new";
     nw.textContent = h.newName;
+
     const od = document.createElement("div");
     od.className = "old";
     od.textContent = h.originalName;
+
     const mt = document.createElement("div");
     mt.className = "meta";
-    const pill = document.createElement("span");
-    pill.className = "domain-pill";
-    pill.textContent = h.domain || "unknown";
-    mt.appendChild(pill);
+
+    const domain = document.createElement("span");
+    domain.className = "chip domain";
+    domain.textContent = h.domain || "unknown";
+    mt.appendChild(domain);
+
     if (h.dimensions) {
       const dm = document.createElement("span");
-      dm.className = "dim-pill";
+      dm.className = "chip dim";
       dm.textContent = h.dimensions;
       mt.appendChild(dm);
     }
+
     if (h.duplicate) {
       const dp = document.createElement("span");
-      dp.className = "dup-pill";
+      dp.className = "chip dup";
       dp.textContent = "duplicate";
       mt.appendChild(dp);
     }
+
     const time = document.createElement("span");
     time.className = "time";
     time.textContent = fmtTime(h.time);
     mt.appendChild(time);
-    if (isUnfiltered && idx === 0) {
+
+    if (idx === 0 && activeFilter === "all" && !searchEl.value.trim()) {
       const undoBtn = document.createElement("button");
-      undoBtn.className = "undo-btn";
+      undoBtn.className = "undo";
       undoBtn.textContent = "Undo";
-      undoBtn.title = "Remove from history & keep original name next time this URL downloads";
       undoBtn.onclick = async () => {
         undoBtn.disabled = true;
         undoBtn.textContent = "Undone";
-        try { await chrome.runtime.sendMessage({ type: "undo-last" }); }
-        catch {
-          const { history = [], skipOnce = [] } = await chrome.storage.local.get(["history", "skipOnce"]);
+        try {
+          await chrome.runtime.sendMessage({ type: "undo-last" });
+        } catch {
+          const { history = [], skipOnce = [] } = await chrome.storage.local.get([
+            "history",
+            "skipOnce",
+          ]);
           const [last, ...rest] = history;
-          const nextSkip = last?.url ? [last.url, ...skipOnce.filter((u) => u !== last.url)].slice(0, 50) : skipOnce;
+          const nextSkip = last?.url
+            ? [last.url, ...skipOnce.filter((u) => u !== last.url)].slice(0, 50)
+            : skipOnce;
           await chrome.storage.local.set({ history: rest, skipOnce: nextSkip });
         }
         setTimeout(renderHistory, 250);
       };
       mt.appendChild(undoBtn);
     }
+
     div.append(nw, od, mt);
     listEl.appendChild(div);
   });
@@ -98,15 +148,14 @@ function paint(entries) {
 
 function applyFilter() {
   const q = (searchEl.value || "").toLowerCase().trim();
-  if (!q) return paint(cachedHistory);
-  paint(
-    cachedHistory.filter(
-      (h) =>
-        (h.newName || "").toLowerCase().includes(q) ||
-        (h.originalName || "").toLowerCase().includes(q) ||
-        (h.domain || "").toLowerCase().includes(q)
-    )
-  );
+  const entries = !q
+    ? cachedHistory
+    : cachedHistory.filter((h) =>
+        [h.newName, h.originalName, h.domain, h.dimensions].some((v) =>
+          String(v || "").toLowerCase().includes(q)
+        )
+      );
+  paint(entries);
 }
 
 async function renderHistory() {
@@ -115,22 +164,33 @@ async function renderHistory() {
   applyFilter();
 }
 
+async function renderStats() {
+  const { stats = { total: 0, byDomain: {}, byDay: {} } } =
+    await chrome.storage.local.get("stats");
+  const today = new Date().toISOString().slice(0, 10);
+  statToday.textContent = String(stats.byDay?.[today] || 0);
+  statTotal.textContent = String(stats.total || 0);
+  statSources.textContent = String(Object.keys(stats.byDomain || {}).length);
+}
+
 async function renderToggle() {
   const { enabled = true } = await chrome.storage.local.get("enabled");
   masterSwitch.classList.toggle("on", enabled);
   masterSwitch.setAttribute("aria-checked", String(enabled));
   toggleTitle.textContent = enabled ? "Renaming on" : "Renaming paused";
   toggleSub.textContent = enabled
-    ? "Downloads will be auto-renamed"
-    : "Files save with their original names";
+    ? "Downloads will be source-aware and searchable."
+    : "Files will keep their original names.";
 }
 
 async function renderSiteRow() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab || !tab.url) return;
+    if (!tab?.url || tab.url.startsWith("chrome://")) return;
+
     const host = new URL(tab.url).hostname;
-    if (!host || host === "newtab" || tab.url.startsWith("chrome://")) return;
+    if (!host || host === "newtab") return;
+
     const domain = baseDomain(host);
     siteHostEl.textContent = domain;
     siteRow.style.display = "flex";
@@ -140,8 +200,8 @@ async function renderSiteRow() {
       "siteList",
     ]);
     const inList = siteList.some((d) => domain.includes(d) || d.includes(domain));
-    // "Skipping" means: in blacklist and listed, OR in whitelist and NOT listed.
-    const skipping = (siteMode === "blacklist" && inList) || (siteMode === "whitelist" && !inList);
+    const skipping =
+      (siteMode === "blacklist" && inList) || (siteMode === "whitelist" && !inList);
 
     siteToggleBtn.classList.toggle("active", skipping);
     siteToggleBtn.textContent = skipping ? "Skipping — undo" : "Skip this site";
@@ -152,14 +212,10 @@ async function renderSiteRow() {
       let list = Array.isArray(s.siteList) ? [...s.siteList] : [];
       const idx = list.indexOf(domain);
       if (mode === "whitelist") {
-        // Toggle domain membership; whitelist mode preserved.
-        if (idx === -1) list.push(domain);
-        else list.splice(idx, 1);
+        idx === -1 ? list.push(domain) : list.splice(idx, 1);
       } else {
-        // "all" or "blacklist": ensure blacklist mode and toggle membership.
         mode = "blacklist";
-        if (idx === -1) list.push(domain);
-        else list.splice(idx, 1);
+        idx === -1 ? list.push(domain) : list.splice(idx, 1);
       }
       await chrome.storage.local.set({ siteMode: mode, siteList: list });
       renderSiteRow();
@@ -171,6 +227,14 @@ masterSwitch.addEventListener("click", async () => {
   const { enabled = true } = await chrome.storage.local.get("enabled");
   await chrome.storage.local.set({ enabled: !enabled });
   renderToggle();
+});
+
+filters.addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-filter]");
+  if (!btn) return;
+  activeFilter = btn.dataset.filter;
+  filters.querySelectorAll(".filter").forEach((b) => b.classList.toggle("active", b === btn));
+  applyFilter();
 });
 
 searchEl.addEventListener("input", applyFilter);
@@ -197,5 +261,6 @@ document.getElementById("opts").addEventListener("click", (e) => {
 });
 
 renderHistory();
+renderStats();
 renderToggle();
 renderSiteRow();

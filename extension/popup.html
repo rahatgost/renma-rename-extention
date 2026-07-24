@@ -2,235 +2,156 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Renma — Recent renames</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,144,600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <title>Renma — Command center</title>
     <style>
       :root {
         --coral: #cc785c;
-        --coral-active: #a9583e;
+        --coral-dark: #a9583e;
         --ink: #141413;
         --body: #3d3d3a;
         --muted: #6c6a64;
-        --muted-soft: #8e8b82;
+        --soft-muted: #8e8b82;
         --canvas: #faf9f5;
-        --surface-soft: #f5f0e8;
-        --surface-card: #efe9de;
-        --hairline: #e6dfd8;
-        --success: #5db872;
+        --surface: #fffdf9;
+        --soft: #f5f0e8;
+        --card: #efe9de;
+        --line: #e6dfd8;
       }
       * { box-sizing: border-box; }
       html, body {
         margin: 0;
-        width: 360px;
-        font-family: "Inter", system-ui, sans-serif;
+        width: 394px;
+        min-height: 560px;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         color: var(--ink);
-        background: var(--canvas);
+        background:
+          radial-gradient(circle at 10% -10%, rgba(204,120,92,.24), transparent 35%),
+          radial-gradient(circle at 105% 20%, rgba(93,184,114,.14), transparent 35%),
+          var(--canvas);
       }
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 18px 12px;
-        border-bottom: 1px solid var(--hairline);
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .shell { padding: 14px; }
+      .panel {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        background: rgba(255,253,249,.88);
+        box-shadow: 0 24px 70px rgba(20,20,19,.12);
+        backdrop-filter: blur(16px);
       }
-      .brand { display: flex; align-items: baseline; gap: 8px; }
-      .wordmark {
-        font-family: "Fraunces", serif;
-        font-style: italic; font-weight: 600;
-        font-size: 22px; letter-spacing: -0.04em; line-height: 1;
+      .hero {
+        padding: 18px 18px 16px;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(245,240,232,.72));
       }
-      .wordmark .dot { color: var(--coral); }
-      .tag {
-        font-size: 10px; font-weight: 500;
-        letter-spacing: 0.15em; text-transform: uppercase;
-        color: var(--muted);
-      }
-      .count {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px; color: var(--muted);
-        background: var(--surface-card);
-        padding: 3px 8px; border-radius: 999px;
-      }
-
-      /* Master toggle strip */
-      .toggle-strip {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 12px 18px;
-        background: var(--surface-soft);
-        border-bottom: 1px solid var(--hairline);
-      }
-      .toggle-label {
-        display: flex; flex-direction: column; gap: 2px;
-      }
-      .toggle-label .t {
-        font-size: 12.5px; font-weight: 600; color: var(--ink);
-      }
-      .toggle-label .s {
-        font-size: 11px; color: var(--muted);
-      }
-      .switch {
-        position: relative; width: 38px; height: 22px;
-        background: #d6cfc4; border-radius: 999px; cursor: pointer;
-        transition: background 0.2s ease;
-        flex-shrink: 0;
-      }
-      .switch::after {
-        content: ""; position: absolute; top: 2px; left: 2px;
-        width: 18px; height: 18px; border-radius: 50%;
-        background: #fff;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-        transition: transform 0.2s ease;
-      }
-      .switch.on { background: var(--coral); }
-      .switch.on::after { transform: translateX(16px); }
-
-      /* Site row */
-      .site-row {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 10px 18px;
-        border-bottom: 1px solid var(--hairline);
-        font-size: 12px;
-      }
-      .site-host {
-        font-family: "JetBrains Mono", monospace;
-        color: var(--body);
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-        max-width: 200px;
-      }
-      .site-btn {
-        font-family: "Inter", sans-serif;
-        font-size: 11px; font-weight: 500;
-        color: var(--muted);
-        background: transparent;
-        border: 1px solid var(--hairline);
-        border-radius: 999px;
-        padding: 3px 10px; cursor: pointer;
-        transition: all 0.15s ease;
-      }
-      .site-btn:hover { color: var(--coral); border-color: var(--coral); }
-      .site-btn.active { color: #fff; background: var(--coral); border-color: var(--coral); }
-
-      .section-label {
-        padding: 14px 18px 6px;
-        font-size: 11px; font-weight: 500;
-        letter-spacing: 0.15em; text-transform: uppercase;
-        color: var(--muted-soft);
-      }
-      #list { padding: 0 10px; }
-      .item {
-        padding: 10px 12px; border-radius: 10px; margin-bottom: 4px;
-        transition: background 0.15s ease;
-      }
-      .item:hover { background: var(--surface-soft); }
-      .new {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 12.5px; font-weight: 500;
-        color: var(--ink); word-break: break-all; line-height: 1.4;
-      }
-      .old {
-        font-size: 11.5px; color: var(--muted);
-        word-break: break-all; margin-top: 3px; line-height: 1.4;
-      }
-      .old::before { content: "was "; color: var(--muted-soft); }
-      .meta { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
-      .domain-pill {
-        font-size: 10.5px; font-weight: 500; color: var(--coral);
-        background: color-mix(in oklab, var(--coral) 10%, transparent);
-        padding: 2px 7px; border-radius: 999px;
-      }
-      .dup-pill {
-        font-size: 10.5px; font-weight: 500; color: #8a5a1a;
-        background: color-mix(in oklab, #d4a24a 22%, transparent);
-        padding: 2px 7px; border-radius: 999px;
-      }
-      .dim-pill {
-        font-size: 10.5px; font-weight: 500; color: var(--body);
-        background: var(--surface-card);
-        padding: 2px 7px; border-radius: 999px;
-        font-family: "JetBrains Mono", monospace;
-      }
-      .undo-btn {
-        font-family: "Inter", sans-serif; font-size: 10.5px; font-weight: 500;
-        color: var(--muted); background: transparent;
-        border: 1px solid var(--hairline); border-radius: 999px;
-        padding: 2px 8px; cursor: pointer; margin-left: auto;
-        transition: all 0.15s ease;
-      }
-      .undo-btn:hover { color: var(--coral); border-color: var(--coral); }
-      .time { font-size: 10.5px; color: var(--muted-soft); }
-      .empty {
-        margin: 8px 12px; padding: 28px 16px; text-align: center;
-        border: 1px dashed var(--hairline); border-radius: 12px;
-        background: var(--surface-soft);
-      }
-      .empty .title {
-        font-family: "Instrument Serif", serif;
-        font-size: 20px; line-height: 1.2; color: var(--ink); margin-bottom: 4px;
-      }
-      .empty .sub { font-size: 12px; color: var(--muted); }
-      .footer {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 12px 18px 16px;
-        border-top: 1px solid var(--hairline);
-        margin-top: 8px;
-      }
-      #opts {
-        font-size: 12px; font-weight: 500; color: var(--ink);
-        text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
-      }
-      #opts:hover { color: var(--coral); }
-      #opts::after { content: "→"; transition: transform 0.2s ease; }
-      #opts:hover::after { transform: translateX(2px); }
-      #clear {
-        font-family: "Inter", sans-serif; font-size: 12px; font-weight: 500;
-        color: var(--muted); background: transparent;
-        border: 1px solid var(--hairline); border-radius: 999px;
-        padding: 5px 12px; cursor: pointer;
-        transition: all 0.15s ease;
-      }
-      #clear:hover { color: var(--coral); border-color: var(--coral); }
+      .top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+      .brand { display:flex; align-items:center; gap:10px; min-width:0; }
+      .mark { width:34px; height:34px; border-radius:11px; box-shadow:0 12px 28px rgba(204,120,92,.24); }
+      .brand-name { display:flex; align-items:baseline; gap:7px; }
+      .brand-name img { height:26px; width:auto; display:block; }
+      .tag { font-size:10px; text-transform:uppercase; letter-spacing:.16em; color:var(--muted); font-weight:700; }
+      .badge { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11px; color:var(--muted); background:var(--soft); border:1px solid var(--line); border-radius:999px; padding:5px 9px; }
+      .status-card { margin-top:16px; display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; }
+      .status-title { font-weight:750; font-size:15px; }
+      .status-sub { margin-top:3px; font-size:12px; color:var(--muted); line-height:1.35; }
+      .switch { width:52px; height:30px; border-radius:999px; background:#d7d0c6; padding:3px; transition:.18s ease; border:0; }
+      .switch span { display:block; width:24px; height:24px; border-radius:999px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.18); transition:.18s ease; }
+      .switch.on { background:var(--coral); }
+      .switch.on span { transform:translateX(22px); }
+      .quick { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:16px; }
+      .metric { border:1px solid var(--line); border-radius:16px; padding:11px 10px; background:rgba(255,255,255,.6); }
+      .metric .k { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--soft-muted); font-weight:800; }
+      .metric .v { margin-top:5px; font-family: Georgia, serif; font-size:25px; line-height:1; }
+      .site { display:none; align-items:center; justify-content:space-between; gap:10px; padding:12px 18px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.48); }
+      .site-host { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; color:var(--body); }
+      .pill-btn { border:1px solid var(--line); background:var(--surface); color:var(--body); border-radius:999px; padding:6px 10px; font-size:11px; font-weight:700; transition:.15s ease; white-space:nowrap; }
+      .pill-btn:hover { border-color:var(--coral); color:var(--coral); transform:translateY(-1px); }
+      .pill-btn.active { background:var(--coral); border-color:var(--coral); color:#fff; }
+      .tools { padding:14px 18px 10px; display:grid; gap:10px; }
+      .search-wrap { position:relative; }
+      .search-wrap svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); width:14px; height:14px; color:var(--soft-muted); }
+      #search { width:100%; border:1px solid var(--line); background:var(--soft); border-radius:14px; padding:10px 12px 10px 33px; outline:none; font-size:12.5px; color:var(--ink); }
+      #search:focus { border-color:var(--coral); background:#fff; box-shadow:0 0 0 3px rgba(204,120,92,.13); }
+      .filters { display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; }
+      .filter { border:1px solid var(--line); background:transparent; color:var(--muted); border-radius:999px; padding:5px 9px; font-size:11px; font-weight:700; white-space:nowrap; }
+      .filter.active { background:var(--ink); color:var(--canvas); border-color:var(--ink); }
+      .section-label { display:flex; align-items:center; justify-content:space-between; padding:4px 18px 8px; font-size:10.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--soft-muted); }
+      #list { max-height:250px; overflow:auto; padding:0 10px 6px; scrollbar-width:thin; }
+      .item { position:relative; padding:12px; border:1px solid transparent; border-radius:16px; margin-bottom:7px; transition:.15s ease; }
+      .item:hover { background:rgba(255,255,255,.72); border-color:var(--line); transform:translateY(-1px); }
+      .new { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; font-weight:800; color:var(--ink); line-height:1.35; word-break:break-all; }
+      .old { margin-top:5px; font-size:11.5px; color:var(--muted); word-break:break-all; line-height:1.35; }
+      .old::before { content:"was "; color:var(--soft-muted); }
+      .meta { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:8px; }
+      .chip { font-size:10.5px; font-weight:800; padding:3px 7px; border-radius:999px; background:var(--soft); color:var(--body); }
+      .chip.domain { color:var(--coral); background:rgba(204,120,92,.11); }
+      .chip.dup { color:#865818; background:rgba(216,155,69,.18); }
+      .chip.dim { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+      .time { font-size:10.5px; color:var(--soft-muted); }
+      .undo { margin-left:auto; border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:999px; padding:4px 9px; font-size:10.5px; font-weight:800; }
+      .empty { margin:8px 8px 18px; padding:28px 20px; text-align:center; border:1px dashed var(--line); border-radius:18px; background:var(--soft); }
+      .empty .title { font-family:Georgia,serif; font-size:23px; font-style:italic; }
+      .empty .sub { margin-top:6px; color:var(--muted); font-size:12px; line-height:1.45; }
+      .footer { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:12px 18px 18px; border-top:1px solid var(--line); background:rgba(255,255,255,.45); }
+      .footer .action { height:38px; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:13px; font-size:12px; font-weight:800; text-decoration:none; display:grid; place-items:center; }
+      .footer .primary { background:var(--ink); border-color:var(--ink); color:var(--canvas); }
+      .footer .action:hover { transform:translateY(-1px); }
     </style>
   </head>
   <body>
-    <div class="header">
-      <div class="brand">
-        <img src="icon.png" alt="" width="22" height="22" style="border-radius:6px;display:block" />
-        <img src="wordmark.png" alt="renma" style="height:22px;width:auto;display:block" />
-        <span class="tag">renamer</span>
+    <div class="shell">
+      <div class="panel">
+        <section class="hero">
+          <div class="top">
+            <div class="brand">
+              <img class="mark" src="icon.png" alt="" />
+              <div class="brand-name">
+                <img src="wordmark.png" alt="renma" />
+                <span class="tag">pro</span>
+              </div>
+            </div>
+            <span class="badge" id="count">0</span>
+          </div>
+          <div class="status-card">
+            <div>
+              <div class="status-title" id="toggleTitle">Renaming on</div>
+              <div class="status-sub" id="toggleSub">Downloads will be source-aware and searchable.</div>
+            </div>
+            <button class="switch on" id="masterSwitch" role="switch" aria-checked="true"><span></span></button>
+          </div>
+          <div class="quick">
+            <div class="metric"><div class="k">Today</div><div class="v" id="statToday">0</div></div>
+            <div class="metric"><div class="k">Total</div><div class="v" id="statTotal">0</div></div>
+            <div class="metric"><div class="k">Sources</div><div class="v" id="statSources">0</div></div>
+          </div>
+        </section>
+        <div class="site" id="siteRow">
+          <span class="site-host" id="siteHost">—</span>
+          <button class="pill-btn" id="siteToggle">Skip this site</button>
+        </div>
+        <div class="tools">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="search" placeholder="Search filename, domain, dimensions…" />
+          </div>
+          <div class="filters" id="filters">
+            <button class="filter active" data-filter="all">All</button>
+            <button class="filter" data-filter="ai">AI</button>
+            <button class="filter" data-filter="duplicates">Duplicates</button>
+            <button class="filter" data-filter="today">Today</button>
+          </div>
+        </div>
+        <div class="section-label">
+          <span>Recent renames</span>
+          <button id="export" class="pill-btn">Export JSON</button>
+        </div>
+        <div id="list"></div>
+        <div class="footer">
+          <a href="#" class="action primary" id="opts">Open rules</a>
+          <button class="action" id="clear">Clear history</button>
+        </div>
       </div>
-      <span class="count" id="count">0</span>
-    </div>
-
-    <div class="toggle-strip">
-      <div class="toggle-label">
-        <span class="t" id="toggleTitle">Renaming on</span>
-        <span class="s" id="toggleSub">Downloads will be auto-renamed</span>
-      </div>
-      <div class="switch on" id="masterSwitch" role="switch" aria-checked="true"></div>
-    </div>
-
-    <div class="site-row" id="siteRow" style="display:none">
-      <span class="site-host" id="siteHost">—</span>
-      <button class="site-btn" id="siteToggle">Skip this site</button>
-    </div>
-
-    <div class="section-label" style="display:flex;align-items:center;justify-content:space-between;padding-right:14px">
-      <span>Recent renames</span>
-      <button id="export" class="site-btn" style="text-transform:none;letter-spacing:0">Export JSON</button>
-    </div>
-    <div style="padding:2px 14px 8px">
-      <input id="search" placeholder="Search filename or domain…" style="width:100%;font-family:'Inter',sans-serif;font-size:12px;color:var(--ink);background:var(--surface-soft);border:1px solid var(--hairline);border-radius:8px;padding:7px 10px;outline:none" />
-    </div>
-    <div id="list"></div>
-
-    <div class="footer">
-      <a href="#" id="opts">Custom rules</a>
-      <button id="clear">Clear history</button>
     </div>
     <script src="popup.js"></script>
   </body>
