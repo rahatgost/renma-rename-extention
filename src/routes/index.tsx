@@ -239,6 +239,8 @@ function Nav() {
 
 function handleDownload(e: React.MouseEvent<HTMLAnchorElement>) {
   e.preventDefault();
+  const label = e.currentTarget.dataset.ctaLabel || "add_to_chrome";
+  trackEvent("cta_click", { event_label: label });
   fetch("/smart-image-renamer.zip")
     .then((r) => {
       if (!r.ok) throw new Error(`Download failed: ${r.status}`);
@@ -253,6 +255,11 @@ function handleDownload(e: React.MouseEvent<HTMLAnchorElement>) {
     })
     .catch((err) => alert(err.message));
 }
+
+function trackCta(label: string) {
+  return () => trackEvent("cta_click", { event_label: label });
+}
+
 
 /* ---------------- Hero ---------------- */
 
