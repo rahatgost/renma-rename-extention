@@ -2,7 +2,7 @@
 // Data flows one-way: this landing site POSTs, admin project stores + displays.
 const ADMIN_BASE =
   (import.meta.env.VITE_ADMIN_API_URL as string | undefined)?.replace(/\/$/, "") ||
-  "https://id-preview--d9993ab7-e2e8-47f1-aa73-dc701833f07e.lovable.app";
+  "https://project--d9993ab7-e2e8-47f1-aa73-dc701833f07e.lovable.app";
 
 export const TRACK_URL = `${ADMIN_BASE}/api/public/track`;
 export const REPORT_URL = `${ADMIN_BASE}/api/public/report`;
