@@ -1,4 +1,4 @@
-const DEFAULT_TEMPLATE = "{prefix}_{timestamp}.{ext}";
+const DEFAULT_TEMPLATE = "{prefix}_{date}_{time}_{counter}.{ext}";
 const TOKENS = ["prefix", "domain", "host", "date", "time", "timestamp", "counter", "originalName", "ext", "width", "height", "dimensions"];
 
 const $ = (id) => document.getElementById(id);
@@ -258,6 +258,7 @@ const BACKUP_KEYS = [
   "enabled", "template", "dateFolders", "dateFolderFormat",
   "siteMode", "siteList", "customMappings", "filetypes",
   "onlyImages", "notifications", "duplicateMode", "fetchDimensions",
+  "filenameCase", "maxNameLength", "aiPrefix",
 ];
 $("exportSettings").addEventListener("click", async () => {
   const data = await get(BACKUP_KEYS);
@@ -443,6 +444,13 @@ $("bulk-run").addEventListener("click", async () => {
     const src = bulkItems[i];
     if (!src?.url) { fail++; continue; }
     try {
+      // Bulk re-download must not be treated as a duplicate by background.js
+      const { seenUrls = [] } = await chrome.storage.local.get("seenUrls");
+      if (seenUrls.includes(src.url)) {
+        await chrome.storage.local.set({
+          seenUrls: seenUrls.filter((u) => u !== src.url),
+        });
+      }
       await new Promise((resolve, reject) => {
         chrome.downloads.download({ url: src.url, conflictAction: "uniquify" }, (id) => {
           if (chrome.runtime.lastError || !id) {
@@ -475,6 +483,7 @@ bindSwitch("sw-enabled", "enabled", true);
 bindSwitch("sw-onlyImages", "onlyImages", true);
 bindSwitch("sw-dateFolders", "dateFolders", false);
 bindSwitch("sw-notifications", "notifications", false);
+bindSwitch("sw-fetchDimensions", "fetchDimensions", true);
 renderTokens();
 loadTemplate();
 renderMappings();
