@@ -182,14 +182,14 @@ function ReportPage() {
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-2">
-              <p className="text-xs text-ink/50 max-w-sm">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
+              <p className="text-xs text-ink/50 sm:max-w-sm">
                 We never store what you download. This form only sends what you type here.
               </p>
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-coral text-white text-sm font-medium hover:bg-coral/90 disabled:opacity-60 transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-coral text-white text-sm font-medium hover:bg-coral/90 disabled:opacity-60 transition-colors"
               >
                 {status === "sending" ? (
                   <>
@@ -200,6 +200,7 @@ function ReportPage() {
                 )}
               </button>
             </div>
+
           </form>
         )}
       </main>
