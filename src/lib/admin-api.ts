@@ -46,6 +46,21 @@ export function trackEvent(
   }).catch(() => {});
 }
 
+const CATEGORY_MAP: Record<string, "bug" | "feature" | "question" | "other"> = {
+  Bug: "bug",
+  "Feature request": "feature",
+  "Rename didn't work": "bug",
+  "UI issue": "bug",
+  Other: "other",
+};
+
+const SEVERITY_MAP: Record<string, "low" | "medium" | "high"> = {
+  Low: "low",
+  Medium: "medium",
+  High: "high",
+  Blocking: "high",
+};
+
 export async function submitReport(data: {
   name?: string;
   email?: string;
@@ -58,13 +73,23 @@ export async function submitReport(data: {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ...data,
+        name: data.name || undefined,
+        email: data.email || undefined,
+        description: data.description,
+        category: CATEGORY_MAP[data.category] ?? "other",
+        severity: SEVERITY_MAP[data.severity] ?? "medium",
         path: typeof window !== "undefined" ? window.location.pathname : null,
         user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-        ts: new Date().toISOString(),
       }),
     });
-    if (!res.ok) return { ok: false, error: `Server error (${res.status})` };
+    if (!res.ok) {
+      let msg = `Server error (${res.status})`;
+      try {
+        const j = await res.json();
+        if (j?.error) msg = j.error;
+      } catch {}
+      return { ok: false, error: msg };
+    }
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Network error" };
