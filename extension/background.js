@@ -90,8 +90,11 @@ function isImage(item, ext, filetypes) {
 }
 
 function siteAllowed(hostname, mode, list) {
-  const hits = list.some((d) => d && hostname.includes(d.toLowerCase()));
-  if (mode === "whitelist") return hits;
+  const cleaned = (list || [])
+    .map((d) => (d || "").trim().toLowerCase())
+    .filter(Boolean);
+  const hits = hostname && cleaned.some((d) => hostname.includes(d));
+  if (mode === "whitelist") return !!hits;
   if (mode === "blacklist") return !hits;
   return true;
 }
