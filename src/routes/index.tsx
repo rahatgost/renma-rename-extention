@@ -57,8 +57,10 @@ export const Route = createFileRoute("/")({
         content:
           "Auto-rename every image download by source domain. Chrome MV3. Local-only.",
       },
+      { property: "og:url", content: "https://renma.flinkeo.online/" },
+      { name: "twitter:url", content: "https://renma.flinkeo.online/" },
     ],
-
+    links: [{ rel: "canonical", href: "https://renma.flinkeo.online/" }],
   }),
   component: Landing,
 });

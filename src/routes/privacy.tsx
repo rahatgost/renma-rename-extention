@@ -19,8 +19,10 @@ export const Route = createFileRoute("/privacy")({
           "How the Renma Chrome extension handles your data. Local-first, no tracking, no accounts.",
       },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: "https://renma.flinkeo.online/privacy" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://renma.flinkeo.online/privacy" }],
   }),
   component: PrivacyPage,
 });

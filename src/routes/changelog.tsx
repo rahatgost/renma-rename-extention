@@ -18,8 +18,10 @@ export const Route = createFileRoute("/changelog")({
         content: "Version-by-version history of the Renma Chrome extension.",
       },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: "https://renma.flinkeo.online/changelog" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://renma.flinkeo.online/changelog" }],
   }),
   component: ChangelogPage,
 });

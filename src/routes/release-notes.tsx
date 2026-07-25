@@ -18,8 +18,10 @@ export const Route = createFileRoute("/release-notes")({
         content: "Narrative release notes for the Renma Chrome extension.",
       },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: "https://renma.flinkeo.online/release-notes" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://renma.flinkeo.online/release-notes" }],
   }),
   component: ReleaseNotesPage,
 });
