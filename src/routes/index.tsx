@@ -893,12 +893,14 @@ function CTA() {
             <div className="mt-10">
               <a
                 href="/smart-image-renamer.zip"
+                data-cta-label="add_to_chrome_final"
                 onClick={handleDownload}
                 className="group inline-flex items-center gap-2 h-12 px-7 rounded-full bg-coral text-canvas font-medium hover:bg-coral/90 transition-all shadow-[0_20px_60px_-15px_oklch(0.68_0.19_32/0.65)]"
               >
                 <Download className="w-4 h-4" /> Start renaming for free
               </a>
             </div>
+
           </div>
         </motion.div>
 
