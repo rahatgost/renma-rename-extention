@@ -72,20 +72,21 @@ function ReportPage() {
         </Link>
       </header>
 
-      <main className="max-w-3xl mx-auto px-6 pb-24">
-        <div className="pt-8 pb-12 border-b border-ink/10">
+      <main className="max-w-3xl mx-auto px-5 sm:px-6 pb-24">
+        <div className="pt-8 pb-10 sm:pb-12 border-b border-ink/10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-coral/10 text-coral text-xs uppercase tracking-wider mb-6">
             <Bug className="w-3.5 h-3.5" /> Report an issue
           </div>
-          <h1 className="font-serif text-5xl md:text-6xl leading-[1.05]">
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl leading-[1.05]">
             Something off? <br />
             <span className="italic text-coral">Tell us.</span>
           </h1>
-          <p className="mt-6 text-lg text-ink/70 max-w-xl">
+          <p className="mt-5 sm:mt-6 text-base sm:text-lg text-ink/70 max-w-xl">
             Bugs, feature ideas, weird filenames — anything. Reports go straight to the
             maintainers. No account needed.
           </p>
         </div>
+
 
         {status === "done" ? (
           <div className="mt-12 rounded-2xl border border-ink/10 bg-white p-10 text-center">
