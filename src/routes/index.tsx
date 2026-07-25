@@ -1008,12 +1008,14 @@ function Footer() {
           <div className="md:col-span-3 flex md:justify-end items-start">
             <a
               href="#install"
+              onClick={trackCta("add_to_chrome_footer")}
               className="group relative inline-flex items-center justify-center h-12 px-6 rounded-full bg-ink text-canvas t-button overflow-hidden transition-all hover:pr-12"
             >
               <span className="relative z-10">Add to Chrome</span>
               <ArrowRight className="absolute right-4 w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
             </a>
           </div>
+
         </div>
 
         {/* Giant wordmark — clean text */}
