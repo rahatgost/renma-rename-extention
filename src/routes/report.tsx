@@ -105,8 +105,9 @@ function ReportPage() {
             </button>
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="mt-12 space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
+          <form onSubmit={onSubmit} className="mt-10 sm:mt-12 space-y-6">
+            <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+
               <Field label="Your name" hint="Optional">
                 <input
                   type="text"
