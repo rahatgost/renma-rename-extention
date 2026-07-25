@@ -439,7 +439,21 @@ function createMenus() {
   } catch {}
 }
 
-chrome.runtime.onInstalled.addListener(createMenus);
+chrome.runtime.onInstalled.addListener(async (details) => {
+  createMenus();
+  try {
+    const currentVersion = chrome.runtime.getManifest().version;
+    const { lastSeenVersion } = await chrome.storage.local.get("lastSeenVersion");
+    const reason = details.reason === "install" ? "install" : "update";
+    if (reason === "install" || lastSeenVersion !== currentVersion) {
+      const url = chrome.runtime.getURL(
+        `whatsnew.html?v=${encodeURIComponent(currentVersion)}&prev=${encodeURIComponent(lastSeenVersion || "")}&reason=${reason}`
+      );
+      chrome.tabs.create({ url });
+      await chrome.storage.local.set({ lastSeenVersion: currentVersion });
+    }
+  } catch {}
+});
 chrome.runtime.onStartup?.addListener(createMenus);
 
 chrome.contextMenus?.onClicked.addListener(async (info) => {
