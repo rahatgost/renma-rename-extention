@@ -726,19 +726,20 @@ function RulesShowcase() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-15%" }}
             transition={{ duration: 0.8, ease: EASE }}
-            className="md:col-span-7 rounded-2xl bg-surface-dark p-1.5"
+            className="md:col-span-7 rounded-2xl bg-surface-dark p-1 sm:p-1.5 min-w-0"
           >
-            <div className="rounded-xl bg-surface-dark-elevated p-6">
+            <div className="rounded-xl bg-surface-dark-elevated p-3 sm:p-6 min-w-0">
               <div className="flex items-center gap-2 mb-4">
                 <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
                 <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
                 <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
-                <span className="ml-3 text-[11px] font-mono text-white/40 tracking-widest uppercase">background.js</span>
+                <span className="ml-3 text-[10px] sm:text-[11px] font-mono text-white/40 tracking-widest uppercase truncate">background.js</span>
               </div>
-              <pre className="font-mono text-[13px] leading-relaxed text-white/85 overflow-x-auto">
+              <pre className="font-mono text-[11px] sm:text-[13px] leading-relaxed text-white/85 overflow-x-auto whitespace-pre">
 {CODE_SNIPPET}
               </pre>
             </div>
+
           </motion.div>
         </div>
       </div>
