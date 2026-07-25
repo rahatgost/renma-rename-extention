@@ -130,7 +130,7 @@ function ReportPage() {
               </Field>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
               <Field label="Category">
                 <select
                   value={form.category}
