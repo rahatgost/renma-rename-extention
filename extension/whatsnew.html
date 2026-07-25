@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>What's new in Renma</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="icon-32.png" />
+    <style>
+      :root {
+        --canvas: #f7f2ea;
+        --ink: #1a1614;
+        --body: #4a423d;
+        --muted: #8a7f77;
+        --hairline: #e6ddd0;
+        --coral: #e85d3c;
+        --coral-soft: #fce8e2;
+        --card: #fffbf4;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--canvas); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; -webkit-font-smoothing: antialiased; }
+      .wrap { max-width: 720px; margin: 0 auto; padding: 56px 28px 80px; }
+      .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+      .brand img { width: 28px; height: 28px; border-radius: 6px; }
+      .brand span { font-family: "Fraunces", "Instrument Serif", Georgia, serif; font-style: italic; font-size: 22px; }
+      .brand .dot { color: var(--coral); }
+      .eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+      h1 { font-family: "Fraunces", "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 44px; line-height: 1.05; letter-spacing: -0.01em; margin: 0 0 12px; }
+      h1 em { color: var(--coral); font-style: italic; }
+      .lede { color: var(--body); font-size: 16px; line-height: 1.6; max-width: 560px; margin: 0 0 40px; }
+      .version-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--coral-soft); color: var(--coral); font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; font-weight: 600; }
+      .release { border: 1px solid var(--hairline); background: var(--card); border-radius: 16px; padding: 26px 28px; margin-bottom: 16px; }
+      .release-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+      .release-head .v { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; color: var(--ink); }
+      .release-head .date { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+      .release-head .tag { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--coral-soft); color: var(--coral); font-weight: 600; }
+      .release h2 { font-family: "Fraunces", "Instrument Serif", Georgia, serif; font-style: italic; font-weight: 400; font-size: 22px; margin: 8px 0 16px; }
+      .items { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+      .items li { display: flex; gap: 10px; font-size: 14px; line-height: 1.55; color: var(--body); }
+      .kind { flex-shrink: 0; margin-top: 2px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+      .kind.New { background: var(--coral-soft); color: var(--coral); }
+      .kind.Fix { background: #e8e4dc; color: var(--ink); }
+      .kind.Polish { background: #efeae1; color: var(--muted); }
+      .actions { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+      .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 999px; font-size: 13px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: opacity 0.15s; }
+      .btn:hover { opacity: 0.85; }
+      .btn.primary { background: var(--coral); color: white; }
+      .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--hairline); }
+      .footnote { margin-top: 40px; font-size: 12px; color: var(--muted); }
+      .footnote a { color: var(--coral); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">
+        <img src="icon-128.png" alt="" />
+        <span>renma<span class="dot">.</span></span>
+      </div>
+      <div class="eyebrow">What's new</div>
+      <h1>Fresh polish, <em>less friction.</em></h1>
+      <p class="lede" id="lede">Here's what changed in the version you just installed — and everything shipped recently.</p>
+      <div style="margin-bottom: 32px;"><span class="version-badge" id="ver">v1.5.1</span></div>
+      <div id="releases"></div>
+      <div class="actions">
+        <button class="btn primary" id="openOptions">Open settings</button>
+        <a class="btn ghost" href="https://renma.flinkeo.online/changelog" target="_blank" rel="noopener">Full history</a>
+      </div>
+      <div class="footnote">
+        You'll see this only after installs and updates. Manage everything from <a href="#" id="optLink">Options</a>.
+      </div>
+    </div>
+    <script src="whatsnew.js"></script>
+  </body>
+</html>
