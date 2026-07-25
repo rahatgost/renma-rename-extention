@@ -993,6 +993,7 @@ function Footer() {
                     <li key={l.label}>
                       <a
                         href={l.href}
+                        onClick={trackCta(`footer_${l.label.toLowerCase().replace(/\s+/g, "_")}`)}
                         className="text-[13.5px] font-medium text-ink/80 hover:text-coral transition-colors"
                       >
                         {l.label}
@@ -1000,6 +1001,7 @@ function Footer() {
                     </li>
                   ))}
                 </ul>
+
               </div>
             ))}
           </div>
