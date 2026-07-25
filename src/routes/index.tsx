@@ -30,6 +30,8 @@ import renmaLogo from "@/assets/renma-logo.png";
 import renmaWordmark from "@/assets/renma-wordmark.png";
 import GuideSection from "@/components/GuideSection";
 import DemoSection from "@/components/DemoSection";
+import { trackEvent } from "@/lib/admin-api";
+
 
 
 
@@ -210,6 +212,7 @@ function Nav() {
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub"
+              onClick={trackCta("github_nav")}
               className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full text-body-text hover:text-ink hover:bg-ink/[0.06] transition-colors"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px]" aria-hidden>
@@ -218,6 +221,7 @@ function Nav() {
             </a>
             <a
               href="/smart-image-renamer.zip"
+              data-cta-label="add_to_chrome_nav"
               onClick={handleDownload}
               className="group relative inline-flex items-center gap-1.5 h-9 pl-3.5 pr-2 rounded-full bg-ink text-canvas text-[13px] font-medium hover:bg-coral transition-colors"
             >
@@ -226,6 +230,7 @@ function Nav() {
                 <ArrowRight className="w-3.5 h-3.5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
               </span>
             </a>
+
           </div>
         </div>
       </div>
@@ -237,6 +242,8 @@ function Nav() {
 
 function handleDownload(e: React.MouseEvent<HTMLAnchorElement>) {
   e.preventDefault();
+  const label = e.currentTarget.dataset.ctaLabel || "add_to_chrome";
+  trackEvent("cta_click", { event_label: label });
   fetch("/smart-image-renamer.zip")
     .then((r) => {
       if (!r.ok) throw new Error(`Download failed: ${r.status}`);
@@ -251,6 +258,11 @@ function handleDownload(e: React.MouseEvent<HTMLAnchorElement>) {
     })
     .catch((err) => alert(err.message));
 }
+
+function trackCta(label: string) {
+  return () => trackEvent("cta_click", { event_label: label });
+}
+
 
 /* ---------------- Hero ---------------- */
 
@@ -881,12 +893,14 @@ function CTA() {
             <div className="mt-10">
               <a
                 href="/smart-image-renamer.zip"
+                data-cta-label="add_to_chrome_final"
                 onClick={handleDownload}
                 className="group inline-flex items-center gap-2 h-12 px-7 rounded-full bg-coral text-canvas font-medium hover:bg-coral/90 transition-all shadow-[0_20px_60px_-15px_oklch(0.68_0.19_32/0.65)]"
               >
                 <Download className="w-4 h-4" /> Start renaming for free
               </a>
             </div>
+
           </div>
         </motion.div>
 
@@ -979,6 +993,7 @@ function Footer() {
                     <li key={l.label}>
                       <a
                         href={l.href}
+                        onClick={trackCta(`footer_${l.label.toLowerCase().replace(/\s+/g, "_")}`)}
                         className="text-[13.5px] font-medium text-ink/80 hover:text-coral transition-colors"
                       >
                         {l.label}
@@ -986,6 +1001,7 @@ function Footer() {
                     </li>
                   ))}
                 </ul>
+
               </div>
             ))}
           </div>
@@ -994,12 +1010,14 @@ function Footer() {
           <div className="md:col-span-3 flex md:justify-end items-start">
             <a
               href="#install"
+              onClick={trackCta("add_to_chrome_footer")}
               className="group relative inline-flex items-center justify-center h-12 px-6 rounded-full bg-ink text-canvas t-button overflow-hidden transition-all hover:pr-12"
             >
               <span className="relative z-10">Add to Chrome</span>
               <ArrowRight className="absolute right-4 w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
             </a>
           </div>
+
         </div>
 
         {/* Giant wordmark — clean text */}
