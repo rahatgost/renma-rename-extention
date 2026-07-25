@@ -73,8 +73,8 @@ export async function submitReport(data: {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: data.name || undefined,
-        email: data.email || undefined,
+        name: (data.name && data.name.trim()) || "Anonymous",
+        email: (data.email && data.email.trim()) || undefined,
         description: data.description,
         category: CATEGORY_MAP[data.category] ?? "other",
         severity: SEVERITY_MAP[data.severity] ?? "medium",
