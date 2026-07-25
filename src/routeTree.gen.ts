@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReportRouteImport } from './routes/report'
 import { Route as ReleaseNotesRouteImport } from './routes/release-notes'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReleaseNotesRoute = ReleaseNotesRouteImport.update({
   id: '/release-notes',
   path: '/release-notes',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/privacy': typeof PrivacyRoute
   '/release-notes': typeof ReleaseNotesRoute
+  '/report': typeof ReportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/guide': typeof GuideRoute
   '/privacy': typeof PrivacyRoute
   '/release-notes': typeof ReleaseNotesRoute
+  '/report': typeof ReportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,27 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/privacy': typeof PrivacyRoute
   '/release-notes': typeof ReleaseNotesRoute
+  '/report': typeof ReportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/changelog' | '/guide' | '/privacy' | '/release-notes'
+  fullPaths:
+    | '/'
+    | '/changelog'
+    | '/guide'
+    | '/privacy'
+    | '/release-notes'
+    | '/report'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/changelog' | '/guide' | '/privacy' | '/release-notes'
-  id: '__root__' | '/' | '/changelog' | '/guide' | '/privacy' | '/release-notes'
+  to: '/' | '/changelog' | '/guide' | '/privacy' | '/release-notes' | '/report'
+  id:
+    | '__root__'
+    | '/'
+    | '/changelog'
+    | '/guide'
+    | '/privacy'
+    | '/release-notes'
+    | '/report'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,10 +99,18 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   PrivacyRoute: typeof PrivacyRoute
   ReleaseNotesRoute: typeof ReleaseNotesRoute
+  ReportRoute: typeof ReportRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/release-notes': {
       id: '/release-notes'
       path: '/release-notes'
@@ -125,6 +155,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuideRoute: GuideRoute,
   PrivacyRoute: PrivacyRoute,
   ReleaseNotesRoute: ReleaseNotesRoute,
+  ReportRoute: ReportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
