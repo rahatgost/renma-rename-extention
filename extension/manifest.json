@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Renma — Smart Image Renamer",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Advanced source-aware image renamer with templates, AI-source detection, folder routing, duplicate controls, local stats, context menu actions, and backup tools.",
   "permissions": ["downloads", "storage", "tabs", "notifications", "contextMenus"],
   "host_permissions": ["<all_urls>"],
