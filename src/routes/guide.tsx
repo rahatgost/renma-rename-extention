@@ -43,7 +43,9 @@ export const Route = createFileRoute("/guide")({
         name: "twitter:description",
         content: "Every Renma setting, annotated. Sketch guide + screenshots.",
       },
+      { property: "og:url", content: "https://renma.flinkeo.online/guide" },
     ],
+    links: [{ rel: "canonical", href: "https://renma.flinkeo.online/guide" }],
   }),
   component: GuidePage,
 });

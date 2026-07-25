@@ -18,7 +18,9 @@ export const Route = createFileRoute("/report")({
         property: "og:description",
         content: "Send bug reports and feature requests to the Renma team.",
       },
+      { property: "og:url", content: "https://renma.flinkeo.online/report" },
     ],
+    links: [{ rel: "canonical", href: "https://renma.flinkeo.online/report" }],
   }),
   component: ReportPage,
 });
