@@ -291,6 +291,185 @@ $("importFile").addEventListener("change", async (e) => {
   }
 });
 
+/* ---------- Bulk rename ---------- */
+const bulkListEl = $("bulk-list");
+const bulkEmptyEl = $("bulk-empty");
+const bulkToolbarEl = $("bulk-toolbar");
+const bulkStatusEl = $("bulk-status");
+const bulkAllEl = $("bulk-all");
+const bulkCountEl = $("bulk-count");
+const bulkDeleteEl = $("bulk-delete");
+
+let bulkItems = [];
+
+const IMG_EXT_RE = /\.(png|jpe?g|gif|webp|avif|bmp|svg|tiff?|ico|heic)$/i;
+
+function basename(p) {
+  if (!p) return "";
+  const parts = String(p).replace(/\\/g, "/").split("/");
+  return parts[parts.length - 1] || String(p);
+}
+
+function previewName(payload) {
+  return new Promise((resolve) => {
+    try {
+      chrome.runtime.sendMessage({ type: "preview-name", payload }, (res) => {
+        if (chrome.runtime.lastError) return resolve({ error: chrome.runtime.lastError.message });
+        resolve(res || {});
+      });
+    } catch (e) {
+      resolve({ error: String(e?.message || e) });
+    }
+  });
+}
+
+function updateBulkCount() {
+  const n = bulkListEl.querySelectorAll('input[data-bulk]:checked').length;
+  bulkCountEl.textContent = `${n} selected`;
+}
+
+async function renderBulkList() {
+  bulkListEl.innerHTML = "";
+  if (bulkItems.length === 0) {
+    bulkEmptyEl.style.display = "block";
+    bulkToolbarEl.style.display = "none";
+    return;
+  }
+  bulkEmptyEl.style.display = "none";
+  bulkToolbarEl.style.display = "flex";
+
+  for (let i = 0; i < bulkItems.length; i++) {
+    const it = bulkItems[i];
+    const original = basename(it.filename);
+    const looksMessy = /^image( \(\d+\))?\.[a-z]+$/i.test(original)
+      || /^unnamed/i.test(original)
+      || /^download/i.test(original);
+    const row = document.createElement("div");
+    row.style.cssText =
+      "display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;background:#fff;border:1px solid var(--hairline);border-radius:12px";
+    row.innerHTML = `
+      <input type="checkbox" data-bulk data-i="${i}" style="width:auto;accent-color:var(--coral);margin-top:2px" ${looksMessy ? "checked" : ""} />
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="orig-name" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%"></span>
+          ${looksMessy ? '<span style="font-family:\'JetBrains Mono\',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);background:var(--coral-soft);padding:2px 7px;border-radius:999px">messy</span>' : ""}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted-soft)">
+          <span>→</span>
+          <span class="new-name" style="color:var(--coral);overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+        </div>
+        <div class="host" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted-soft);margin-top:3px;letter-spacing:.05em"></div>
+      </div>
+      <a class="open-src" href="${it.url || '#'}" target="_blank" rel="noopener" title="Open source in a new tab" style="font-size:11.5px;color:var(--muted);text-decoration:none;padding:6px 10px;border:1px solid var(--hairline);border-radius:999px">Source ↗</a>
+    `;
+    row.querySelector(".orig-name").textContent = original || "(no filename)";
+    const newEl = row.querySelector(".new-name");
+    const hostEl = row.querySelector(".host");
+    hostEl.textContent = "resolving…";
+    newEl.textContent = "…";
+    bulkListEl.appendChild(row);
+
+    previewName({ url: it.url, filename: original, mime: it.mime }).then((res) => {
+      if (res?.skipped) {
+        newEl.textContent = `(skipped: ${res.skipped})`;
+        newEl.style.color = "var(--muted-soft)";
+        const cb = row.querySelector('input[data-bulk]');
+        cb.checked = false;
+        cb.disabled = true;
+        row.style.opacity = "0.6";
+      } else if (res?.finalPath) {
+        newEl.textContent = res.finalPath;
+        it._previewed = res.finalPath;
+      } else {
+        newEl.textContent = res?.error || "(preview failed)";
+        newEl.style.color = "var(--muted-soft)";
+      }
+      hostEl.textContent = res?.hostname || "(no source)";
+      updateBulkCount();
+    });
+  }
+
+  bulkListEl.querySelectorAll('input[data-bulk]').forEach((cb) => {
+    cb.addEventListener("change", updateBulkCount);
+  });
+  updateBulkCount();
+}
+
+$("bulk-scan").addEventListener("click", async () => {
+  bulkStatusEl.style.color = "";
+  bulkStatusEl.textContent = "";
+  try {
+    const items = await chrome.downloads.search({
+      limit: 100,
+      orderBy: ["-startTime"],
+      exists: true,
+    });
+    bulkItems = items
+      .filter((it) => it && it.url && (
+        (it.mime && it.mime.startsWith("image/")) || IMG_EXT_RE.test(it.filename || "")
+      ))
+      .slice(0, 100);
+    await renderBulkList();
+    flash(bulkStatusEl, `Loaded ${bulkItems.length} image download${bulkItems.length === 1 ? "" : "s"}`);
+  } catch (e) {
+    bulkStatusEl.style.color = "#c64545";
+    bulkStatusEl.textContent = "Scan failed: " + (e?.message || e);
+  }
+});
+
+bulkAllEl.addEventListener("change", () => {
+  bulkListEl.querySelectorAll('input[data-bulk]:not(:disabled)').forEach((cb) => {
+    cb.checked = bulkAllEl.checked;
+  });
+  updateBulkCount();
+});
+
+$("bulk-run").addEventListener("click", async () => {
+  const boxes = Array.from(bulkListEl.querySelectorAll('input[data-bulk]:checked'));
+  if (boxes.length === 0) {
+    bulkStatusEl.style.color = "#c64545";
+    bulkStatusEl.textContent = "Nothing selected.";
+    setTimeout(() => { bulkStatusEl.textContent = ""; bulkStatusEl.style.color = ""; }, 1800);
+    return;
+  }
+  const deleteOriginals = bulkDeleteEl.checked;
+  let ok = 0;
+  let fail = 0;
+  bulkStatusEl.style.color = "";
+  bulkStatusEl.textContent = `Working through ${boxes.length}…`;
+
+  for (const cb of boxes) {
+    const i = Number(cb.dataset.i);
+    const src = bulkItems[i];
+    if (!src?.url) { fail++; continue; }
+    try {
+      await new Promise((resolve, reject) => {
+        chrome.downloads.download({ url: src.url, conflictAction: "uniquify" }, (id) => {
+          if (chrome.runtime.lastError || !id) {
+            return reject(new Error(chrome.runtime.lastError?.message || "download failed"));
+          }
+          resolve(id);
+        });
+      });
+      if (deleteOriginals && src.id) {
+        try { await chrome.downloads.removeFile(src.id); } catch {}
+        try { await chrome.downloads.erase({ id: src.id }); } catch {}
+      }
+      ok++;
+      cb.closest("div[style*='grid']")?.remove();
+    } catch {
+      fail++;
+    }
+    bulkStatusEl.textContent = `Renamed ${ok} · Failed ${fail}`;
+    await new Promise((r) => setTimeout(r, 120));
+  }
+
+  bulkStatusEl.textContent = fail === 0
+    ? `Re-downloaded ${ok} file${ok === 1 ? "" : "s"} with renma naming.`
+    : `Done — ${ok} succeeded, ${fail} failed.`;
+  updateBulkCount();
+});
+
 /* ---------- Init ---------- */
 bindSwitch("sw-enabled", "enabled", true);
 bindSwitch("sw-onlyImages", "onlyImages", true);
