@@ -922,7 +922,7 @@ function Footer() {
       links: [
         { label: "User guide", href: "/guide" },
         { label: "GitHub", href: "#" },
-        { label: "Report an issue", href: "#" },
+        { label: "Report an issue", href: "/report" },
         { label: "Privacy", href: "/privacy" },
       ],
     },
