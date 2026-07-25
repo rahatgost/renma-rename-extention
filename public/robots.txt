@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://renma.flinkeo.online/sitemap.xml

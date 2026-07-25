@@ -36,6 +36,20 @@ import { trackEvent } from "@/lib/admin-api";
 
 
 
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Renma",
+  description:
+    "Chrome extension that renames image downloads by their source domain, in the same millisecond Chrome writes the file.",
+  applicationCategory: "BrowserApplication",
+  operatingSystem: "Chrome",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: "https://renma.flinkeo.online/",
+  image: "https://renma.flinkeo.online/og-image.jpg",
+  author: { "@type": "Organization", name: "Renma" },
+};
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -51,16 +65,26 @@ export const Route = createFileRoute("/")({
         content:
           "Stop dragging image (17).png into folders. Renma rewrites filenames the moment they hit disk — Chrome MV3, zero setup, zero telemetry.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://renma.flinkeo.online/" },
+      { property: "og:image", content: "https://renma.flinkeo.online/og-image.jpg" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Renma" },
       {
         name: "twitter:description",
         content:
           "Auto-rename every image download by source domain. Chrome MV3. Local-only.",
       },
-      { property: "og:url", content: "https://renma.flinkeo.online/" },
       { name: "twitter:url", content: "https://renma.flinkeo.online/" },
+      { name: "twitter:image", content: "https://renma.flinkeo.online/og-image.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://renma.flinkeo.online/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(JSON_LD),
+      },
+    ],
   }),
   component: Landing,
 });

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as ReleaseNotesRouteImport } from './routes/release-notes'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as InstalledRouteImport } from './routes/installed'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const ReleaseNotesRoute = ReleaseNotesRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstalledRoute = InstalledRouteImport.update({
+  id: '/installed',
+  path: '/installed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuideRoute = GuideRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/guide': typeof GuideRoute
+  '/installed': typeof InstalledRoute
   '/privacy': typeof PrivacyRoute
   '/release-notes': typeof ReleaseNotesRoute
   '/report': typeof ReportRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/guide': typeof GuideRoute
+  '/installed': typeof InstalledRoute
   '/privacy': typeof PrivacyRoute
   '/release-notes': typeof ReleaseNotesRoute
   '/report': typeof ReportRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/guide': typeof GuideRoute
+  '/installed': typeof InstalledRoute
   '/privacy': typeof PrivacyRoute
   '/release-notes': typeof ReleaseNotesRoute
   '/report': typeof ReportRoute
@@ -78,16 +87,25 @@ export interface FileRouteTypes {
     | '/'
     | '/changelog'
     | '/guide'
+    | '/installed'
     | '/privacy'
     | '/release-notes'
     | '/report'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/changelog' | '/guide' | '/privacy' | '/release-notes' | '/report'
+  to:
+    | '/'
+    | '/changelog'
+    | '/guide'
+    | '/installed'
+    | '/privacy'
+    | '/release-notes'
+    | '/report'
   id:
     | '__root__'
     | '/'
     | '/changelog'
     | '/guide'
+    | '/installed'
     | '/privacy'
     | '/release-notes'
     | '/report'
@@ -97,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChangelogRoute: typeof ChangelogRoute
   GuideRoute: typeof GuideRoute
+  InstalledRoute: typeof InstalledRoute
   PrivacyRoute: typeof PrivacyRoute
   ReleaseNotesRoute: typeof ReleaseNotesRoute
   ReportRoute: typeof ReportRoute
@@ -123,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/installed': {
+      id: '/installed'
+      path: '/installed'
+      fullPath: '/installed'
+      preLoaderRoute: typeof InstalledRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guide': {
@@ -153,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChangelogRoute: ChangelogRoute,
   GuideRoute: GuideRoute,
+  InstalledRoute: InstalledRoute,
   PrivacyRoute: PrivacyRoute,
   ReleaseNotesRoute: ReleaseNotesRoute,
   ReportRoute: ReportRoute,
@@ -160,13 +187,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
