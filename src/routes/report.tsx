@@ -72,20 +72,21 @@ function ReportPage() {
         </Link>
       </header>
 
-      <main className="max-w-3xl mx-auto px-6 pb-24">
-        <div className="pt-8 pb-12 border-b border-ink/10">
+      <main className="max-w-3xl mx-auto px-5 sm:px-6 pb-24">
+        <div className="pt-8 pb-10 sm:pb-12 border-b border-ink/10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-coral/10 text-coral text-xs uppercase tracking-wider mb-6">
             <Bug className="w-3.5 h-3.5" /> Report an issue
           </div>
-          <h1 className="font-serif text-5xl md:text-6xl leading-[1.05]">
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl leading-[1.05]">
             Something off? <br />
             <span className="italic text-coral">Tell us.</span>
           </h1>
-          <p className="mt-6 text-lg text-ink/70 max-w-xl">
+          <p className="mt-5 sm:mt-6 text-base sm:text-lg text-ink/70 max-w-xl">
             Bugs, feature ideas, weird filenames — anything. Reports go straight to the
             maintainers. No account needed.
           </p>
         </div>
+
 
         {status === "done" ? (
           <div className="mt-12 rounded-2xl border border-ink/10 bg-white p-10 text-center">
@@ -104,8 +105,9 @@ function ReportPage() {
             </button>
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="mt-12 space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
+          <form onSubmit={onSubmit} className="mt-10 sm:mt-12 space-y-6">
+            <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+
               <Field label="Your name" hint="Optional">
                 <input
                   type="text"
@@ -128,7 +130,7 @@ function ReportPage() {
               </Field>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
               <Field label="Category">
                 <select
                   value={form.category}
@@ -180,14 +182,14 @@ function ReportPage() {
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-2">
-              <p className="text-xs text-ink/50 max-w-sm">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
+              <p className="text-xs text-ink/50 sm:max-w-sm">
                 We never store what you download. This form only sends what you type here.
               </p>
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-coral text-white text-sm font-medium hover:bg-coral/90 disabled:opacity-60 transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-coral text-white text-sm font-medium hover:bg-coral/90 disabled:opacity-60 transition-colors"
               >
                 {status === "sending" ? (
                   <>
@@ -198,6 +200,7 @@ function ReportPage() {
                 )}
               </button>
             </div>
+
           </form>
         )}
       </main>
