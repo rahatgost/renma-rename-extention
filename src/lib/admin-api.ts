@@ -22,17 +22,16 @@ function getSessionId(): string {
 }
 
 export function trackEvent(
-  event: string,
-  props: Record<string, unknown> = {},
+  event_type: "pageview" | "cta_click",
+  extras: { event_label?: string } = {},
 ): void {
   if (typeof window === "undefined") return;
   const payload = {
-    event,
+    event_type,
     path: window.location.pathname,
     referrer: document.referrer || null,
     session_id: getSessionId(),
-    ts: new Date().toISOString(),
-    props,
+    ...extras,
   };
   try {
     const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
