@@ -212,6 +212,7 @@ function Nav() {
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub"
+              onClick={trackCta("github_nav")}
               className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full text-body-text hover:text-ink hover:bg-ink/[0.06] transition-colors"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px]" aria-hidden>
@@ -220,6 +221,7 @@ function Nav() {
             </a>
             <a
               href="/smart-image-renamer.zip"
+              data-cta-label="add_to_chrome_nav"
               onClick={handleDownload}
               className="group relative inline-flex items-center gap-1.5 h-9 pl-3.5 pr-2 rounded-full bg-ink text-canvas text-[13px] font-medium hover:bg-coral transition-colors"
             >
@@ -228,6 +230,7 @@ function Nav() {
                 <ArrowRight className="w-3.5 h-3.5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
               </span>
             </a>
+
           </div>
         </div>
       </div>
