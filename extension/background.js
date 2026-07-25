@@ -354,9 +354,67 @@ chrome.commands?.onCommand.addListener(async (cmd) => {
   }
 });
 
+async function computePreviewPath({ url, filename, mime }) {
+  const s = await getSettings();
+  const item = { url, finalUrl: url, filename: filename || "image.png", mime: mime || "" };
+  const ext = getExtension(item.filename);
+  const hostname = getHostname(item);
+  if (s.onlyImages && !isImage(item, ext, s.filetypes)) {
+    return { skipped: "not-an-image", hostname };
+  }
+  if (!siteAllowed(hostname, s.siteMode, s.siteList)) {
+    return { skipped: "site-scoped-out", hostname };
+  }
+  const mapping = resolveMapping(hostname, s.customMappings, s.aiPrefix);
+  const now = new Date();
+  const { counter = 0 } = await chrome.storage.local.get("counter");
+  const finalExt = ext || "png";
+  const tokens = {
+    prefix: sanitize(mapping.prefix || domainPrefix(hostname)),
+    domain: sanitize(domainPrefix(hostname)),
+    host: sanitize(hostname.replace(/^www\./, "")),
+    date: formatDate(now, "YYYY-MM-DD"),
+    time: formatDate(now, "HH-mm-ss"),
+    timestamp: now.getTime(),
+    counter: pad(counter + 1, 4),
+    originalName: sanitize(stripExt(item.filename), 72),
+    ext: finalExt,
+    width: "",
+    height: "",
+    dimensions: "",
+  };
+  let name = renderTemplate(s.template || DEFAULT_TEMPLATE, tokens)
+    .replace(/_+/g, "_")
+    .replace(/\._/g, ".")
+    .replace(/_\./g, ".")
+    .replace(/^_+|_+$/g, "");
+  if (!name || name.startsWith(".")) name = renderTemplate(DEFAULT_TEMPLATE, tokens);
+  name = applyCase(name, s.filenameCase);
+  name = sanitize(name, Number(s.maxNameLength) || 120);
+  if (!name.includes(".")) name = `${name}.${finalExt}`;
+  const parts = [];
+  if (mapping.folder) {
+    mapping.folder.split("/").filter(Boolean).forEach((p) => parts.push(sanitize(p)));
+  }
+  if (s.dateFolders) {
+    formatDate(now, s.dateFolderFormat || "YYYY/MM/DD")
+      .split("/")
+      .filter(Boolean)
+      .forEach((p) => parts.push(sanitize(p)));
+  }
+  parts.push(name);
+  return { finalPath: parts.join("/"), hostname, prefix: mapping.prefix };
+}
+
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg?.type === "undo-last") {
     undoLast().then((ok) => sendResponse({ ok }));
+    return true;
+  }
+  if (msg?.type === "preview-name") {
+    computePreviewPath(msg.payload || {}).then((res) => sendResponse(res)).catch((e) =>
+      sendResponse({ error: String(e?.message || e) })
+    );
     return true;
   }
 });
