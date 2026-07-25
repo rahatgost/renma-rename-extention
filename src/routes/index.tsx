@@ -30,6 +30,8 @@ import renmaLogo from "@/assets/renma-logo.png";
 import renmaWordmark from "@/assets/renma-wordmark.png";
 import GuideSection from "@/components/GuideSection";
 import DemoSection from "@/components/DemoSection";
+import { trackEvent } from "@/lib/admin-api";
+
 
 
 
